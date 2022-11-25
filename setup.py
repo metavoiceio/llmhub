@@ -10,6 +10,9 @@ from setuptools import find_packages, setup
 requirements = [
     "typing_extensions",
 ]
+LLM_REQUIREMENTS = ["openai"]
+DEV_REQUIREMENTS = ["black", "flake8", "isort", "mypy", "pytest", "sphinx"]
+
 
 def read_file(filename: str) -> str:
     with open(filename, encoding="utf-8") as f:
@@ -40,6 +43,6 @@ setup(
     package_data={"": ["*.lark"]},
     include_package_data=True,
     install_requires=requirements,
-    # extras_require={},
+    extras_require={"prod": LLM_REQUIREMENTS, "dev": LLM_REQUIREMENTS + DEV_REQUIREMENTS},
     python_requires=">=3.10",
 )

@@ -1,13 +1,8 @@
-NOTEBOOK_BLACK_CONFIG=-t py311 -l 100
-NOTEBOOK_BLACK_TARGETS=doc/sphinx/notebooks
-NOTEBOOK_ISORT_CONFIG=--atomic -l 100 --trailing-comma --remove-redundant-aliases --multi-line 3
-NOTEBOOK_ISORT_TARGETS=doc/sphinx/notebooks
-
-BLACK_CONFIG=-t py311 -l 100
-BLACK_TARGETS=llm tests benchmark doc/*.py setup.py
+BLACK_CONFIG=-t py310 -l 100
+BLACK_TARGETS=onellm tests docs/*.py setup.py
 ISORT_CONFIG=--atomic -l 100 --trailing-comma --remove-redundant-aliases --multi-line 3
-ISORT_TARGETS=llm tests benchmark doc/*.py setup.py
-MYPY_TARGETS=llm tests benchmark doc/*.py doc/sphinx/notebooks/getting_started setup.py
+ISORT_TARGETS=onellm tests docs/*.py setup.py
+MYPY_TARGETS=onellm tests docs/*.py setup.py
 
 .PHONY: help clean dev-install install package format format-check type-check test check-all
 
@@ -27,25 +22,21 @@ clean:
 	rm -rf dist *.egg-info build
 
 dev-install:
-	pip install -e .
+	pip install -e ".[dev]"
 
 install:
-	pip install .
+	pip install -e ".[prod]"
 
 package:
 	python setup.py bdist
 
 format:
 	black $(BLACK_CONFIG) $(BLACK_TARGETS)
-	black $(NOTEBOOK_BLACK_CONFIG) $(NOTEBOOK_BLACK_TARGETS)
 	isort $(ISORT_CONFIG) $(ISORT_TARGETS)
-	isort $(NOTEBOOK_ISORT_CONFIG) $(NOTEBOOK_ISORT_TARGETS)
 
 format-check:
 	black --check $(BLACK_CONFIG) $(BLACK_TARGETS)
-	black --check $(NOTEBOOK_BLACK_CONFIG) $(NOTEBOOK_BLACK_TARGETS)
 	isort --check-only $(ISORT_CONFIG) $(ISORT_TARGETS)
-	isort --check-only $(NOTEBOOK_ISORT_CONFIG) $(NOTEBOOK_ISORT_TARGETS)
 
 type-check:
 	mypy `python -m llm.mypy_flags` $(MYPY_TARGETS)
