@@ -1,0 +1,24 @@
+{
+  "name": "llmhub",
+  "version": "0.0.3",
+  "description": "Github for LLMs",
+  "main": "main.js",
+  "bin": {
+    "llmhub-auth": "cli_auth.js"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "pack build"
+  },
+  "type": "module",
+  "@pika/pack": {
+    "pipeline": []
+  },
+  "author": "VST",
+  "license": "ISC",
+  "dependencies": {
+    "@pika/pack": "^0.5.0",
+    "fs-extra": "^10.1.0",
+    "node-fetch": "^3.3.0"
+  }
+}
