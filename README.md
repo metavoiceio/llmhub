@@ -1,1 +1,1 @@
-# LLM Hub: Web App
+# LLM Hub: Github for LLMs
