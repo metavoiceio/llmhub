@@ -1,6 +1,6 @@
 import fetch from 'node-fetch';
 import { BASE_URL } from './common.js';
-import { get_token } from './app_auth.js';
+import { get_token } from './appAuth.js';
 
 export default class LLMHub {
     constructor(llmhub_prompt_id) {
