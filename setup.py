@@ -10,8 +10,8 @@ from setuptools import find_packages, setup
 requirements = [
     "typing_extensions",
 ]
-LLM_REQUIREMENTS = ["openai", "cohere"]
-DEV_REQUIREMENTS = ["black", "flake8", "isort", "mypy", "pytest", "sphinx"]
+LLM_REQUIREMENTS = ["openai", "cohere", "requests"]
+DEV_REQUIREMENTS = ["black", "flake8", "isort", "mypy", "pytest", "sphinx", "fastapi", "uvicorn"]
 
 
 def read_file(filename: str) -> str:

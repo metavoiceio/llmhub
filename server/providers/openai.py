@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Optional
 
 import openai
 
@@ -15,7 +15,7 @@ class OpenAI(LLM):
         top_p: float = 1.0,
         frequency_penalty: float = 0.0,
         presence_penalty: float = 0.0,
-        stop: List[str] = ["\n"],
+        stop: Optional[List[str]] = None,
     ) -> None:
         """
         Initaliser for the OpenAI completion API.
@@ -45,7 +45,7 @@ class OpenAI(LLM):
         if top_p < 1 and temperature < 1:
             raise ValueError("Cannot use top_p and temperature together.")
 
-        if len(stop) > 4:
+        if stop and len(stop) > 4:
             raise ValueError("Cannot use more than 4 stop sequences.")
 
         if frequency_penalty < -2 or frequency_penalty > 2:
@@ -55,13 +55,13 @@ class OpenAI(LLM):
             raise ValueError("Presence penalty must be between -2 and 2.")
 
         self.llm_args = {
-            "engine": self.model_name,
-            "temperature": self.temperature,
-            "max_tokens": self.max_tokens,
-            "top_p": self.top_p,
-            "frequency_penalty": self.frequency_penalty,
-            "presence_penalty": self.presence_penalty,
-            "stop": self.stop,
+            "engine": model_name,
+            "temperature": temperature,
+            "max_tokens": max_tokens,
+            "top_p": top_p,
+            "frequency_penalty": frequency_penalty,
+            "presence_penalty": presence_penalty,
+            "stop": stop,
         }
 
     def __call__(self, prompt: str) -> str:
@@ -75,4 +75,5 @@ class OpenAI(LLM):
         """
         # TODO: add check on exceeding max_tokens?
         response = self.client.create(prompt=prompt, **self.llm_args)
+        print(response)
         return response.choices[0].text
