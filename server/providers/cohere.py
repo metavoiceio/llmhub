@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Optional
 
 import cohere
 
@@ -16,7 +16,7 @@ class Cohere(LLM):
         top_p: float = 0.75,
         frequency_penalty: float = 0.0,
         presence_penalty: float = 0.0,
-        stop: List[str] = ["\n"],
+        stop: Optional[List[str]] = None,
     ) -> None:
         """
         Initaliser for the Cohere completion API.
@@ -64,13 +64,13 @@ class Cohere(LLM):
             raise ValueError("Presence penalty must be between 0.0 and 1.0.")
 
         self.llm_args = {
-            "model": self.model_name,
-            "max_tokens": self.max_tokens,
-            "temperature": self.temperature,
-            "k": self.top_k,
-            "p": self.top_p,
-            "frequency_penalty": self.frequency_penalty,
-            "presence_penalty": self.presence_penalty,
+            "model": model_name,
+            "max_tokens": max_tokens,
+            "temperature": temperature,
+            "k": top_k,
+            "p": top_p,
+            "frequency_penalty": frequency_penalty,
+            "presence_penalty": presence_penalty,
         }
 
         def __call__(self, prompt: str) -> str:

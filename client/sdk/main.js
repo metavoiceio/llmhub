@@ -1,10 +1,11 @@
 import fetch from 'node-fetch';
-import { BASE_URL, LLMHUB_APP_ID } from './constants.js';
+import { BASE_URL } from './common.js';
 import { get_token } from './appAuth.js';
 
 export default class LLMHub {
-    constructor() {
+    constructor(llmhub_prompt_id) {
         this.auth_token = null;
+        this.llmhub_prompt_id = llmhub_prompt_id;
     }
 
     async run(prompt) {
@@ -14,7 +15,7 @@ export default class LLMHub {
             }
 
             let response = await fetch(
-                `${BASE_URL}/completion?prompt=${encodeURIComponent(prompt)}&llmhub_app_id=${LLMHUB_APP_ID}`,
+                `${BASE_URL}/completion?input=${encodeURIComponent(prompt)}&llmhub_prompt_id=${this.llmhub_prompt_id}`,
                 {
                     method: 'GET',
                     headers: {
@@ -28,7 +29,7 @@ export default class LLMHub {
             //       API should check we have enough to run the query (aka generation + prompt size!)
             console.error(error);
         } finally {
-            console.log("done");
+            console.log("query returned successfully");
         }
     }
     
