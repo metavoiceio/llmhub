@@ -1,10 +1,10 @@
 {
   "name": "llmhub",
-  "version": "0.0.3",
+  "version": "0.0.1",
   "description": "Github for LLMs",
   "main": "main.js",
   "bin": {
-    "llmhub-auth": "cli_auth.js"
+    "llmhub-auth": "cliAuth.js"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -14,7 +14,7 @@
   "@pika/pack": {
     "pipeline": []
   },
-  "author": "VST",
+  "author": "LLMHub",
   "license": "ISC",
   "dependencies": {
     "@pika/pack": "^0.5.0",

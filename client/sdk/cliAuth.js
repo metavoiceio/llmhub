@@ -7,7 +7,7 @@ import { BASE_URL, TOKEN_FILE_PATH } from "./common.js";
 import fetch from 'node-fetch';
 import mkdirp from 'mkdirp';
 import path from "path";
-import { get_saved_token } from './app_auth.js';
+import { get_saved_token } from './appAuth.js';
 
 // USED BY CLI FOR ONE TIME SETUP
 

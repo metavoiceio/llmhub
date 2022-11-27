@@ -1,5 +1,5 @@
 import fs from "fs-extra";
-import { TOKEN_FILE_PATH } from "./common.js";
+import { TOKEN_FILE_PATH } from "./constants.js";
 
 // USED BY APP
 
