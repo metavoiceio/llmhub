@@ -10,7 +10,7 @@ from setuptools import find_packages, setup
 requirements = [
     "typing_extensions",
 ]
-LLM_REQUIREMENTS = ["openai"]
+LLM_REQUIREMENTS = ["openai", "cohere"]
 DEV_REQUIREMENTS = ["black", "flake8", "isort", "mypy", "pytest", "sphinx"]
 
 

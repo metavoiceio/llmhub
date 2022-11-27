@@ -2,7 +2,7 @@ from typing import List
 
 import openai
 
-from onellm.llms.providers.base import LLM
+from server.providers.base import LLM
 
 
 class OpenAI(LLM):
@@ -54,8 +54,6 @@ class OpenAI(LLM):
         if presence_penalty < -2 or presence_penalty > 2:
             raise ValueError("Presence penalty must be between -2 and 2.")
 
-        # TODO: add check on exceeding max_tokens?
-
         self.llm_args = {
             "engine": self.model_name,
             "temperature": self.temperature,
@@ -75,5 +73,6 @@ class OpenAI(LLM):
         Returns:
             Completed string.
         """
+        # TODO: add check on exceeding max_tokens?
         response = self.client.create(prompt=prompt, **self.llm_args)
         return response.choices[0].text
