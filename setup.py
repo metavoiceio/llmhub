@@ -11,7 +11,17 @@ requirements = [
     "typing_extensions",
 ]
 LLM_REQUIREMENTS = ["openai", "cohere", "requests"]
-DEV_REQUIREMENTS = ["black", "flake8", "isort", "mypy", "pytest", "sphinx", "fastapi", "uvicorn"]
+DEV_REQUIREMENTS = [
+    "black",
+    "flake8",
+    "isort",
+    "mypy",
+    "pytest",
+    "sphinx",
+    "fastapi",
+    "uvicorn",
+    "supabase",
+]
 
 
 def read_file(filename: str) -> str:
