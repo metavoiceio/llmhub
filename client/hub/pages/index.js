@@ -1,6 +1,7 @@
 import { useSession, signIn, signOut } from "next-auth/react"
 import Footer from "../components/footer"
 import Header from "../components/header"
+import UnAuthNavBar from "../components/unAuthNavBar"
 import styles from '../styles/Home.module.css'
 
 export default function Home() {
@@ -9,8 +10,9 @@ export default function Home() {
   return (
     <div className={styles.container}>
       <Header />
+      <UnAuthNavBar />
       <main className={styles.main}>
-        <h1 className={styles.title}>Welcome to LLMHub!</h1>
+        <h1 className={styles.title}>Welcome to LLMHub</h1>
         {/* {
           session ? (
             <>
@@ -27,5 +29,5 @@ export default function Home() {
       </main>
       <Footer />
     </div>
-  )
+  );
 }
