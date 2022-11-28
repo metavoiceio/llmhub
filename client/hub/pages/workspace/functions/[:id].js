@@ -1,5 +1,5 @@
-import { WORKSPACE_ID } from "../common/constants";
-import AuthSideBar from "../components/sidebar";
+import { WORKSPACE_ID } from "../../../common/constants";
+import AuthSideBar from "../../../components/sidebar";
 
 export default function Function() {
   return (
@@ -11,6 +11,7 @@ export default function Function() {
       </div>
       {/* main area */}
       <div className="h-full flex flex-col overflow-y-auto flex-1">
+        functions page
       </div>
     </div>
   );
