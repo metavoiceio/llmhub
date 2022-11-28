@@ -8,6 +8,7 @@ export default function App({
   return (
     <SessionProvider session={session}>
       <Component {...pageProps} />
+      <script src="https://unpkg.com/flowbite@1.5.4/dist/flowbite.js" />
     </SessionProvider>
   )
 }
