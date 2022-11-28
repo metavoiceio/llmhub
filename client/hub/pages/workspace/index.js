@@ -1,8 +1,7 @@
 // represents the authenticated page
-// code out sidebar - move to top on mobile view
-// support functions
-import AuthSideBar from "../components/sidebar";
-import { WORKSPACE_ID } from "../common/constants";
+// sidebar - move to top on mobile view
+import AuthSideBar from "../../components/sidebar";
+import { WORKSPACE_ID } from "../../common/constants";
 
 export default function Workspace() {
   return (
