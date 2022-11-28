@@ -1,5 +1,5 @@
-import { WORKSPACE_ID } from "../../../../../common/constants";
-import AuthSideBar from "../../../../../components/sidebar";
+import { WORKSPACE_ID } from "../../../../common/constants";
+import AuthSideBar from "../../../../components/sidebar";
 
 export default function Function() {
   return (
