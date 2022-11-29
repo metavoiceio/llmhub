@@ -3,19 +3,27 @@ import { HiChartBar } from 'react-icons/hi';
 import { BsGearWide, BsBraces, BsThreeDots } from 'react-icons/bs';
 import logo from "../public/logo.png";
 
-export default function AuthSideBar({ workspaceId }) {
-  const renderFunction = () => {
-    return (
-      <div role={"button"} tabIndex={0} className="group p-1 rounded flex items-center text-start dark:hover:bg-gray-800 hover:bg-gray-100 gap-1">
-        <div className="p-1 h-6 flex items-center justify-center rounded" >
-          <BsBraces />
+export default function AuthSideBar({ workspaceId, functions }) {
+  const renderFunctions = () => {
+    return functions.map((funcData, index) => {
+      return (
+        <div
+          key={funcData.id}
+          id={funcData.id}
+          role={"button"}
+          tabIndex={0}
+          className="group p-1 rounded flex items-center text-start dark:hover:bg-gray-800 hover:bg-gray-100 gap-1"
+        >
+          <div className="p-1 h-6 flex items-center justify-center rounded" >
+            <BsBraces />
+          </div>
+          <div className="flex flex-1 leading-none text-sm">
+            {funcData.name}
+          </div>
+          <button className='p-1 opacity-0 group-hover:opacity-100 group-hover:border group-hover:bg-gray-200 rounded-lg'><BsThreeDots /></button>
         </div>
-        <div className="flex flex-1 leading-none text-sm">
-          Untitled
-        </div>
-        <button className='p-1 opacity-0 group-hover:opacity-100 group-hover:border group-hover:bg-gray-200 rounded-lg'><BsThreeDots /></button>
-      </div>
-    );
+      );
+    })
   }
 
   return (
@@ -26,8 +34,9 @@ export default function AuthSideBar({ workspaceId }) {
           <Image src={logo} alt="LLMHub logo" className="inline mr-1" />
           &nbsp;{workspaceId}
         </a>
+
+        {/* functions */}
         <div className="pt-8 grow">
-          {/* title */}
           <div className='px-2 pb-2 flex flex-row items-center justify-between'>
             <div className="text-gray-500 text-xs p-1">Functions</div>
             <div
@@ -39,35 +48,13 @@ export default function AuthSideBar({ workspaceId }) {
               </svg>
             </div>
           </div>
+
           {/* render functions */}
           <div className='max-h-[70vh] overflow-y-auto'>
-            {renderFunction()}
-            {renderFunction()}
-            {renderFunction()}
-            {renderFunction()}
-            {renderFunction()}
-            {renderFunction()}
-            {renderFunction()}
-            {renderFunction()}
-            {renderFunction()}
-            {renderFunction()}
-            {renderFunction()}
-            {renderFunction()}
-            {renderFunction()}
-            {renderFunction()}
-            {renderFunction()}
-            {renderFunction()}
-            {renderFunction()}
-            {renderFunction()}
-            {renderFunction()}
-            {renderFunction()}
-            {renderFunction()}
-            {renderFunction()}
-            {renderFunction()}
-            {renderFunction()}
-            {renderFunction()}
+            {renderFunctions()}
           </div>
         </div>
+
         {/* aux actions pane */}
         <div className="flex flex-col pt-6 mb-4">
           <a className="flex items-center px-2 interact-bounce hover:bg-gray-100 dark:hover:bg-gray-800 py-1 rounded" href="workspace/metrics">

@@ -1,20 +1,24 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 const handleGet = (req) => {
   const rand = Math.floor(Math.random() * 10);
-  return [...Array(rand).keys()].map((value, index) => {
+  const ret =  [...Array(rand).keys()].map((value, index) => {
     return {
       id: value,
       name: 'Untitled'
     }
   });
+
+  return JSON.stringify(ret);
 }
 
 const handlePost = async (req) => {
   console.log(await req.json());
-  return {
+  const ret = {
     id: Math.floor(Math.random() * 10),
     name: 'Untitled'
   };
+
+  return JSON.stringify(ret);
 }
 
 export default async function handler(req, res) {
