@@ -1,8 +1,12 @@
 
+import { useRouter } from "next/router";
 import { BASE_API_URL } from "../../../../common/constants";
 import AuthSideBar from "../../../../components/sidebar";
 
-export default function Function({workspaceId, functionId, functions}) {
+export default function Function({ functions }) {
+  const router = useRouter();
+  const { workspaceId, id } = router.query;
+
   const renderPlayground = () => {
     return (
       <form>
@@ -42,7 +46,7 @@ export default function Function({workspaceId, functionId, functions}) {
           <button className="text-sm">Share</button>
         </div>
 
-        <div>in function {functionId}</div>
+        <div>in function {id}</div>
         {renderPlayground()}
 
         {/* results pane */}
@@ -60,8 +64,6 @@ export async function getServerSideProps({ params }) {
   // TODO sidroopdaska: fetch the function details
   return {
     props: {
-      workspaceId: params.workspaceId,
-      functionId: params.id,
       functions: data
     }
   }
