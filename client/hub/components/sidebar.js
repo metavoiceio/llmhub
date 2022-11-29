@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import Link from 'next/link'
 import { useRouter } from 'next/router';
 import Image from 'next/image';
 import { HiChartBar } from 'react-icons/hi';
@@ -72,10 +73,10 @@ export default function AuthSideBar({ workspaceId, functions }) {
       <div className="hidden sm:flex select-auto w-[260px] max-w-[530px] min-w-[200px] box-border shrink-0 min-h-screen" >
         <div className="flex flex-col bg-gray-50 dark:bg-gray-900 dark:text-gray-200 border-r-1 dark:border-gray-800 px-2 overflow-auto w-full">
           {/* sidebar header */}
-          <a className="pt-4 flex items-center px-1 text-sm" href="/workspace">
+          <Link className="pt-4 flex items-center px-1 text-sm" href={`/${workspaceId}`}>
             <Image src={logo} alt="LLMHub logo" className="inline mr-1" />
             &nbsp;{workspaceId}
-          </a>
+          </Link>
 
           {/* functions */}
           <div className="pt-8 grow">
@@ -99,14 +100,14 @@ export default function AuthSideBar({ workspaceId, functions }) {
 
           {/* aux actions pane */}
           <div className="flex flex-col pt-6 mb-4">
-            <a className="flex items-center px-2 interact-bounce hover:bg-gray-100 dark:hover:bg-gray-800 py-1 rounded" href="workspace/metrics">
+            <Link className="flex items-center px-2 interact-bounce hover:bg-gray-100 dark:hover:bg-gray-800 py-1 rounded" href={`/${workspaceId}/metrics`}>
               <HiChartBar />
               <span className="text-sm ml-2 mr-1 text-gray-700 dark:text-gray-300">Metrics</span>
-            </a>
-            <a className="flex items-center px-2 interact-bounce hover:bg-gray-100 dark:hover:bg-gray-800 py-1 rounded" href="workspace/settings">
+            </Link>
+            <Link className="flex items-center px-2 interact-bounce hover:bg-gray-100 dark:hover:bg-gray-800 py-1 rounded" href={`/${workspaceId}/settings`}>
               <BsGearWide />
               <span className="text-sm ml-2 mr-1 text-gray-700 dark:text-gray-300">Settings</span>
-            </a>
+            </Link>
           </div>
         </div>
       </div>
