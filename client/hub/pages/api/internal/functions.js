@@ -12,16 +12,19 @@ const handleGet = (req) => {
 }
 
 const handlePost = async (req) => {
-  console.log(await req.json());
-  const ret = {
+  console.log('GOT BODY: ', req.body)
+  const res = {
     id: Math.floor(Math.random() * 10),
     name: 'Untitled'
   };
 
-  return JSON.stringify(ret);
+  return JSON.stringify(res);
 }
 
 export default async function handler(req, res) {
   if (req.method === 'GET') return res.status(200).json(handleGet(req));
-  if (req.method === 'POST') return res.status(201).json(await handlePost(res));
+  if (req.method === 'POST') {
+    const ret = await handlePost(req);
+    return res.status(201).json(ret);
+  };
 }
