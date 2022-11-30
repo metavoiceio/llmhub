@@ -1,4 +1,3 @@
-// sidebar - move to top on mobile view
 import { useRouter } from "next/router";
 import { BASE_API_URL } from "../../common/constants";
 import AuthSideBar from "../../components/sidebar";
@@ -16,8 +15,8 @@ export default function Workspace({ functions }) {
 }
 
 export async function getServerSideProps({ params }) {
-  const req = await fetch(`${BASE_API_URL}/functions`, { method: 'GET' });
-  const data = JSON.parse(await req.json());
+  const res = await fetch(`${BASE_API_URL}/functions`, { method: 'GET' });
+  const data = JSON.parse(await res.json());
 
   return {
     props: {

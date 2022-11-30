@@ -49,12 +49,13 @@ export default function AuthSideBar({ workspaceId, functions }) {
   const renderFunctions = () => {
     return functions.map((funcData, index) => {
       return (
-        <div
+        <Link
           key={funcData.id}
           id={funcData.id}
           role={"button"}
           tabIndex={0}
           className="group p-1 rounded flex items-center text-start dark:hover:bg-gray-800 hover:bg-gray-100 gap-1"
+          href={`/${workspaceId}/functions/${funcData.id}`}
         >
           <div className="p-1 h-6 flex items-center justify-center rounded" >
             <BsBraces />
@@ -63,7 +64,7 @@ export default function AuthSideBar({ workspaceId, functions }) {
             {funcData.name}
           </div>
           <button className='p-1 opacity-0 group-hover:opacity-100 group-hover:border group-hover:bg-gray-200 rounded-lg'><BsThreeDots /></button>
-        </div>
+        </Link>
       );
     })
   }

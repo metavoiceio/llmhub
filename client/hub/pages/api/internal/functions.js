@@ -1,7 +1,13 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 const handleGet = (req) => {
+  if (req.params && req.params.id) {
+    return {
+      
+    }
+  }
+
   const rand = Math.floor(Math.random() * 10);
-  const ret =  [...Array(rand).keys()].map((value, index) => {
+  const ret =  [...Array(rand).keys()].map((value, _index) => {
     return {
       id: value,
       name: 'Untitled'
@@ -15,7 +21,7 @@ const handlePost = async (req) => {
   console.log('GOT BODY: ', req.body)
   const res = {
     id: Math.floor(Math.random() * 10),
-    name: 'Untitled'
+    name: req.body.name
   };
 
   return JSON.stringify(res);
