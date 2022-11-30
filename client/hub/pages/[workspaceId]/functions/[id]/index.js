@@ -1,8 +1,6 @@
 
 import { useRouter } from "next/router";
-import { REDIRECT_NOTFOUND_OBJ } from "../../../../common/constants";
-import supabase from "../../../../common/supabase";
-import { doesWorkspaceExist } from "../../../../common/validation";
+import { getFunctions, supabase } from "../../../../common/supabase";
 import AuthSideBar from "../../../../components/sidebar";
 
 export default function Function({ functions, selectedFunction }) {
@@ -61,27 +59,16 @@ export default function Function({ functions, selectedFunction }) {
 
 export async function getServerSideProps({ params }) {
   let { workspaceId, id } = params;
-  workspaceId = workspaceId.split('-')[1];
-
-  // validate workspace
-  if (!doesWorkspaceExist(workspaceId)) return REDIRECT_NOTFOUND_OBJ;
 
   // get selected function
-  let { data: selectedFunction, sferror } = await supabase
+  let { data: selectedFunction, error } = await supabase
     .from('functions')
     .select(`*`)
     .eq('id', id);
-  if (!selectedFunction) return REDIRECT_NOTFOUND_OBJ;
-
-  // get functions
-  let { data: functions, error } = await supabase
-    .from('functions')
-    .select(`*`)
-    .eq('workspace_id', workspaceId);
 
   return {
     props: {
-      functions,
+      functions: await getFunctions(workspaceId),
       selectedFunction: selectedFunction[0]
     }
   };

@@ -5,5 +5,13 @@ const supabaseUrl = 'https://ynmrxmxganprxliyqppn.supabase.co'
 const supabaseKey = process.env.SUPABASE_KEY
 export const supabase = createClient(supabaseUrl, supabaseKey);
 
-// export function getFunctions
+export async function getFunctions(workspaceId) {
+  workspaceId = workspaceId.split('-')[1];
 
+  let { data: functions, error } = await supabase
+    .from('functions')
+    .select(`*`)
+    .eq('workspace_id', workspaceId);
+  
+    return functions;
+}
