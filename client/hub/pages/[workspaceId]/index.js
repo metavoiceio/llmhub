@@ -1,7 +1,10 @@
 import { useRouter } from "next/router";
-import { BASE_API_URL } from "../../common/constants";
 import AuthSideBar from "../../components/sidebar";
+import supabase from '../../common/supabase';
+import { doesWorkspaceExist } from "../../common/validation";
+import { REDIRECT_NOTFOUND_OBJ } from "../../common/constants";
 
+// TODO: error handling, incorrect workspaceId
 export default function Workspace({ functions }) {
   const router = useRouter();
   const { workspaceId } = router.query;
@@ -15,12 +18,21 @@ export default function Workspace({ functions }) {
 }
 
 export async function getServerSideProps({ params }) {
-  const res = await fetch(`${BASE_API_URL}/functions`, { method: 'GET' });
-  const data = JSON.parse(await res.json());
+  let { workspaceId } = params;
+  workspaceId = workspaceId.split('-')[1];
+
+  // validate workspace
+  if (!doesWorkspaceExist(workspaceId)) return REDIRECT_NOTFOUND_OBJ;
+
+  // get functions
+  let { data: functions, error } = await supabase
+    .from('functions')
+    .select(`*`)
+    .eq('workspace_id', workspaceId);
 
   return {
     props: {
-      functions: data
+      functions
     }
   };
 }

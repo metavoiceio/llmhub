@@ -1,5 +1,6 @@
 import { useRouter } from "next/router";
-import { BASE_API_URL } from "../../common/constants";
+import { REDIRECT_NOTFOUND_OBJ } from "../../common/constants";
+import supabase from "../../common/supabase";
 import AuthSideBar from "../../components/sidebar";
 
 export default function Settings({ functions }) {
@@ -17,12 +18,21 @@ export default function Settings({ functions }) {
 }
 
 export async function getServerSideProps({ params }) {
-  const res = await fetch(`${BASE_API_URL}/functions`, { method: 'GET' });
-  const data = JSON.parse(await res.json());
+  let { workspaceId } = params;
+  workspaceId = workspaceId.split('-')[1];
+
+  // validate workspace
+  if (!doesWorkspaceExist(workspaceId)) return REDIRECT_NOTFOUND_OBJ
+
+  // get functions
+  let { data: functions, error } = await supabase
+    .from('functions')
+    .select(`*`)
+    .eq('workspace_id', workspaceId);
 
   return {
     props: {
-      functions: data
+      functions
     }
   };
 }

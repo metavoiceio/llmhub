@@ -7,7 +7,7 @@ export default function Function() {
       <AuthSideBar workspaceId={WORKSPACE_ID} />
 
       <div className="h-full flex flex-col overflow-y-auto flex-1">
-        deployments page
+        Deployments page
       </div>
     </div>
   );

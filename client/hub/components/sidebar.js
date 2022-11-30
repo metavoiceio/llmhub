@@ -10,7 +10,7 @@ import { BASE_API_URL } from '../common/constants';
 
 export default function AuthSideBar({ workspaceId, functions }) {
   const router = useRouter();
-  const [isRefreshing, setIsRefreshing] = useState(false);
+  const [isRefreshing, setIsRefreshing] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [newFunctionName, setNewFunctionName] = useState('');
 
@@ -47,7 +47,7 @@ export default function AuthSideBar({ workspaceId, functions }) {
   }, [functions])
 
   const renderFunctions = () => {
-    return functions.map((funcData, index) => {
+    return functions.map((funcData, _index) => {
       return (
         <Link
           key={funcData.id}
@@ -101,9 +101,9 @@ export default function AuthSideBar({ workspaceId, functions }) {
 
           {/* aux actions pane */}
           <div className="flex flex-col pt-6 mb-4">
-            <Link className="flex items-center px-2 interact-bounce hover:bg-gray-100 dark:hover:bg-gray-800 py-1 rounded" href={`/${workspaceId}/metrics`}>
+            <Link className="flex items-center px-2 interact-bounce hover:bg-gray-100 dark:hover:bg-gray-800 py-1 rounded" href={`/${workspaceId}/usage`}>
               <HiChartBar />
-              <span className="text-sm ml-2 mr-1 text-gray-700 dark:text-gray-300">Metrics</span>
+              <span className="text-sm ml-2 mr-1 text-gray-700 dark:text-gray-300">Usage</span>
             </Link>
             <Link className="flex items-center px-2 interact-bounce hover:bg-gray-100 dark:hover:bg-gray-800 py-1 rounded" href={`/${workspaceId}/settings`}>
               <BsGearWide />
