@@ -23,7 +23,7 @@ export default function AuthSideBar({ workspaceId, functions }) {
     event.preventDefault();
     event.stopPropagation();
 
-    const res = await fetch(`${BASE_API_URL}/functions`, {
+    const res = await fetch(`${BASE_API_URL}/${workspaceId}/functions`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
