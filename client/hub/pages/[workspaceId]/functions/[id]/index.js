@@ -7,24 +7,18 @@ import PlaygroundEditor from "../../../../components/playgroundEditor";
 import PlaygroundToolbar from "../../../../components/playgroundToolbar";
 import AuthSideBar from "../../../../components/sidebar";
 
+const initialConfig = {
+  temperature: 0.0,
+  presencePenalty: 0.0,
+  frequencyPenalty: 0.0
+};
+
 export default function Function({ functions, selectedFunction }) {
   const router = useRouter();
   const { workspaceId, id } = router.query;
   const [prompt, setPrompt] = useState('');
-  const [configs, setConfigs] = useState({
-    'text-davinci-003': {
-      modelName: 'text-davinci-003',
-      temperature: 0.0,
-      frequencyPenalty: 0.0,
-      presencePenalty: 0.0
-    },
-    'text-davinci-003': {
-      modelName: 'text-davinci-003',
-      temperature: 0.0,
-      frequencyPenalty: 0.0,
-      presencePenalty: 0.0
-    }
-  });
+  const [selectedModel, setSelectedModel] = useState('text-davinci-003');
+  const [modelConfig, setModelConfig] = useState(initialConfig);
 
   const handleRun = (event) => {
     event.preventDefault();
@@ -39,7 +33,12 @@ export default function Function({ functions, selectedFunction }) {
 
       <div className="h-full flex flex-col overflow-y-auto flex-1 mx-4">
         <FunctionsNavbar workspaceId={workspaceId} functionId={id} mode="playground" />
-        <PlaygroundToolbar />
+        <PlaygroundToolbar
+          selectedModel={selectedModel}
+          setSelectedModel={setSelectedModel}
+          modelConfig={modelConfig}
+          setModelConfig={setModelConfig}
+        />
         <PlaygroundEditor
           prompt={prompt}
           setPrompt={setPrompt}
