@@ -1,6 +1,6 @@
 import { useRouter } from "next/router";
-import { BASE_API_URL } from "../../common/constants";
 import AuthSideBar from "../../components/sidebar";
+import { getFunctions } from '../../common/supabase';
 
 export default function Workspace({ functions }) {
   const router = useRouter();
@@ -15,12 +15,11 @@ export default function Workspace({ functions }) {
 }
 
 export async function getServerSideProps({ params }) {
-  const res = await fetch(`${BASE_API_URL}/functions`, { method: 'GET' });
-  const data = JSON.parse(await res.json());
+  let { workspaceId } = params;
 
   return {
     props: {
-      functions: data
+      functions: await getFunctions(workspaceId)
     }
   };
 }

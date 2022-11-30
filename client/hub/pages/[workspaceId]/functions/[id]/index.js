@@ -1,9 +1,9 @@
 
 import { useRouter } from "next/router";
-import { BASE_API_URL } from "../../../../common/constants";
+import { getFunctions, supabase } from "../../../../common/supabase";
 import AuthSideBar from "../../../../components/sidebar";
 
-export default function Function({ functions }) {
+export default function Function({ functions, selectedFunction }) {
   const router = useRouter();
   const { workspaceId, id } = router.query;
 
@@ -46,7 +46,7 @@ export default function Function({ functions }) {
           <button className="text-sm">Share</button>
         </div>
 
-        <div>in function {id}</div>
+        <div>in function {selectedFunction.name}</div>
         {renderPlayground()}
 
         {/* results pane */}
@@ -58,13 +58,18 @@ export default function Function({ functions }) {
 }
 
 export async function getServerSideProps({ params }) {
-  const res = await fetch(`${BASE_API_URL}/functions`, { method: 'GET' });
-  const data = JSON.parse(await res.json());
+  let { workspaceId, id } = params;
 
-  // TODO sidroopdaska: fetch the function details
+  // get selected function
+  let { data: selectedFunction, error } = await supabase
+    .from('functions')
+    .select(`*`)
+    .eq('id', id);
+
   return {
     props: {
-      functions: data
+      functions: await getFunctions(workspaceId),
+      selectedFunction: selectedFunction[0]
     }
-  }
+  };
 }
