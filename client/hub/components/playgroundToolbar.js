@@ -1,57 +1,8 @@
 import { BsSliders } from "react-icons/bs";
-
-const SUPPORTED_MODELS = ['text-davinci-003', 'text-davinci-002'];
-const RENDER_CONFIG_INDEX = {
-  'text-davinci-003': {
-    temperature: {
-      min: 0.0,
-      max: 1.0,
-      helper: '',
-      friendlyName: 'Temperature',
-      step: 0.1
-    },
-    frequencyPenalty: {
-      min: 0.0,
-      max: 1.0,
-      helper: '',
-      friendlyName: 'Frequency Penalty',
-      step: 0.1
-    },
-    presencePenalty: {
-      min: 0.0,
-      max: 1.0,
-      helper: '',
-      friendlyName: 'Presence Penalty',
-      step: 0.1
-    }
-  },
-  'text-davinci-002': {
-    temperature: {
-      min: 0.0,
-      max: 1.0,
-      helper: '',
-      friendlyName: 'Temperature',
-      step: 0.1
-    },
-    frequencyPenalty: {
-      min: 0.0,
-      max: 1.0,
-      helper: '',
-      friendlyName: 'Frequency Penalty',
-      step: 0.1
-    },
-    presencePenalty: {
-      min: 0.0,
-      max: 1.0,
-      helper: '',
-      friendlyName: 'Presence Penalty',
-      step: 0.1
-    }
-  }
-}
+import { SUPPORTED_MODELS, RENDER_CONFIG_INDEX } from "../common/constants";
 
 export default function PlaygroundToolbar(
-  { selectedModel, setSelectedModel, modelConfig, setModelConfig }
+  { selectedModel, setSelectedModel, modelConfigs, setModelConfigs }
 ) {
   const modelSelect = () => {
     return (
@@ -70,6 +21,8 @@ export default function PlaygroundToolbar(
 
   const settingsDropdown = () => {
     const renderConfig = RENDER_CONFIG_INDEX[selectedModel];
+    const selectedModelConfig = modelConfigs[selectedModel];
+
     return (
       <>
         <button
@@ -100,10 +53,13 @@ export default function PlaygroundToolbar(
                         max={value.max}
                         step={value.step}
                         className="w-full px-2 py-2 outline-none text-sm border-y focus:border-blue-500"
-                        value={modelConfig[key]}
-                        onInput={event => setModelConfig({
-                          ...modelConfig,
-                          [key]: parseFloat(event.target.value)
+                        value={selectedModelConfig[key]}
+                        onInput={event => setModelConfigs({
+                          ...modelConfigs,
+                          [selectedModel]: {
+                            ...selectedModelConfig,
+                            [key]: parseFloat(event.target.value)
+                          }
                         })}
                       />
                     </div>
