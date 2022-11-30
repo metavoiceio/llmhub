@@ -10,7 +10,7 @@ import { BASE_API_URL } from '../common/constants';
 
 export default function AuthSideBar({ workspaceId, functions }) {
   const router = useRouter();
-  const [isRefreshing, setIsRefreshing] = useState(true);
+  const [isRefreshing, setIsRefreshing] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [newFunctionName, setNewFunctionName] = useState('');
 
