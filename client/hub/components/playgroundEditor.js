@@ -1,7 +1,5 @@
 
-export default function PlaygroundEditor({ initialPrompt }) {
-  const [prompt, setPrompt] = useState(initialPrompt);
-
+export default function PlaygroundEditor({ prompt, setPrompt, handleRun }) {
   return (
     <form>
       <div className="w-full border border-gray-200 rounded-lg bg-gray-50 dark:bg-gray-700 dark:border-gray-600">
@@ -12,8 +10,9 @@ export default function PlaygroundEditor({ initialPrompt }) {
             rows="20"
             className="w-full px-0 text-sm text-gray-900 bg-white border-0 dark:bg-gray-800 focus:ring-0 dark:text-white dark:placeholder-gray-400 resize-none"
             placeholder="Enter prompt..."
-            required
             onChange={event => setPrompt(event.target.value)}
+            value={prompt}
+            required
           />
         </div>
         <div className="flex items-center justify-between px-3 py-2 border-t dark:border-gray-600">
@@ -21,6 +20,7 @@ export default function PlaygroundEditor({ initialPrompt }) {
             <button
               type="submit"
               className="focus:outline-none text-white bg-green-500 hover:bg-green-700 focus:ring-4 focus:ring-green-300 font-medium rounded-lg py-2.5 px-4 text-xs mr-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800"
+              onClick={handleRun}
             >
               Run
             </button>

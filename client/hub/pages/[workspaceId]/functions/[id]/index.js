@@ -10,6 +10,7 @@ import AuthSideBar from "../../../../components/sidebar";
 export default function Function({ functions, selectedFunction }) {
   const router = useRouter();
   const { workspaceId, id } = router.query;
+  const [prompt, setPrompt] = useState('');
   const [configs, setConfigs] = useState({
     'text-davinci-003': {
       modelName: 'text-davinci-003',
@@ -25,8 +26,11 @@ export default function Function({ functions, selectedFunction }) {
     }
   });
 
-  const renderResultsPane = () => {
-    return <></>
+  const handleRun = (event) => {
+    event.preventDefault();
+    event.stopPropagation();
+
+    console.log(prompt);
   }
 
   return (
@@ -37,9 +41,11 @@ export default function Function({ functions, selectedFunction }) {
         <FunctionsNavbar workspaceId={workspaceId} functionId={id} mode="playground" />
         <PlaygroundToolbar />
         <PlaygroundEditor
-          initialPrompt={''}
+          prompt={prompt}
+          setPrompt={setPrompt}
+          handleRun={handleRun}
         />
-        {renderResultsPane()}
+        {/* {renderResultsPane()} */}
       </div>
     </div>
   );
