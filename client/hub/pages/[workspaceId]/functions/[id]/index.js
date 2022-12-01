@@ -10,8 +10,9 @@ import AuthSideBar from "../../../../components/sidebar";
 
 // TODO: add function name to the top to outline that the function has changed
 // TODO: loading spinner & toast
+// TODO: navigate to deployment page on successful deployment
 export default function Function({
-  functions, initialFunctionData, initialExperimentData, experimentHistory
+  functions, initialFunctionData, initialExperimentData, experimentHistory, currentDeployment
 }) {
   const setInitialModelConfigs = (model, config) => {
     return model ? {
@@ -22,6 +23,7 @@ export default function Function({
 
   const router = useRouter();
   const { workspaceId, id } = router.query;
+  const [isRefreshing, setIsRefreshing] = useState(false);
   const [isRunning, setIsRunning] = useState(false);
   const [prompt, setPrompt] = useState('');
   const [selectedModel, setSelectedModel] = useState('text-davinci-003');
@@ -32,7 +34,13 @@ export default function Function({
     setPrompt(initialExperimentData.prompt || '');
     setSelectedModel(initialExperimentData.model || 'text-davinci-003');
     setModelConfigs(setInitialModelConfigs(initialExperimentData.model, initialExperimentData.config))
+    setIsRefreshing(false);
   }, [initialFunctionData, initialExperimentData]);
+
+  const refreshData = () => {
+    router.replace(router.asPath);
+    setIsRefreshing(true);
+  }
 
   const handleRun = async (event) => {
     event.preventDefault();
@@ -50,13 +58,54 @@ export default function Function({
       })
     });
 
+    setIsRunning(false);
+
     if (res.status < 300) {
       console.log('success')
+      refreshData();
     } else {
       // TODO: error handling
     }
+  }
+
+  const handleDeploy = async (event) => {
+    event.stopPropagation();
+    event.preventDefault();
+
+    if (currentDeployment && currentDeployment.experiment_id === initialFunctionData.current_experiment_id) {
+      console.log('skipping')
+      return;
+    }
+
+    setIsRunning(true);
+
+    // create a new deployment
+    let data, error;
+    (
+      { data, error } = await supabase
+        .from('deployments')
+        .insert([
+          {
+            experiment_id: initialFunctionData.current_experiment_id,
+            function_id: id
+          }
+        ])
+        .select()
+    )
+    if (error) console.log(error);
+
+    // update function with current_deployment_id
+    let current_deployment_id = data[0].id;
+    (
+      { data, error } = await supabase
+        .from('functions')
+        .update({ current_deployment_id })
+        .eq('id', id)
+    );
+    if (error) console.log(error);
 
     setIsRunning(false);
+    router.push(`/${workspaceId}/functions/${id}/deployments`);
   }
 
   const resultsPane = () => {
@@ -86,6 +135,8 @@ export default function Function({
           setPrompt={setPrompt}
           handleRun={handleRun}
           experimentHistory={experimentHistory}
+          isRunning={isRunning || isRefreshing}
+          handleDeploy={handleDeploy}
         />
         {resultsPane()}
       </div>
@@ -102,7 +153,6 @@ export async function getServerSideProps({ params }) {
     .from('functions')
     .select(`*`)
     .eq('id', id);
-
   const selectedFunction = functions[0];
 
   // get current experiment
@@ -124,12 +174,22 @@ export async function getServerSideProps({ params }) {
       .order('created_at', { ascending: false })
   )
 
+  // get current deployment
+  let deployments;
+  (
+    { data: deployments, error } = await supabase
+      .from('deployments')
+      .select("*")
+      .eq('id', selectedFunction.current_deployment_id)
+  )
+
   return {
     props: {
       functions: await getFunctions(workspaceId),
       initialFunctionData: selectedFunction,
       initialExperimentData: currentExperiment,
-      experimentHistory: experiments
+      experimentHistory: experiments,
+      currentDeployment: error ? {} : deployments[0]
     }
   };
 }

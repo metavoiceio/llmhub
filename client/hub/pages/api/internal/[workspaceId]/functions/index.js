@@ -6,7 +6,7 @@ async function handlePost(workspaceId, req) {
     .insert([
       {
         name: req.body.name,
-        is_public: false,
+        is_public: true,
         workspace_id: workspaceId
       },
     ]);
