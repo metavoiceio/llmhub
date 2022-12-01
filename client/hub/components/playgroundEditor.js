@@ -20,7 +20,7 @@ export default function PlaygroundEditor({ prompt, setPrompt, handleRun, experim
           <div className="flex pl-0 space-x-1 sm:pl-2">
             <button
               type="submit"
-              className="focus:outline-none text-white bg-green-500 hover:bg-green-700 focus:ring-4 focus:ring-green-300 font-medium rounded-lg py-2.5 px-4 text-xs mr-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800"
+              className="focus:outline-none text-white bg-green-500 hover:bg-green-700 focus:ring-4 focus:ring-green-300 font-medium rounded-lg py-2.5 px-4 text-xs mr-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800 disabled:opacity-50 disabled:cursor-not-allowed"
               disabled={isRunning}
             >
               Run

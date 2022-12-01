@@ -22,6 +22,7 @@ export default function Function({
 
   const router = useRouter();
   const { workspaceId, id } = router.query;
+  const [isRefreshing, setIsRefreshing] = useState(false);
   const [isRunning, setIsRunning] = useState(false);
   const [prompt, setPrompt] = useState('');
   const [selectedModel, setSelectedModel] = useState('text-davinci-003');
@@ -32,6 +33,7 @@ export default function Function({
     setPrompt(initialExperimentData.prompt || '');
     setSelectedModel(initialExperimentData.model || 'text-davinci-003');
     setModelConfigs(setInitialModelConfigs(initialExperimentData.model, initialExperimentData.config))
+    setIsRefreshing(false);
   }, [initialFunctionData, initialExperimentData]);
 
   const handleRun = async (event) => {
@@ -50,13 +52,19 @@ export default function Function({
       })
     });
 
+    setIsRunning(false);
+
     if (res.status < 300) {
       console.log('success')
+      refreshData();
     } else {
       // TODO: error handling
     }
+  }
 
-    setIsRunning(false);
+  const refreshData = () => {
+    router.replace(router.asPath);
+    setIsRefreshing(true);
   }
 
   const resultsPane = () => {
@@ -86,7 +94,7 @@ export default function Function({
           setPrompt={setPrompt}
           handleRun={handleRun}
           experimentHistory={experimentHistory}
-          isRunning={isRunning}
+          isRunning={isRunning || isRefreshing}
         />
         {resultsPane()}
       </div>
