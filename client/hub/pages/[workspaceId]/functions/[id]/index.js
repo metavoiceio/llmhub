@@ -10,6 +10,8 @@ import AuthSideBar from "../../../../components/sidebar";
 
 // TODO: add function name to the top to outline that the function has changed
 // TODO: loading spinner & toast
+// disable deployment button
+// refresh data after run, enable deployment button
 export default function Function({
   functions, initialFunctionData, initialExperimentData, experimentHistory
 }) {
@@ -86,6 +88,7 @@ export default function Function({
           setPrompt={setPrompt}
           handleRun={handleRun}
           experimentHistory={experimentHistory}
+          isRunning={isRunning}
         />
         {resultsPane()}
       </div>
