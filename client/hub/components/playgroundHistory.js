@@ -6,11 +6,24 @@ export default function PlaygroundHistory({ history }) {
   }
 
   const showHistory = () => {
-    return (
-      <p className="mb-6 text-sm text-gray-500 dark:text-gray-400">
-        Supercharge your hiring by taking advantage of our <a href="#" className="text-blue-600 underline dark:text-blue-500 hover:no-underline">limited-time sale</a> for Flowbite Docs + Job Board. Unlimited access to over 190K top-ranked candidates and the #1 design job board.
-      </p>
-    )
+    if (history.length === 0) return <p>No history to show</p>;
+
+    return history.map((experiment, idx) => {
+      return (
+        <div key={`experiment-${idx}`}>
+          <div>created_at: {experiment.created_at}</div>
+          <div>Prompt</div>
+          <div>{experiment.prompt}</div>
+          <div>Output</div>
+          <div>{experiment.output}</div>
+          <div>
+            {experiment.model} &nbsp;
+            {JSON.stringify(experiment.config)}
+          </div>
+          <div class="flex-grow border-b border-gray-400"></div>
+        </div>
+      )
+    });
   }
 
   return (

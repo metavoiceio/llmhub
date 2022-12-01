@@ -1,6 +1,6 @@
 import PlaygroundHistory from "./playgroundHistory"
 
-export default function PlaygroundEditor({ prompt, setPrompt, handleRun }) {
+export default function PlaygroundEditor({ prompt, setPrompt, handleRun, experimentHistory }) {
   return (
     <form>
       <div className="w-full border border-gray-200 rounded-lg bg-gray-50 dark:bg-gray-700 dark:border-gray-600">
@@ -25,7 +25,7 @@ export default function PlaygroundEditor({ prompt, setPrompt, handleRun }) {
             >
               Run
             </button>
-            <PlaygroundHistory />
+            <PlaygroundHistory history={experimentHistory} />
           </div>
           <div className="flex pl-0 space-x-1 sm:pl-2">
             <button

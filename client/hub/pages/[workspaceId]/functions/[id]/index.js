@@ -10,7 +10,9 @@ import AuthSideBar from "../../../../components/sidebar";
 
 // TODO: add function name to the top to outline that the function has changed
 // TODO: loading spinner & toast
-export default function Function({ functions, initialFunctionData, initialExperimentData }) {
+export default function Function({
+  functions, initialFunctionData, initialExperimentData, experimentHistory
+}) {
   const setInitialModelConfigs = (model, config) => {
     return model ? {
       ...INITIAL_MODEL_CONFIGS,
@@ -83,6 +85,7 @@ export default function Function({ functions, initialFunctionData, initialExperi
           prompt={prompt}
           setPrompt={setPrompt}
           handleRun={handleRun}
+          experimentHistory={experimentHistory}
         />
         {resultsPane()}
       </div>
@@ -109,13 +112,24 @@ export async function getServerSideProps({ params }) {
       .from('experiments')
       .select("*")
       .eq('id', selectedFunction.current_experiment_id)
+  );
+  let currentExperiment = error ? {} : experiments[0];
+
+  //  get experiment history
+  (
+    { data: experiments, error } = await supabase
+      .from('experiments')
+      .select("*")
+      .eq('function_id', id)
+      .order('created_at', { ascending: false })
   )
 
   return {
     props: {
       functions: await getFunctions(workspaceId),
       initialFunctionData: selectedFunction,
-      initialExperimentData: error ? {} : experiments[0]
+      initialExperimentData: currentExperiment,
+      experimentHistory: experiments
     }
   };
 }
