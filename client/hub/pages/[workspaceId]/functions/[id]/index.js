@@ -12,7 +12,7 @@ import AuthSideBar from "../../../../components/sidebar";
 // TODO: loading spinner & toast
 // TODO: navigate to deployment page on successful deployment
 export default function Function({
-  functions, initialFunctionData, initialExperimentData, experimentHistory
+  functions, initialFunctionData, initialExperimentData, experimentHistory, currentDeployment
 }) {
   const setInitialModelConfigs = (model, config) => {
     return model ? {
@@ -69,7 +69,14 @@ export default function Function({
   }
 
   const handleDeploy = async (event) => {
-    // todo: handle multiple clicks
+    event.stopPropagation();
+    event.preventDefault();
+
+    if (currentDeployment && currentDeployment.experiment_id === initialFunctionData.current_experiment_id) {
+      console.log('skipping')
+      return;
+    }
+
     setIsRunning(true);
 
     // create a new deployment
@@ -78,26 +85,27 @@ export default function Function({
       { data, error } = await supabase
         .from('deployments')
         .insert([
-          { experiment_id: initialFunctionData.current_experiment_id }
+          {
+            experiment_id: initialFunctionData.current_experiment_id,
+            function_id: id
+          }
         ])
         .select()
     )
     if (error) console.log(error);
 
     // update function with current_deployment_id
-    console.log(data);
-    console.log(initialFunctionData.id);
     let current_deployment_id = data[0].id;
     (
       { data, error } = await supabase
         .from('functions')
         .update({ current_deployment_id })
-        .eq('id', initialFunctionData.id)
+        .eq('id', id)
     );
     if (error) console.log(error);
 
     setIsRunning(false);
-    console.log('success');
+    router.push(`/${workspaceId}/functions/${id}/deployments`);
   }
 
   const resultsPane = () => {
@@ -145,7 +153,6 @@ export async function getServerSideProps({ params }) {
     .from('functions')
     .select(`*`)
     .eq('id', id);
-
   const selectedFunction = functions[0];
 
   // get current experiment
@@ -167,12 +174,22 @@ export async function getServerSideProps({ params }) {
       .order('created_at', { ascending: false })
   )
 
+  // get current deployment
+  let deployments;
+  (
+    { data: deployments, error } = await supabase
+      .from('deployments')
+      .select("*")
+      .eq('id', selectedFunction.current_deployment_id)
+  )
+
   return {
     props: {
       functions: await getFunctions(workspaceId),
       initialFunctionData: selectedFunction,
       initialExperimentData: currentExperiment,
-      experimentHistory: experiments
+      experimentHistory: experiments,
+      currentDeployment: error ? {} : deployments[0]
     }
   };
 }
