@@ -13,19 +13,6 @@ export default function Home() {
       <UnAuthNavBar />
       <main className={styles.main}>
         <h1 className={styles.title}>Welcome to LLMHub</h1>
-        {/* {
-          session ? (
-            <>
-              Signed in as {session.user.email} <br />
-              <button onClick={() => signOut()}>Sign out</button>
-            </>
-          ) : (
-            <>
-              Not signed in <br />
-              <button onClick={() => signIn()}>Sign in</button>
-            </>
-          )
-        } */}
       </main>
       <Footer />
     </div>

@@ -1,4 +1,6 @@
+import Link from "next/link"
 import { Navbar, Button } from "flowbite-react"
+import { signIn, signOut } from "next-auth/react";
 
 export default function UnAuthNavBar() {
   return (
@@ -13,8 +15,24 @@ export default function UnAuthNavBar() {
         </span>
       </Navbar.Brand>
       <div className="flex md:order-2 space-x-1">
-        <Button size="sm" color="light">Login</Button>
-        <Button size="sm">Sign up</Button>
+        <Link
+          href='/api/auth/signin'
+          onClick={e => {
+            e.preventDefault();
+            signIn();
+          }}
+        >
+          Login
+        </Link>
+        <Link
+          href='/api/auth/signout'
+          onClick={e => {
+            e.preventDefault();
+            signOut();
+          }}
+        >
+          Sign out
+        </Link>
       </div>
     </Navbar>
   )
