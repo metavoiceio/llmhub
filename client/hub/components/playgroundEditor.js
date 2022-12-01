@@ -1,6 +1,8 @@
 import PlaygroundHistory from "./playgroundHistory"
 
-export default function PlaygroundEditor({ prompt, setPrompt, handleRun, experimentHistory, isRunning }) {
+export default function PlaygroundEditor({
+  prompt, setPrompt, handleRun, experimentHistory, isRunning, handleDeploy
+}) {
   return (
     <form onSubmit={handleRun}>
       <div className="w-full border border-gray-200 rounded-lg bg-gray-50 dark:bg-gray-700 dark:border-gray-600">
@@ -31,6 +33,7 @@ export default function PlaygroundEditor({ prompt, setPrompt, handleRun, experim
             <button
               className="text-white bg-gradient-to-br from-pink-500 to-orange-400 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-pink-200 dark:focus:ring-pink-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2 disabled:cursor-not-allowed disabled:opacity-50"
               disabled={isRunning || experimentHistory.length === 0}
+              onClick={handleDeploy}
             >
               Deploy
             </button>

@@ -10,6 +10,7 @@ import AuthSideBar from "../../../../components/sidebar";
 
 // TODO: add function name to the top to outline that the function has changed
 // TODO: loading spinner & toast
+// TODO: navigate to deployment page on successful deployment
 export default function Function({
   functions, initialFunctionData, initialExperimentData, experimentHistory
 }) {
@@ -35,6 +36,11 @@ export default function Function({
     setModelConfigs(setInitialModelConfigs(initialExperimentData.model, initialExperimentData.config))
     setIsRefreshing(false);
   }, [initialFunctionData, initialExperimentData]);
+
+  const refreshData = () => {
+    router.replace(router.asPath);
+    setIsRefreshing(true);
+  }
 
   const handleRun = async (event) => {
     event.preventDefault();
@@ -62,9 +68,36 @@ export default function Function({
     }
   }
 
-  const refreshData = () => {
-    router.replace(router.asPath);
-    setIsRefreshing(true);
+  const handleDeploy = async (event) => {
+    // todo: handle multiple clicks
+    setIsRunning(true);
+
+    // create a new deployment
+    let data, error;
+    (
+      { data, error } = await supabase
+        .from('deployments')
+        .insert([
+          { experiment_id: initialFunctionData.current_experiment_id }
+        ])
+        .select()
+    )
+    if (error) console.log(error);
+
+    // update function with current_deployment_id
+    console.log(data);
+    console.log(initialFunctionData.id);
+    let current_deployment_id = data[0].id;
+    (
+      { data, error } = await supabase
+        .from('functions')
+        .update({ current_deployment_id })
+        .eq('id', initialFunctionData.id)
+    );
+    if (error) console.log(error);
+
+    setIsRunning(false);
+    console.log('success');
   }
 
   const resultsPane = () => {
@@ -95,6 +128,7 @@ export default function Function({
           handleRun={handleRun}
           experimentHistory={experimentHistory}
           isRunning={isRunning || isRefreshing}
+          handleDeploy={handleDeploy}
         />
         {resultsPane()}
       </div>

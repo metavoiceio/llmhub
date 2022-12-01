@@ -20,7 +20,7 @@ export default function PlaygroundHistory({ history }) {
             {experiment.model} &nbsp;
             {JSON.stringify(experiment.config)}
           </div>
-          <div class="flex-grow border-b border-gray-400"></div>
+          <div className="flex-grow border-b border-gray-400"></div>
         </div>
       )
     });
