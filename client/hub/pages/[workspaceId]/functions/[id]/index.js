@@ -9,7 +9,7 @@ import PlaygroundToolbar from "../../../../components/playgroundToolbar";
 import AuthSideBar from "../../../../components/sidebar";
 
 // TODO: add function name to the top to outline that the function has changed
-// TODO: loading spinner
+// TODO: loading spinner & toast
 export default function Function({ functions, initialFunctionData, initialExperimentData }) {
   const setInitialModelConfigs = (model, config) => {
     return model ? {
