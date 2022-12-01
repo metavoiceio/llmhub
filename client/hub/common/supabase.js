@@ -9,7 +9,8 @@ export async function getFunctions(workspaceId) {
   let { data: functions, error } = await supabase
     .from('functions')
     .select(`*`)
-    .eq('workspace_id', workspaceId);
-  
-    return functions;
+    .eq('workspace_id', workspaceId)
+    .order('created_at', { ascending: false });
+
+  return functions;
 }
