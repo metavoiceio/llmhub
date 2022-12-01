@@ -1,5 +1,6 @@
 import { supabase } from '../../../../../common/supabase';
 
+// TODO: move to frontend
 async function handlePost(workspaceId, req) {
   return await supabase
     .from('functions')
