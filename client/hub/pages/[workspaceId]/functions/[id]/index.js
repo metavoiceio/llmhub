@@ -1,6 +1,6 @@
 
 import { useRouter } from "next/router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { BASE_API_URL, INITIAL_MODEL_CONFIGS } from "../../../../common/constants";
 import { getFunctions, supabase } from "../../../../common/supabase";
 import FunctionsNavbar from "../../../../components/functionsNavBar";
@@ -8,17 +8,29 @@ import PlaygroundEditor from "../../../../components/playgroundEditor";
 import PlaygroundToolbar from "../../../../components/playgroundToolbar";
 import AuthSideBar from "../../../../components/sidebar";
 
-export default function Function({ functions, selectedFunction }) {
-  const setInitialModelConfigs = () => {
-    return INITIAL_MODEL_CONFIGS;
+// TODO: add function name to the top to outline that the function has changed
+// TODO: loading spinner
+export default function Function({ functions, initialFunctionData, initialExperimentData }) {
+  const setInitialModelConfigs = (model, config) => {
+    return model ? {
+      ...INITIAL_MODEL_CONFIGS,
+      [model]: config
+    } : INITIAL_MODEL_CONFIGS;
   }
 
   const router = useRouter();
   const { workspaceId, id } = router.query;
+  const [isRunning, setIsRunning] = useState(false);
   const [prompt, setPrompt] = useState('');
   const [selectedModel, setSelectedModel] = useState('text-davinci-003');
-  const [modelConfigs, setModelConfigs] = useState(setInitialModelConfigs());
-  const [isRunning, setIsRunning] = useState(false);
+  const [modelConfigs, setModelConfigs] = useState(INITIAL_MODEL_CONFIGS);
+  const [isPublic, setIsPublic] = useState(initialFunctionData.is_public);
+
+  useEffect(() => {
+    setPrompt(initialExperimentData.prompt || '');
+    setSelectedModel(initialExperimentData.model || 'text-davinci-003');
+    setModelConfigs(setInitialModelConfigs(initialExperimentData.model, initialExperimentData.config))
+  }, [initialFunctionData, initialExperimentData]);
 
   const handleRun = async (event) => {
     event.preventDefault();
@@ -45,6 +57,16 @@ export default function Function({ functions, selectedFunction }) {
     setIsRunning(false);
   }
 
+  const resultsPane = () => {
+    return (
+      <div>
+        <p>output: {initialExperimentData.output}</p>
+        <p>num_tokens: {initialExperimentData.num_tokens}</p>
+        <p>duration_s: {initialExperimentData.duration_s}</p>
+      </div>
+    )
+  }
+
   return (
     <div className="flex flex-col sm:flex-row min-h-screen">
       <AuthSideBar workspaceId={workspaceId} functions={functions} />
@@ -62,25 +84,38 @@ export default function Function({ functions, selectedFunction }) {
           setPrompt={setPrompt}
           handleRun={handleRun}
         />
-        {/* {renderResultsPane()} */}
+        {resultsPane()}
       </div>
     </div>
   );
 }
 
+// TODO sidroopdaska: error handling
 export async function getServerSideProps({ params }) {
   let { workspaceId, id } = params;
 
   // get selected function
-  let { data: selectedFunction, error } = await supabase
+  let { data: functions, error } = await supabase
     .from('functions')
     .select(`*`)
     .eq('id', id);
 
+  const selectedFunction = functions[0];
+
+  // get current experiment
+  let experiments;
+  (
+    { data: experiments, error } = await supabase
+      .from('experiments')
+      .select("*")
+      .eq('id', selectedFunction.current_experiment_id)
+  )
+
   return {
     props: {
       functions: await getFunctions(workspaceId),
-      selectedFunction: selectedFunction[0]
+      initialFunctionData: selectedFunction,
+      initialExperimentData: error ? {} : experiments[0]
     }
   };
 }
