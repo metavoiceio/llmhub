@@ -29,8 +29,8 @@ export default function PlaygroundEditor({ prompt, setPrompt, handleRun, experim
           </div>
           <div className="flex pl-0 space-x-1 sm:pl-2">
             <button
-              className="text-blue-700 hover:text-white border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-xs py-2.5 px-4 text-center mr-2 dark:border-blue-500 dark:text-blue-500 dark:hover:text-white dark:hover:bg-blue-600 dark:focus:ring-blue-800"
-              disabled={isRunning}
+              className="text-white bg-gradient-to-br from-pink-500 to-orange-400 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-pink-200 dark:focus:ring-pink-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2 disabled:cursor-not-allowed disabled:opacity-50"
+              disabled={isRunning || experimentHistory.length === 0}
             >
               Deploy
             </button>
