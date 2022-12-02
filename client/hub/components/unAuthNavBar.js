@@ -1,4 +1,3 @@
-import Link from "next/link"
 import { Navbar, Button } from "flowbite-react"
 import { signIn, signOut } from "next-auth/react";
 
@@ -15,24 +14,25 @@ export default function UnAuthNavBar() {
         </span>
       </Navbar.Brand>
       <div className="flex md:order-2 space-x-1">
-        <Link
-          href='/api/auth/signin'
+        <Button
+          size="sm"
+          color="light"
           onClick={e => {
             e.preventDefault();
-            signIn();
+            signIn('auth0', { callbackUrl: process.env.NEXT_PUBLIC_POST_SIGNIN_URL })
           }}
         >
           Login
-        </Link>
-        <Link
-          href='/api/auth/signout'
+        </Button>
+        <Button
+          size="sm"
           onClick={e => {
             e.preventDefault();
-            signOut();
+            signOut({ callbackUrl: process.env.NEXT_PUBLIC_POST_SIGNOUT_URL })
           }}
         >
           Sign out
-        </Link>
+        </Button>
       </div>
     </Navbar>
   )
