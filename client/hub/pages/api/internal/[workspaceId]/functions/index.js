@@ -8,7 +8,7 @@ async function handlePost(workspaceId, req) {
       {
         name: req.body.name,
         is_public: true,
-        workspace_id: workspaceId
+        workspace_id: workspaceId,
       },
     ]);
 }

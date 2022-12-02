@@ -39,6 +39,7 @@ export default function AuthSideBar({ workspaceId, functions }) {
       setNewFunctionName('');
     } else {
       // TODO sidroopdaska: error handling
+      console.log(error);
     }
   }
 
