@@ -5,7 +5,6 @@ export const authOptions = {
   callbacks: {
     async session({ session, token, user }) {
       session.user.id = parseInt(token.sub.split('|')[1]);
-      console.log(session);
       return session;
     }
   },
