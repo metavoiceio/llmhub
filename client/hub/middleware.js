@@ -36,18 +36,16 @@ const params = (url) => {
 export default withAuth({
   callbacks: {
     async authorized({ req, token }) {
-      if (!req.nextUrl.href.includes('api')) {
-        const { workspaceId } = params(req.url);
+      if (req.nextUrl.href.includes('welcome')) return !!token;
 
-        // check if token exists & user owns workspace
-        const { data: [workspace], error } = await supabase
-          .from('workspaces')
-          .select('*')
-          .eq('id', workspaceId)
-        return !!token && !error && workspace.user_id === 2;
-      }
+      // check if token exists & user owns workspace
+      const { workspaceId } = params(req.url);
+      const { data: workspaces, error } = await supabase
+        .from('workspaces')
+        .select('*')
+        .eq('id', workspaceId)
 
-      return !!token
+      return !!token && !error && workspaces[0].user_id === parseInt(token.sub.split('|')[1]);
     },
   },
 })
