@@ -1,28 +1,20 @@
 import NextAuth from 'next-auth';
-import GithubProvider from 'next-auth/providers/github';
+import Auth0Provider from "next-auth/providers/auth0";
 
 export const authOptions = {
-    callbacks: {
-        async jwt({ token, account, profile }) {
-            // Persist the OAuth access_token and or the user id to the token right after signin
-            if (account) {
-                token.accessToken = account.access_token
-                token.id = profile.id
-            }
-            return token
-        },
-        async session({ session, token, user }) {
-            // Send properties to the client, like an access_token from a provider.
-            session.accessToken = token.accessToken
-            return session
-        }
-    },
-    providers: [
-        GithubProvider({
-            clientId: process.env.GITHUB_CLIENT_ID,
-            clientSecret: process.env.GITHUB_CLIENT_SECRET
-        })
-    ]
+  callbacks: {
+    async session({ session, token, user }) {
+      session.user.id = parseInt(token.sub.split('|')[1]);
+      return session;
+    }
+  },
+  providers: [
+    Auth0Provider({
+      clientId: process.env.NEXT_AUTH0_CLIENT_ID,
+      clientSecret: process.env.NEXT_AUTH0_CLIENT_SECRET,
+      issuer: process.env.NEXT_AUTH0_ISSUER
+    })
+  ]
 }
 
 export default NextAuth(authOptions);

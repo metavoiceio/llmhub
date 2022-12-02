@@ -1,6 +1,6 @@
 import { supabase } from '../../../../../../common/supabase';
 
-function mockCompletionApiCall() {
+export function mockCompletionApiCall() {
   return new Promise((resolve, reject) => {
     setTimeout(() => resolve({
       output: 'This is a generated output by a LLM',
