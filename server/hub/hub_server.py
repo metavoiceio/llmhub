@@ -23,7 +23,7 @@ app.add_middleware(
 
 @app.get("/")
 async def health_check():
-    return "OK"
+    return "LLMHub is up and running."
 
 
 class CompletionRequest(BaseModel):
@@ -41,4 +41,4 @@ async def get_completion(request: CompletionRequest):
 
 if __name__ == "__main__":
     # start server
-    uvicorn.run(app, host="127.0.0.1", port=58000, log_level="info")
+    uvicorn.run(app, host="127.0.0.1", port=58001, log_level="info")
