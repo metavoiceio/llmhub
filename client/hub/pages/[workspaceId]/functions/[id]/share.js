@@ -57,7 +57,7 @@ export default function Share() {
 
   const resultPane = () => {
     return (
-      <div className='mt-[2px] h-[calc(25vh)] bg-[#f0f0f0] border rounded p-2'>
+      <div className='mt-[2px] h-[calc(25vh)] bg-[#f0f0f0] border rounded p-2 overflow-y-auto'>
         <div className="flex flex-col">
           {/* top bar */}
           <div className="flex gap-10 mb-4">
@@ -71,7 +71,9 @@ export default function Share() {
             </div>
           </div>
           {/* output */}
-          <p className="text-sm">Renders output...</p>
+          <p className="text-sm">
+            Show results here...
+          </p>
         </div>
       </div>
     )
@@ -80,7 +82,7 @@ export default function Share() {
   return (
     <>
       {navbar()}
-      <div className="h-screen px-5 mt-10 flex">
+      <div className="max-h-screen px-5 mt-10 flex overflow-y-hidden scrollbar-hide">
         <div className='flex-1'>
           <div className="flex flex-col">
             <PlaygroundEditor />
