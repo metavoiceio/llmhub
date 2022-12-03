@@ -10,15 +10,34 @@ export function mockCompletionApiCall() {
   });
 }
 
+export function completionApiCall(prompt, input, config) {
+    fetch('https://api.llmhub.com/completion', {
+      method: 'POST',
+      body: JSON.stringify({
+        prompt: prompt,
+        input: input,
+        config: config
+      })
+    })
+    .then(response => response.json())
+    .then(data => {
+      return data;
+    });
+}
+
 export default async function handler(req, res) {
   const { workspaceId, id } = req.query
 
   if (req.method !== 'POST') return res.status(500).json({ error: 'Invalid request' });
 
   const { prompt, input, model, config } = req.body;
+  // TODO: make sure this works across various different providers
+  config["engine"] = model; // TODO: remove this when the API is updated
+  config["provider"] = "openai";
 
   // call completion API
-  const { output, num_tokens, duration_s } = await mockCompletionApiCall();
+  // const { output, num_tokens, duration_s } = await mockCompletionApiCall(prompt, input, model, config);
+  const { output, num_tokens, duration_s } = await completionApiCall(prompt, input, config);
 
   let data, error;
   // update usage_tokens in the workspace
