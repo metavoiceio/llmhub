@@ -6,6 +6,7 @@ import { getFunctions, supabase } from "../../../../common/supabase";
 import FunctionsNavbar from "../../../../components/functionsNavBar";
 import PlaygroundEditor from "../../../../components/playgroundEditor";
 import PlaygroundToolbar from "../../../../components/playgroundToolbar";
+import ResultPane from "../../../../components/resultPane";
 import AuthSideBar from "../../../../components/sidebar";
 
 // TODO: add function name to the top to outline that the function has changed
@@ -108,16 +109,6 @@ export default function Function({
     router.push(`/${workspaceId}/functions/${id}/deployments`);
   }
 
-  const resultsPane = () => {
-    return (
-      <div>
-        <p>output: {initialExperimentData.output}</p>
-        <p>num_tokens: {initialExperimentData.num_tokens}</p>
-        <p>duration_s: {initialExperimentData.duration_s}</p>
-      </div>
-    )
-  }
-
   return (
     <div className="flex flex-col sm:flex-row min-h-screen">
       <AuthSideBar workspaceId={workspaceId} functions={functions} />
@@ -138,7 +129,11 @@ export default function Function({
           isRunning={isRunning || isRefreshing}
           handleDeploy={handleDeploy}
         />
-        {resultsPane()}
+        <ResultPane
+          output={initialExperimentData.output}
+          num_tokens={initialExperimentData.num_tokens}
+          duration_s={initialExperimentData.duration_s}
+        />
       </div>
     </div>
   );
