@@ -1,6 +1,5 @@
 #! /usr/bin/env node
 
-
 require('dotenv').config();
 const { Issuer, errors: { OPError } } = require('openid-client');
 const open = require('open');
@@ -13,10 +12,6 @@ const { program } = require('commander');
 const figlet = require("figlet");
 
 console.log(figlet.textSync("LLM Hub"));
-
-// program
-//   .version('0.0.1')
-//   .description("LLM Hub CLI");
 
 const options = program.opts();
 
@@ -85,8 +80,6 @@ async function authToken() {
       process.exitCode = 1;
   }
 }
-      
-
 
 program
   .command('auth')
