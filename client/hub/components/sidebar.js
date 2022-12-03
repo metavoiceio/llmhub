@@ -7,12 +7,15 @@ import { BsGearWide, BsBraces, BsThreeDots } from 'react-icons/bs';
 import logo from "../public/logo.png";
 import NewFunctionModal from './newFunctionModal';
 import { BASE_API_URL } from '../common/constants';
+import { toast } from 'react-toastify';
 
 export default function AuthSideBar({ workspaceId, functions }) {
   const router = useRouter();
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [newFunctionName, setNewFunctionName] = useState('');
+  const [functionToFork, setFunctionToFork] = useState('');
+  const [isRunning, setIsRunning] = useState(false);
 
   const refreshData = () => {
     router.replace(router.asPath);
@@ -22,6 +25,7 @@ export default function AuthSideBar({ workspaceId, functions }) {
   const handleCreateFunction = async (event) => {
     event.preventDefault();
     event.stopPropagation();
+    setIsRunning(true);
 
     const res = await fetch(`${BASE_API_URL}/${workspaceId}/functions`, {
       method: 'POST',
@@ -29,18 +33,23 @@ export default function AuthSideBar({ workspaceId, functions }) {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
-        name: newFunctionName
+        name: newFunctionName,
+        functionToFork
       })
     });
 
     if (res.status < 300) {
       refreshData();
-      setIsModalOpen(false);
-      setNewFunctionName('');
+      toast("Function successfully created!", { type: 'success' });
     } else {
       // TODO sidroopdaska: error handling
-      console.log(error);
+      console.log(await res.json());
+      toast("Unable to make function", { type: 'error' });
     }
+    setIsModalOpen(false);
+    setNewFunctionName('');
+    setFunctionToFork('');
+    setIsRunning(false);
   }
 
   useEffect(() => {
@@ -119,6 +128,9 @@ export default function AuthSideBar({ workspaceId, functions }) {
         handleCreateFunction={handleCreateFunction}
         newFunctionName={newFunctionName}
         setNewFunctionName={setNewFunctionName}
+        functionToFork={functionToFork}
+        setFunctionToFork={setFunctionToFork}
+        isRunning={isRunning}
       />
     </>
   );
