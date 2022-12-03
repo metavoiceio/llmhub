@@ -44,11 +44,15 @@ export default withAuth({
       let workspaces, error;
 
       try {
+        // route - /welcome
         if (req.nextUrl.href.includes('welcome')) return !!token;
 
-        // for public facing API, ensure that user has a valid workspace
+        // route - /api/v0/*, ensure user has a valid workspace
         // TODO: check for plan validity
-        if (req.nextUrl.href.includes('api/v0')) {
+        if (
+          req.nextUrl.href.includes('api/v0') ||
+          req.nextUrl.href.includes('share')
+        ) {
           const decoded = getTokenFromReqHeaders(req.headers.get("Authorization"));
           (
             { data: workspaces, error } = await supabase
@@ -64,6 +68,7 @@ export default withAuth({
           return !error && workspaces.length > 0;
         }
 
+        // route - /:workspaceId/*, /api/internal/*
         // check if token exists & user owns workspace
         const { workspaceId } = params(req.url);
         (
