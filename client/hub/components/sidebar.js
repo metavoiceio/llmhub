@@ -64,7 +64,7 @@ export default function AuthSideBar({ workspaceId, functions }) {
           <div className="flex flex-1 leading-none text-sm">
             {funcData.name}
           </div>
-          <button className='p-1 opacity-0 group-hover:opacity-100 group-hover:border group-hover:bg-gray-200 rounded-lg'><BsThreeDots /></button>
+          {/* <button className='p-1 opacity-0 group-hover:opacity-100 group-hover:border group-hover:bg-gray-200 rounded-lg'><BsThreeDots /></button> */}
         </Link>
       );
     })
