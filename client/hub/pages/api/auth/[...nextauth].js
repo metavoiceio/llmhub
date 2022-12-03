@@ -4,8 +4,18 @@ import { parseUserIdFromToken } from '../../../common/token';
 
 export const authOptions = {
   callbacks: {
+    async jwt({ token, account, profile }) {
+      if (account) {
+        token.name = profile.name
+        token.nickname = profile.nickname
+        token.accessToken = account.id_token
+      }
+      return token
+    },
     async session({ session, token, user }) {
       session.user.id = parseUserIdFromToken(token);
+      session.user.nickname = token.nickname;
+      session.id_token = token.accessToken
       return session;
     }
   },

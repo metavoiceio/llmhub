@@ -71,3 +71,9 @@ export const RENDER_CONFIG_INDEX = {
     }
   }
 }
+
+export const ATTR_FRIENDLY_NAME_INDEX = {
+  'temperature': 'Temperature',
+  'presencePenalty': 'Presence Penalty',
+  'frequencyPenalty': 'Frequency Penalty',
+}
