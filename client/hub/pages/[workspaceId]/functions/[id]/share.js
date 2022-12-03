@@ -1,21 +1,60 @@
-import { Badge, Navbar, Select } from "flowbite-react"
+import { useState } from "react";
+import { useSession } from "next-auth/react"
 import Image from "next/image";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { Badge, Navbar } from "flowbite-react"
 import PlaygroundEditor from "../../../../components/playgroundEditor";
 import ResultPane from "../../../../components/resultPane";
 import logo from "../../../../public/logo.png";
 import { supabase } from '../../../../common/supabase';
+import { ATTR_FRIENDLY_NAME_INDEX } from "../../../../common/constants";
+import { useRouter } from "next/router";
 
 export default function Share({ initialPrompt, model, config }) {
+  const router = useRouter();
+  const { workspaceId, id } = router.query;
+  const { data: session, status } = useSession();
+  const [isRunning, setIsRunning] = useState(false);
   const [prompt, setPrompt] = useState(initialPrompt);
   const [result, setResult] = useState({
     output: '',
-    tokens: '0',
+    num_tokens: '0',
     duration_s: '0.0'
   });
 
-  const handleRun = () => { }
+  const handleRun = async (event) => {
+    try {
+      event.stopPropagation();
+      event.preventDefault();
+
+      setIsRunning(true);
+
+      const res = await fetch(`/api/v0/${workspaceId}/functions/${id}`, {
+        method: 'POST',
+        body: JSON.stringify({
+          input: prompt,
+          mode: 'share-ui'
+        }),
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${session.id_token}`
+        }
+      })
+
+      if (res.status > 300) console.log(await res.json());
+
+      const newResult = await res.json();
+      setResult({
+        output: newResult.output,
+        num_tokens: newResult.num_tokens,
+        duration_s: newResult.duration_s,
+      })
+
+    } catch (error) {
+      console.log(error)
+    }
+    setIsRunning(false);
+  }
 
   const navbar = () => {
     return (
@@ -32,7 +71,7 @@ export default function Share({ initialPrompt, model, config }) {
             color="pink"
             size="sm"
           >
-            Mode: view & run
+            Mode: View & Run
           </Badge>
         </div>
       </Navbar>
@@ -51,7 +90,7 @@ export default function Share({ initialPrompt, model, config }) {
           {Object.entries(config).map(([key, value], index) => {
             return (
               <div className="flex items-center justify-between" key={`config-${index}`}>
-                <div className="text-xs text-gray-800">{key}</div>
+                <div className="text-xs text-gray-800">{ATTR_FRIENDLY_NAME_INDEX[key]}</div>
                 <div>{value}</div>
               </div>
             )
@@ -61,7 +100,7 @@ export default function Share({ initialPrompt, model, config }) {
     )
   }
 
-  return (
+  return status === 'authenticated' ? (
     <>
       {navbar()}
       <div className="max-h-screen px-5 mt-10 flex overflow-y-hidden scrollbar-hide">
@@ -73,10 +112,11 @@ export default function Share({ initialPrompt, model, config }) {
               handleRun={handleRun}
               handleDeploy={null}
               experimentHistory={null}
+              isRunning={isRunning}
             />
             <ResultPane
               output={result.output}
-              tokens={result.tokens}
+              num_tokens={result.num_tokens}
               duration_s={result.duration_s}
             />
           </div>
@@ -84,28 +124,29 @@ export default function Share({ initialPrompt, model, config }) {
         {configPanel()}
       </div>
     </>
-  )
+  ) : <></>
 }
 
 export async function getServerSideProps({ params }) {
   const { workspaceId, id } = params
-  console.log(params)
   let error, functions;
   (
     { data: functions, error } = await supabase
       .from('functions')
       .select(`
-        experiments!functions_current_experiment_id_fkey (
-          id,
-          prompt,
-          model,
-          config
+        deployments!functions_current_deployment_id_fkey (
+          experiments (
+            id,
+            prompt,
+            model,
+            config
+          )
         )
       `)
       .eq('id', id)
   )
 
-  const experiment = functions && functions[0].experiments;
+  const experiment = functions && functions[0].deployments.experiments;
   return {
     props: {
       initialPrompt: experiment.prompt || '',
