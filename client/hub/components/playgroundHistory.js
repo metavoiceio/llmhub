@@ -11,7 +11,7 @@ export default function PlaygroundHistory({ history }) {
     return history.map((experiment, idx) => {
       return (
         <div key={`experiment-${idx}`}>
-          <div>created_at: {experiment.created_at}</div>
+          <div>Created_at: {experiment.created_at}</div>
           <div>Prompt</div>
           <div>{experiment.prompt}</div>
           <div>Output</div>
@@ -30,8 +30,8 @@ export default function PlaygroundHistory({ history }) {
     <>
       <button
         data-tooltip-target="tooltip-animation"
+        data-drawer-toggle="drawer-right"
         data-drawer-target="drawer-right"
-        data-drawer-show="drawer-right"
         data-drawer-placement="right"
         aria-controls="drawer-right"
         className="inline-flex items-center justify-center p-2 text-gray-500 rounded cursor-pointer hover:text-gray-900 hover:bg-gray-100 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600"

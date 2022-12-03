@@ -8,9 +8,9 @@ import PlaygroundEditor from "../../../../components/playgroundEditor";
 import PlaygroundToolbar from "../../../../components/playgroundToolbar";
 import ResultPane from "../../../../components/resultPane";
 import AuthSideBar from "../../../../components/sidebar";
+import { toast } from 'react-toastify';
 
-// TODO: add function name to the top to outline that the function has changed
-// TODO: loading spinner & toast
+// TODO: loading spinner
 // TODO: navigate to deployment page on successful deployment
 export default function Function({
   functions, initialFunctionData, initialExperimentData, experimentHistory, currentDeployment
@@ -43,6 +43,11 @@ export default function Function({
     setIsRefreshing(true);
   }
 
+  const handleError = (friendlyMessage, error) => {
+    toast(friendlyMessage, { type: 'error' });
+    console.log(error)
+  }
+
   const handleRun = async (event) => {
     event.preventDefault();
     event.stopPropagation();
@@ -58,14 +63,13 @@ export default function Function({
         config: modelConfigs[selectedModel]
       })
     });
-
     setIsRunning(false);
 
     if (res.status < 300) {
       console.log('success')
       refreshData();
     } else {
-      // TODO: error handling
+      handleError('Unable to run prompt', await res.json())
     }
   }
 
@@ -93,7 +97,11 @@ export default function Function({
         ])
         .select()
     )
-    if (error) console.log(error);
+    if (error) {
+      handleError('Unable to create deployment', error)
+      setIsRunning(false);
+      return
+    }
 
     // update function with current_deployment_id
     let current_deployment_id = data[0].id;
@@ -103,9 +111,14 @@ export default function Function({
         .update({ current_deployment_id })
         .eq('id', id)
     );
-    if (error) console.log(error);
+    if (error) {
+      handleError('Unable to create deployment', error)
+      setIsRunning(false);
+      return
+    }
 
     setIsRunning(false);
+    toast('Deployment successful', {type: 'success'});
     router.push(`/${workspaceId}/functions/${id}/deployments`);
   }
 
@@ -161,6 +174,7 @@ export async function getServerSideProps({ params }) {
   let currentExperiment = error ? {} : experiments[0];
 
   //  get experiment history
+  let allExperiments = [];
   (
     { data: experiments, error } = await supabase
       .from('experiments')
@@ -168,6 +182,21 @@ export async function getServerSideProps({ params }) {
       .eq('function_id', id)
       .order('created_at', { ascending: false })
   )
+  allExperiments = allExperiments.concat(experiments);
+
+  // get snapshot experiment history 
+  if (selectedFunction && selectedFunction.fork_function_experiments_snapshot) {
+    (
+      { data: experiments, error } = await supabase
+        .from('experiments')
+        .select("*")
+        .in('id', selectedFunction.fork_function_experiments_snapshot)
+        .order('created_at', { ascending: false })
+    )
+    allExperiments = allExperiments.concat(experiments)
+  }
+
+  console.log(allExperiments);
 
   // get current deployment
   let deployments;
@@ -183,7 +212,7 @@ export async function getServerSideProps({ params }) {
       functions: await getFunctions(workspaceId),
       initialFunctionData: selectedFunction,
       initialExperimentData: currentExperiment,
-      experimentHistory: experiments,
+      experimentHistory: allExperiments,
       currentDeployment: error ? {} : deployments[0]
     }
   };
