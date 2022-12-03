@@ -1,10 +1,18 @@
 import { Badge, Navbar } from "flowbite-react"
 import Image from "next/image";
 import Link from "next/link";
+import { useState } from "react";
 import PlaygroundEditor from "../../../../components/playgroundEditor";
+import ResultPane from "../../../../components/resultPane";
 import logo from "../../../../public/logo.png";
 
 export default function Share() {
+  const [result, setResult] = useState({
+    output: '',
+    tokens: '0',
+    duration_s: '0.0'
+  });
+
   const navbar = () => {
     return (
       <Navbar
@@ -55,30 +63,6 @@ export default function Share() {
     )
   }
 
-  const resultPane = () => {
-    return (
-      <div className='mt-[2px] h-[calc(25vh)] bg-[#f0f0f0] border rounded p-2 overflow-y-auto'>
-        <div className="flex flex-col">
-          {/* top bar */}
-          <div className="flex gap-10 mb-4">
-            <div className="flex flex-col">
-              <div className="text-sm">1024</div>
-              <div className="text-xs text-gray-800">tokens</div>
-            </div>
-            <div className="flex flex-col">
-              <div className="text-sm">2.4s</div>
-              <div className="text-xs text-gray-800">duration</div>
-            </div>
-          </div>
-          {/* output */}
-          <p className="text-sm">
-            Show results here...
-          </p>
-        </div>
-      </div>
-    )
-  }
-
   return (
     <>
       {navbar()}
@@ -86,7 +70,11 @@ export default function Share() {
         <div className='flex-1'>
           <div className="flex flex-col">
             <PlaygroundEditor />
-            {resultPane()}
+            <ResultPane
+              output={result.output}
+              tokens={result.tokens}
+              duration_s={result.duration_s}
+            />
           </div>
         </div>
         {configPanel()}
