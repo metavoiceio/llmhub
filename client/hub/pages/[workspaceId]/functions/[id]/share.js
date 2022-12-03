@@ -1,7 +1,7 @@
 import { Badge, Navbar, Select } from "flowbite-react"
 import Image from "next/image";
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import PlaygroundEditor from "../../../../components/playgroundEditor";
 import ResultPane from "../../../../components/resultPane";
 import logo from "../../../../public/logo.png";
@@ -15,9 +15,7 @@ export default function Share({ initialPrompt, model, config }) {
     duration_s: '0.0'
   });
 
-  const handleRun = () => {
-
-  }
+  const handleRun = () => { }
 
   const navbar = () => {
     return (
@@ -26,11 +24,9 @@ export default function Share({ initialPrompt, model, config }) {
         rounded={true}
         className='pt-4'
       >
-        <Navbar.Brand href="https://flowbite.com/">
-          <Link href={`http://localhost:3000`}>
-            <Image src={logo} alt="LLMHub logo" className="inline mr-1" />
-          </Link>
-        </Navbar.Brand>
+        <Link href={`/`}>
+          <Image src={logo} alt="LLMHub logo" className="inline mr-1" />
+        </Link>
         <div className="flex md:order-2">
           <Badge
             color="pink"
@@ -112,7 +108,7 @@ export async function getServerSideProps({ params }) {
   const experiment = functions && functions[0].experiments;
   return {
     props: {
-      prompt: experiment.prompt || '',
+      initialPrompt: experiment.prompt || '',
       model: experiment.model || '',
       config: experiment.config || {}
     }
