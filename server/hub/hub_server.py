@@ -3,6 +3,7 @@ from typing import Dict
 import fastapi
 import fastapi.middleware.cors
 import uvicorn
+from pydantic import BaseModel
 
 from server.providers.openai import OpenAI
 
@@ -25,9 +26,15 @@ async def health_check():
     return "OK"
 
 
-@app.get("/completion")
-async def get_completion(prompt: str, input: str, config: Dict[str, str]):
-    output, num_tokens, duration_s = llm_provider(prompt, input, config)
+class CompletionRequest(BaseModel):
+    prompt: str
+    input: str
+    config: Dict[str, str]
+
+
+@app.post("/completion")
+async def get_completion(request: CompletionRequest):
+    output, num_tokens, duration_s = llm_provider(request.prompt, request.input, request.config)
 
     return {"output": output, "num_tokens": num_tokens, "duration_s": duration_s}
 
