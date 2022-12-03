@@ -15,11 +15,15 @@ export default function ResultPane({ output, tokens, duration_s }) {
           </div>
         </div>
         {/* output */}
-        <p className="text-sm">
+        <div className="text-sm">
           {
-            output ? output : <span>Click <code>Run</code>to execute prompt</span>
+            output ?
+              output :
+              <span>
+                Click<code className="font-mono m-2 p-2 bg-gray-100 border rounded-sm">Run</code>to execute prompt
+              </span>
           }
-        </p>
+        </div>
       </div>
     </div>
   )
