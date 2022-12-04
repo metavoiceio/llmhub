@@ -4,7 +4,6 @@ const { get_token } = require('./appAuth');
 
 class LLMHub {
     constructor(llmhub_share_url) {
-        this.auth_token = null;
         const path = llmhub_share_url.split("/");
 
         if (path.length !== 7) {
@@ -29,16 +28,14 @@ class LLMHub {
 
     async run(input) {
         try {
-            if (this.auth_token === null) {
-                this.auth_token = await get_token();
-            }
+            auth_token = await get_token();
 
             let response = await fetch(
                 `${BASE_URL}/${this.workspace_id}/functions/${this.function_id}`,
                 {
                     method: 'POST',
                     headers: {
-                        'Authorization': `Bearer ${this.auth_token}`,
+                        'Authorization': `Bearer ${auth_token}`,
                         'Content-Type': 'application/json',
                     },
                     body: JSON.stringify({
