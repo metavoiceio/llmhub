@@ -11,12 +11,12 @@ export const REDIRECT_NOTFOUND_OBJ = {
 
 export const INITIAL_MODEL_CONFIGS = {
   'text-davinci-003': {
-    temperature: 0.0,
+    temperature: 0.7,
     presencePenalty: 0.0,
     frequencyPenalty: 0.0
   },
   'text-davinci-002': {
-    temperature: 0.0,
+    temperature: 0.7,
     presencePenalty: 0.0,
     frequencyPenalty: 0.0
   }
@@ -28,7 +28,7 @@ export const RENDER_CONFIG_INDEX = {
     temperature: {
       min: 0.0,
       max: 1.0,
-      helper: '',
+      helper: 'Rigid: 0.0, Moderate: 0.5 & Creative 1.0',
       friendlyName: 'Temperature',
       step: 0.1
     },
