@@ -1,29 +1,35 @@
-import fetch from 'node-fetch';
-import { BASE_URL } from './common.js';
-import { get_token } from './appAuth.js';
+const fetch = require('node-fetch-commonjs');
+const { BASE_URL } = require('./constants');
+const { get_token } = require('./appAuth');
 
-export default class LLMHub {
-    constructor(llmhub_prompt_id) {
+class LLMHub {
+    constructor(workspace_id, function_id) {
         this.auth_token = null;
-        this.llmhub_prompt_id = llmhub_prompt_id;
+        this.workspace_id = workspace_id;
+        this.function_id = function_id;
     }
 
-    async run(prompt) {
+    async run(input) {
         try {
             if (this.auth_token === null) {
                 this.auth_token = await get_token();
             }
 
             let response = await fetch(
-                `${BASE_URL}/completion?input=${encodeURIComponent(prompt)}&llmhub_prompt_id=${this.llmhub_prompt_id}`,
+                `${BASE_URL}/${this.workspace_id}/functions/${this.function_id}`,
                 {
-                    method: 'GET',
+                    method: 'POST',
                     headers: {
                         'Authorization': `Bearer ${this.auth_token}`,
-                    }
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        input,
+                        mode: "direct",
+                    }),
                 });
-            response = await response.json();
-            return response.completion;
+            const { output, num_tokens, duration_s } = await response.json();
+            return output;
         } catch (error) {
             // TODO: credit checking should happen here.
             //       API should check we have enough to run the query (aka generation + prompt size!)
@@ -31,6 +37,7 @@ export default class LLMHub {
         } finally {
             console.log("query returned successfully");
         }
-    }
-    
+    }    
 }
+
+module.exports = { LLMHub };
