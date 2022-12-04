@@ -65,6 +65,8 @@ async function authToken() {
 
     await mkdirp(path.dirname(constants.TOKEN_FILE_PATH));
     await fs.writeFile(constants.TOKEN_FILE_PATH, JSON.stringify({ token: tokens.access_token }));
+
+    console.log('Authenticated successfully!');
   } catch (err) {
       console.log(err);
       process.exitCode = 1;
