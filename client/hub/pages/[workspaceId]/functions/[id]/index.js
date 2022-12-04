@@ -130,7 +130,12 @@ export default function Function({
       <AuthSideBar workspaceId={workspaceId} functions={functions} />
 
       <div className="h-full flex flex-col overflow-y-auto flex-1 mx-4">
-        <FunctionsNavbar workspaceId={workspaceId} functionId={id} mode="playground" />
+        <FunctionsNavbar
+          workspaceId={workspaceId}
+          functionId={id}
+          mode="playground"
+          allowShare={!!currentDeployment}
+        />
         <PlaygroundToolbar
           selectedModel={selectedModel}
           setSelectedModel={setSelectedModel}
@@ -216,7 +221,7 @@ export async function getServerSideProps({ params }) {
       initialFunctionData: selectedFunction,
       initialExperimentData: currentExperiment,
       experimentHistory: allExperiments,
-      currentDeployment: error ? {} : deployments[0]
+      currentDeployment: error ? null : deployments[0]
     }
   };
 }
