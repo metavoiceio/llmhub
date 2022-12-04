@@ -3,10 +3,28 @@ const { BASE_URL } = require('./constants');
 const { get_token } = require('./appAuth');
 
 class LLMHub {
-    constructor(workspace_id, function_id) {
+    constructor(llmhub_share_url) {
         this.auth_token = null;
-        this.workspace_id = workspace_id;
-        this.function_id = function_id;
+        const path = llmhub_share_url.split("/");
+
+        if (path.length !== 7) {
+            throw new Error("Invalid share URL");
+        }
+        if (path[1] !== "") {
+            throw new Error("Invalid share URL");
+        }
+        if (path[6] !== "share") {
+            throw new Error("Invalid share URL");
+        }
+        if (path[4] !== "functions") {
+            throw new Error("Invalid share URL");
+        }
+        if (!path[2].includes("llmhub.com")) {
+            throw new Error("Invalid share URL");
+        }
+
+        this.workspace_id = path[3];
+        this.function_id = path[5];
     }
 
     async run(input) {
