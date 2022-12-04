@@ -10,19 +10,24 @@ export function mockCompletionApiCall() {
   });
 }
 
-export function completionApiCall(prompt, input, config) {
-    fetch('https://api.llmhub.com/completion', {
+export async function completionApiCall(prompt, input, config) {
+    let res = await fetch('https://api.llmhub.com/completion', {
       method: 'POST',
+      headers: {
+        "Content-type": "application/json"
+      },
       body: JSON.stringify({
-        prompt: prompt,
-        input: input,
-        config: config
+        prompt,
+        input,
+        config
       })
     })
-    .then(response => response.json())
-    .then(data => {
-      return data;
-    });
+    res = await res.json();
+    return {
+        output: res['output'], 
+        num_tokens: res['num_tokens'], 
+        duration_s: res['duration_s']
+    }
 }
 
 export default async function handler(req, res) {
@@ -33,10 +38,11 @@ export default async function handler(req, res) {
   const { prompt, input, model, config } = req.body;
   // TODO: make sure this works across various different providers
   config["engine"] = model; // TODO: remove this when the API is updated
-  config["provider"] = "openai";
+  config["user"] = "testing"; // TODO: @sidroopdaska, fix
+
+  // TODO: move await to inside
 
   // call completion API
-  // const { output, num_tokens, duration_s } = await mockCompletionApiCall(prompt, input, model, config);
   const { output, num_tokens, duration_s } = await completionApiCall(prompt, input, config);
 
   let data, error;
