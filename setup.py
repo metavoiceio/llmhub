@@ -32,23 +32,23 @@ def read_file(filename: str) -> str:
 version = read_file("VERSION")
 readme_text = read_file("README.md")
 
-packages = find_packages(".", exclude=["tests"])
+packages = find_packages(".", exclude=["tests", "client"])
 
 setup(
     name="llm",
     version=version,
-    # author="",
-    # author_email="team",
+    author="LLMHub",
+    author_email="vatsal@llmhub.com",
     # description="",
     long_description=readme_text,
     long_description_content_type="text/markdown",
     # license="",
     # keywords="",
     # url="",
-    project_urls={
-        "Source on GitHub": "https://github.com/metavoice.xyz/llm",
-        # "Documentation": "https://llm.github.io/llm/",
-    },
+    # project_urls={
+    #     "Source on GitHub": "https://github.com/metavoice.xyz/llm",
+    #     "Documentation": "https://llm.github.io/llm/",
+    # },
     packages=packages,
     package_data={"": ["*.lark"]},
     include_package_data=True,
