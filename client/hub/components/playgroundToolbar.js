@@ -1,9 +1,13 @@
+import { Dropdown } from "flowbite-react";
+import { useState } from "react";
 import { BsSliders } from "react-icons/bs";
 import { SUPPORTED_MODELS, RENDER_CONFIG_INDEX } from "../common/constants";
 
 export default function PlaygroundToolbar(
   { selectedModel, setSelectedModel, modelConfigs, setModelConfigs }
 ) {
+  const [error, setError] = useState('');
+
   const modelSelect = () => {
     return (
       <select
@@ -19,57 +23,92 @@ export default function PlaygroundToolbar(
     )
   }
 
+  const renderStopSequences = (selectedModelConfig) => {
+    return (
+      <li key='stopSequenceKey'>
+        <div className="flex flex-col p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-600">
+          <label htmlFor={'stopSequences'} className="mb-1 font-medium text-gray-900 dark:text-gray-300">
+            Stop Sequences
+          </label>
+          <input
+            id={"stopSequences"}
+            name={"stopSequences"}
+            className="w-full px-2 py-2 rounded outline-none text-xs border focus:border-blue-500"
+            value={selectedModelConfig['stopSequences']}
+            onInput={event => {
+              if (event.target.value.split(',').length > 4) {
+                setError('Provided more than four example sequences. Only first four will be considered')
+              } else {
+                setError('')
+              }
+
+              setModelConfigs({
+                ...modelConfigs,
+                [selectedModel]: {
+                  ...selectedModelConfig,
+                  'stopSequences': event.target.value
+                }
+              })
+            }}
+          />
+          <span>Max. four comma seaprated sequences</span>
+          <span className="text-xs text-red-500 break-normal">{error}</span>
+        </div>
+      </li>
+    )
+  }
+
+  // TODO sidroopdaska: change this to be inline on the playground
   const settingsDropdown = () => {
     const renderConfig = RENDER_CONFIG_INDEX[selectedModel];
     const selectedModelConfig = modelConfigs[selectedModel];
 
     return (
-      <>
-        <button
-          id="dropdownMenuIconButton"
-          data-dropdown-toggle="settingsDropdown"
-          className="inline-flex items-center p-2 text-md font-medium text-center text-gray-900 bg-white rounded-lg hover:bg-gray-100 focus:ring-4 focus:outline-none dark:text-white focus:ring-gray-50 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
-        >
-          <BsSliders />
-        </button>
-        <div
-          id="settingsDropdown"
-          className="hidden z-10 w-70 bg-white shadow-md rounded divide-y divide-gray-100 shadow dark:bg-gray-700 dark:divide-gray-600"
-        >
-          <ul className="p-3 space-y-1 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownRadioHelperButton">
-            {
-              Object.entries(renderConfig).map(([key, value], index) => {
-                return (
-                  <li key={index}>
-                    <div className="flex flex-col p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-600">
-                      <label htmlFor={key} className="font-medium text-gray-900 dark:text-gray-300">
-                        {value.friendlyName}
-                      </label>
-                      <input
-                        type="number"
-                        id={key}
-                        name={key}
-                        min={value.min}
-                        max={value.max}
-                        step={value.step}
-                        className="w-full px-2 py-2 outline-none text-sm border-y focus:border-blue-500"
-                        value={selectedModelConfig[key]}
-                        onInput={event => setModelConfigs({
-                          ...modelConfigs,
-                          [selectedModel]: {
-                            ...selectedModelConfig,
-                            [key]: parseFloat(event.target.value)
-                          }
-                        })}
-                      />
-                    </div>
-                  </li>
-                )
-              })
-            }
-          </ul>
-        </div>
-      </>
+      <Dropdown
+        arrowIcon={false}
+        inline
+        label={
+          <div className="ml-2">
+            <BsSliders className="text-lg" />
+          </div>
+        }
+      >
+        <ul className="p-2 text-xs text-gray-700 dark:text-gray-200 max-w-[15rem]" aria-labelledby="dropdownRadioHelperButton">
+          {
+            Object.entries(renderConfig).map(([key, value], index) => {
+              if (key === 'stopSequences') return renderStopSequences(selectedModelConfig);
+              return (
+                <li key={index}>
+                  <div className="flex flex-col p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-600">
+                    <label htmlFor={key} className="mb-1 font-medium text-gray-900 dark:text-gray-300">
+                      {value.friendlyName}
+                    </label>
+                    <input
+                      type="number"
+                      id={key}
+                      name={key}
+                      min={value.min}
+                      max={value.max}
+                      step={value.step}
+                      className="w-full px-2 py-2 rounded outline-none text-xs border-y focus:border-blue-500"
+                      value={selectedModelConfig[key]}
+                      onInput={event => setModelConfigs({
+                        ...modelConfigs,
+                        [selectedModel]: {
+                          ...selectedModelConfig,
+                          [key]: parseFloat(event.target.value)
+                        }
+                      })
+                      }
+                    />
+                    <span>{value.helper}</span>
+                  </div>
+                </li>
+              )
+            })
+          }
+        </ul>
+      </Dropdown>
     )
   }
 
@@ -80,3 +119,20 @@ export default function PlaygroundToolbar(
     </div>
   );
 }
+
+// TODO: replace input.number with range
+{/* <li>
+  <form>
+    <div>
+      <input id="rangeInput" type="range" min="0" max="200" onInput={event => {
+        console.log(event.target.value);
+        document.getElementById('amount').value = event.target.value;
+      }} />
+      <input id="amount" type="number" defaultValue="100" min="0" max="200" onInput={event => {
+        document.getElementById('rangeInput').value = event.target.value;
+        // document.getElementById('amount').value = document.getElementById('rangeInput').value;
+        console.log(document.getElementById('rangeInput').value);
+      }} />
+    </div>
+  </form>
+</li> */}

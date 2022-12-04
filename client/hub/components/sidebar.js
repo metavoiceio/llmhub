@@ -109,11 +109,11 @@ export default function AuthSideBar({ workspaceId, functions }) {
           </div>
 
           {/* aux actions pane */}
-          <div className="flex flex-col pt-6 mb-4">
-            <Link className="flex items-center px-2 interact-bounce hover:bg-gray-100 dark:hover:bg-gray-800 py-1 rounded" href={`/${workspaceId}/usage`}>
+          <div className="flex flex-col pt-6 mb-8">
+            {/* <Link className="flex items-center px-2 interact-bounce hover:bg-gray-100 dark:hover:bg-gray-800 py-1 rounded" href={`/${workspaceId}/usage`}>
               <HiChartBar />
               <span className="text-sm ml-2 mr-1 text-gray-700 dark:text-gray-300">Usage</span>
-            </Link>
+            </Link> */}
             <Link className="flex items-center px-2 interact-bounce hover:bg-gray-100 dark:hover:bg-gray-800 py-1 rounded" href={`/${workspaceId}/settings`}>
               <BsGearWide />
               <span className="text-sm ml-2 mr-1 text-gray-700 dark:text-gray-300">Settings</span>
