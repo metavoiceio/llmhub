@@ -1,7 +1,7 @@
 
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import { BASE_API_URL, INITIAL_MODEL_CONFIGS } from "../../../../common/constants";
+import { INITIAL_MODEL_CONFIGS } from "../../../../common/constants";
 import { getFunctions, supabase } from "../../../../common/supabase";
 import FunctionsNavbar from "../../../../components/functionsNavBar";
 import PlaygroundEditor from "../../../../components/playgroundEditor";
@@ -53,7 +53,7 @@ export default function Function({
 
     setIsRunning(true);
     try {
-      const res = await fetch(`${BASE_API_URL}/${workspaceId}/functions/${id}/completion`, {
+      const res = await fetch(`/api/internal/${workspaceId}/functions/${id}/completion`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

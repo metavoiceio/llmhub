@@ -1,6 +1,6 @@
 import { supabase } from '../../../../../common/supabase';
 import { getTokenFromReqHeaders, parseUserIdFromToken } from '../../../../../common/token';
-import { mockCompletionApiCall } from '../../../internal/[workspaceId]/functions/[id]/completion';
+import { mockCompletionApiCall, completionApiCall } from '../../../internal/[workspaceId]/functions/[id]/completion';
 
 // TODO sidroopdaska: check for plan validity & token
 export default async function handler(req, res) {
@@ -51,7 +51,9 @@ export default async function handler(req, res) {
 
   // make request to completions API
   const { experiments: { prompt, model, config } } = deployments[0];
-  const { output, num_tokens, duration_s } = await mockCompletionApiCall();
+  config["engine"] = model; // TODO: remove this when the API is updated
+  config["user"] = parseUserIdFromToken(token).toString();
+  const { output, num_tokens, duration_s } = await completionApiCall(prompt, req.body.input, config);
 
   // update usage_tokens in the workspace
   // https://github.com/supabase/supabase/discussions/909#discussioncomment-546117

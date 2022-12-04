@@ -6,7 +6,6 @@ import { HiChartBar } from 'react-icons/hi';
 import { BsGearWide, BsBraces, BsThreeDots } from 'react-icons/bs';
 import logo from "../public/logo.png";
 import NewFunctionModal from './newFunctionModal';
-import { BASE_API_URL } from '../common/constants';
 import { toast } from 'react-toastify';
 
 export default function AuthSideBar({ workspaceId, functions }) {
@@ -27,7 +26,7 @@ export default function AuthSideBar({ workspaceId, functions }) {
     event.stopPropagation();
     setIsRunning(true);
 
-    const res = await fetch(`${BASE_API_URL}/${workspaceId}/functions`, {
+    const res = await fetch(`/api/internal/${workspaceId}/functions`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
