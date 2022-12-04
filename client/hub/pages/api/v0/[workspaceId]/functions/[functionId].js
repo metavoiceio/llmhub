@@ -2,9 +2,10 @@ import { supabase } from '../../../../../common/supabase';
 import { getTokenFromReqHeaders, parseUserIdFromToken } from '../../../../../common/token';
 import { mockCompletionApiCall } from '../../../internal/[workspaceId]/functions/[id]/completion';
 
+// TODO sidroopdaska: check for plan validity & token
 export default async function handler(req, res) {
   let data, workspaces, error;
-  const { workspaceId, functionId } = req.query;
+  const { functionId } = req.query;
 
   // check the req
   if (req.method !== 'POST' || !req.body.input || !req.body.mode) return res.status(500).json({ error: 'Invalid request' });
@@ -52,9 +53,17 @@ export default async function handler(req, res) {
   const { experiments: { prompt, model, config } } = deployments[0];
   const { output, num_tokens, duration_s } = await mockCompletionApiCall();
 
-  // register the function call with DB
+  // update usage_tokens in the workspace
+  // https://github.com/supabase/supabase/discussions/909#discussioncomment-546117
   (
     { data, error } = await supabase
+      .rpc('increment', { tokens: num_tokens, workspace_id: workspaces[0].id })
+  )
+
+  // register the function call with DB
+  let function_calls;
+  (
+    { data: function_calls, error } = await supabase
       .from('function_calls')
       .insert([{
         deployment_id: functions[0].current_deployment_id,
@@ -65,6 +74,7 @@ export default async function handler(req, res) {
         workspace_id: workspaces[0].id,
         mode: req.body.mode
       }])
+      .select()
   )
   if (error) return res.status(500).json({ error });
 

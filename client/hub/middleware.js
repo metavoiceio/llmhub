@@ -4,7 +4,6 @@ import { parseUserIdFromToken, getTokenFromReqHeaders } from './common/token';
 
 // TODO sidroopdaska: do we need to check for function ownership as well?
 // FIX: with regexp, this is very brittle!
-// TODO sidroopdaska: remove harcoding for user_id check
 const PATTERNS = [
   [
     new URLPattern({ pathname: '/api/internal/:workspaceId/*' }),
@@ -48,7 +47,6 @@ export default withAuth({
         if (req.nextUrl.href.includes('welcome')) return !!token;
 
         // route - /api/v0/*, ensure user has a valid workspace
-        // TODO: check for plan validity
         if (
           req.nextUrl.href.includes('api/v0') ||
           req.nextUrl.href.includes('share')

@@ -19,7 +19,7 @@ export default function App({
         pauseOnHover
         theme="light"
       />
-      <script src="https://unpkg.com/flowbite@1.5.4/dist/flowbite.js" />
+      <script src="https://unpkg.com/flowbite@1.5.4/dist/flowbite.js" async />
     </SessionProvider>
   )
 }

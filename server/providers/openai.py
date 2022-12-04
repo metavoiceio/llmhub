@@ -1,4 +1,5 @@
-from typing import List, Optional
+import time
+from typing import Dict, List, Optional
 
 import openai
 
@@ -9,7 +10,7 @@ class OpenAI(LLM):
     def __init__(
         self,
         api_key: str,
-        model_name: str,
+        model_name: str = "text-davinci-003",
         temperature: float = 0.7,
         max_tokens: int = 256,
         top_p: float = 1.0,
@@ -54,7 +55,7 @@ class OpenAI(LLM):
         if presence_penalty < -2 or presence_penalty > 2:
             raise ValueError("Presence penalty must be between -2 and 2.")
 
-        self.llm_args = {
+        self.__llm_config = {
             "engine": model_name,
             "temperature": temperature,
             "max_tokens": max_tokens,
@@ -64,7 +65,7 @@ class OpenAI(LLM):
             "stop": stop,
         }
 
-    def __call__(self, prompt: str) -> str:
+    def __call__(self, prompt: str, input: str, config: Dict[str, str]) -> str:
         """
         Calls the OpenAI API to generate a response to the prompt.
 
@@ -73,7 +74,15 @@ class OpenAI(LLM):
         Returns:
             Completed string.
         """
+        self.call_config = self.__llm_config.copy()
+        self.call_config.update(config)
+
         # TODO: add check on exceeding max_tokens?
-        response = self.client.create(prompt=prompt, **self.llm_args)
-        print(response)
-        return response.choices[0].text
+        # TODO: add variable replace?
+
+        client_input = prompt + input
+        start_time = time.time()
+        response = self.client.create(prompt=client_input, **self.call_config)
+        end_time = time.time()
+
+        return response.choices[0].text, response.usage.total_tokens, end_time - start_time
