@@ -29,11 +29,12 @@ async def health_check():
 class CompletionRequest(BaseModel):
     prompt: str
     input: str
-    config: Dict[str, str]
+    config: Dict
 
 
 @app.post("/completion")
 async def get_completion(request: CompletionRequest):
+    print(request)
     output, num_tokens, duration_s = llm_provider(request.prompt, request.input, request.config)
 
     return {"output": output, "num_tokens": num_tokens, "duration_s": duration_s}

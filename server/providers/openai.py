@@ -65,7 +65,23 @@ class OpenAI(LLM):
             "stop": stop,
         }
 
-    def __call__(self, prompt: str, input: str, config: Dict[str, str]) -> str:
+    def map_frontend_config(self, frontend_config: Dict) -> Dict:
+        mapping = {
+            "model": "engine",
+            "presencePenalty": "presence_penalty",
+            "frequencyPenalty": "frequency_penalty",
+            "maximumLength": "max_tokens",
+            "stopSequences": "stop",
+        }
+        new_config = {}
+        for k, v in frontend_config.items():
+            if k in mapping:
+                new_config[mapping[k]] = v
+            else:
+                new_config[k] = v
+        return new_config
+
+    def __call__(self, prompt: str, input: str, config: Dict) -> str:
         """
         Calls the OpenAI API to generate a response to the prompt.
 
@@ -75,11 +91,11 @@ class OpenAI(LLM):
             Completed string.
         """
         self.call_config = self.__llm_config.copy()
-        self.call_config.update(config)
+        self.call_config.update(self.map_frontend_config(config))
 
         # TODO: add check on exceeding max_tokens?
         # TODO: add variable replace?
-
+        print(self.call_config)
         client_input = prompt + input
         start_time = time.time()
         response = self.client.create(prompt=client_input, **self.call_config)
