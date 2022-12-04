@@ -204,8 +204,6 @@ export async function getServerSideProps({ params }) {
     allExperiments = allExperiments.concat(experiments)
   }
 
-  console.log(allExperiments);
-
   // get current deployment
   let deployments;
   (
