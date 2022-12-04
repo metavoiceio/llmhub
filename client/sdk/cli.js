@@ -63,16 +63,6 @@ async function authToken() {
       }
     }
 
-    if (tokens) {
-      console.log('\n\nresult tokens', { ...tokens });
-    }
-
-    try {
-      console.log('\n\nUserInfo response', await client.userinfo(tokens));
-    } catch (err) {
-      //
-    }
-
     await mkdirp(path.dirname(constants.TOKEN_FILE_PATH));
     await fs.writeFile(constants.TOKEN_FILE_PATH, JSON.stringify({ token: tokens.access_token }));
   } catch (err) {
