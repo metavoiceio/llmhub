@@ -9,7 +9,7 @@ const get_token = async () => {
       const { token } = JSON.parse(fileContent);
       return token;
     }
-    throw new Error("Please set up your LLMHub token using `llmhub auth`!");
+    throw new Error("Please set up LLMHub authentication using `llmhub auth`.");
   }
 
 module.exports = { get_token };
