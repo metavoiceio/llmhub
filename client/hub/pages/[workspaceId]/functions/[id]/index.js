@@ -11,7 +11,6 @@ import AuthSideBar from "../../../../components/sidebar";
 import { toast } from 'react-toastify';
 
 // TODO: loading spinner
-// TODO: navigate to deployment page on successful deployment
 export default function Function({
   functions, initialFunctionData, initialExperimentData, experimentHistory, currentDeployment
 }) {
@@ -53,23 +52,27 @@ export default function Function({
     event.stopPropagation();
 
     setIsRunning(true);
-    const res = await fetch(`${BASE_API_URL}/${workspaceId}/functions/${id}/completion`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        prompt,
-        input: '',  // TODO sidroodpaska: add support for parameterisation
-        model: selectedModel,
-        config: modelConfigs[selectedModel]
-      })
-    });
-    setIsRunning(false);
-
-    if (res.status < 300) {
-      console.log('success')
-      refreshData();
-    } else {
-      handleError('Unable to run prompt', await res.json())
+    try {
+      const res = await fetch(`${BASE_API_URL}/${workspaceId}/functions/${id}/completion`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          prompt,
+          input: '',  // TODO sidroodpaska: add support for parameterisation
+          model: selectedModel,
+          config: modelConfigs[selectedModel]
+        })
+      });
+      setIsRunning(false);
+  
+      if (res.status < 300) {
+        console.log('success')
+        refreshData();
+      } else {
+        handleError('Unable to run prompt', await res.json())
+      }
+    } catch (error) {
+      handleError('Unable to run prompt', error)
     }
   }
 

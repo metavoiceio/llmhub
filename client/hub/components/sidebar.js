@@ -42,7 +42,6 @@ export default function AuthSideBar({ workspaceId, functions }) {
       refreshData();
       toast("Function successfully created!", { type: 'success' });
     } else {
-      // TODO sidroopdaska: error handling
       console.log(await res.json());
       toast("Unable to make function", { type: 'error' });
     }

@@ -1,6 +1,5 @@
 import { Button, Modal } from "flowbite-react"
 
-// TODO sidroopdaska: handle empty submit
 export default function NewFunctionModal({
   show, onClose, handleCreateFunction,
   newFunctionName, setNewFunctionName, functionToFork, setFunctionToFork, isRunning
