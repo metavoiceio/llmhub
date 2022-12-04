@@ -3,13 +3,12 @@
   "version": "0.0.0",
   "description": "",
   "main": "index.js",
-  "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "llmhub": "file:../../../client/sdk"
+    "llmhub": "^0.0.4"
   }
 }

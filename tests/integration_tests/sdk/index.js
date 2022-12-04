@@ -1,14 +1,8 @@
-import LLMHub from "llmhub";
+const { LLMHub } = require("llmhub");
 
-// TODO: flow to mange app_id
-const LLMHUB_PROMPT_ID = "test";
-
-const llmhub = new LLMHub(LLMHUB_PROMPT_ID);
-let answer = await llmhub.run("a b c");
-console.log(answer);
-
-// TODO: how to enable cli for node app?
-
-// TODO: write tests for cli
-
-// TODO: write tests for app getting the relevant token
+const llmhub = new LLMHub("https://www.llmhub.com/2/functions/5/share")
+llmhub.run("This is a test prompt").then(
+    (output) => {
+        console.log(output);
+    }
+);
