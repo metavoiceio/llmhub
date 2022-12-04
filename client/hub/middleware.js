@@ -46,7 +46,13 @@ export default withAuth({
         // route - /welcome
         if (req.nextUrl.href.includes('welcome')) return !!token;
 
-        // route - /api/v0/*, ensure user has a valid workspace
+        // route - /api/v0/user, ensure valid token
+        if (req.nextUrl.href.includes('api/v0/users')) {
+          const decoded = getTokenFromReqHeaders(req.headers.get("Authorization"));
+          return decoded && parseUserIdFromToken(decoded)
+        }
+
+        // route - /api/v0/* & */share, ensure user has a valid workspace
         if (
           req.nextUrl.href.includes('api/v0') ||
           req.nextUrl.href.includes('share')
@@ -78,6 +84,7 @@ export default withAuth({
         return !!token && !error && workspaces[0].user_id === parseUserIdFromToken(token);
       } catch (error) {
         console.log(error);
+        return false;
       }
     },
   },

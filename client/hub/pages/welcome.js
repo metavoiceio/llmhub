@@ -18,7 +18,7 @@ export default function Welcome() {
             id: session.user.id,
             name: session.user.name,
             email: session.user.email,
-            email: session.user.nickname
+            nickname: session.user.nickname
           },
         ])
         .select()
