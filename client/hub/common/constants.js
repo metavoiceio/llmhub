@@ -23,6 +23,20 @@ export const INITIAL_MODEL_CONFIGS = {
     maximumLength: 256,
     stopSequences: "",
   },
+  'codegen-16B-multi': {
+    temperature: 0.7,
+    presencePenalty: 0.0,
+    frequencyPenalty: 0.0,
+    maximumLength: 256,
+    stopSequences: "",
+  },
+  'text-davinci-002': {
+    temperature: 0.7,
+    presencePenalty: 0.0,
+    frequencyPenalty: 0.0,
+    maximumLength: 256,
+    stopSequences: "",
+  },
   'code-cushman-001': {
     temperature: 0.7,
     presencePenalty: 0.0,
@@ -50,10 +64,20 @@ export const INITIAL_MODEL_CONFIGS = {
     frequencyPenalty: 0.0,
     maximumLength: 256,
     stopSequences: "",
-  }
+  },
+  'flan-t5-xl': {
+    temperature: 0.7,
+    presencePenalty: 0.0,
+    frequencyPenalty: 0.0,
+    maximumLength: 256,
+    stopSequences: "",
+  },
 };
+  // TODO: This model has no parameters!
+  // TODO: parameters for models for different providers will have different moving
+  // TODO: possibly call api to get these facts?
 
-const TOKEN_MAX_LENGTHS = [4000, 8000, 2048, 2048, 2048, 2048];
+const TOKEN_MAX_LENGTHS = [4000, 8000, 2048, 2048, 2048, 2048, 2048, 1000];
 
 export const SUPPORTED_MODELS = Object.keys(INITIAL_MODEL_CONFIGS);
 export const RENDER_CONFIG_INDEX = {};
