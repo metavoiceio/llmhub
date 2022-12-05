@@ -5,10 +5,12 @@ import fastapi.middleware.cors
 import uvicorn
 from pydantic import BaseModel
 
+from server.providers.huggingface import HuggingFace
 from server.providers.openai import OpenAI
 
 OPENAI_API_KEY = "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"
-llm_provider = OpenAI(OPENAI_API_KEY)
+openai_provider = OpenAI(OPENAI_API_KEY)
+huggingface_provider = HuggingFace()
 
 ## Setup FastAPI server.
 app = fastapi.FastAPI()
@@ -35,7 +37,14 @@ class CompletionRequest(BaseModel):
 @app.post("/completion")
 async def get_completion(request: CompletionRequest):
     print(request)
-    output, num_tokens, duration_s = llm_provider(request.prompt, request.input, request.config)
+    if request.config["engine"] == "flan-t5-xl":
+        output, num_tokens, duration_s = huggingface_provider(
+            request.prompt, request.input, request.config
+        )
+    else:
+        output, num_tokens, duration_s = openai_provider(
+            request.prompt, request.input, request.config
+        )
 
     return {"output": output, "num_tokens": num_tokens, "duration_s": duration_s}
 
