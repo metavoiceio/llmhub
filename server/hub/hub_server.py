@@ -6,11 +6,13 @@ import uvicorn
 from pydantic import BaseModel
 
 from server.providers.huggingface import HuggingFace
+from server.providers.internal_server import InternalServer
 from server.providers.openai import OpenAI
 
 OPENAI_API_KEY = "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"
 openai_provider = OpenAI(OPENAI_API_KEY)
 huggingface_provider = HuggingFace()
+internalserver_provider = InternalServer()
 
 ## Setup FastAPI server.
 app = fastapi.FastAPI()
@@ -39,6 +41,10 @@ async def get_completion(request: CompletionRequest):
     print(request)
     if request.config["engine"] == "flan-t5-xl":
         output, num_tokens, duration_s = huggingface_provider(
+            request.prompt, request.input, request.config
+        )
+    elif request.config["engine"] == "codegen-16B-multi":
+        output, num_tokens, duration_s = internalserver_provider(
             request.prompt, request.input, request.config
         )
     else:
