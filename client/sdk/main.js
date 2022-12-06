@@ -1,6 +1,6 @@
 const fetch = require('node-fetch-commonjs');
 const { BASE_URL } = require('./constants');
-const { get_token } = require('./appAuth');
+const { get_token } = require('./token');
 
 class LLMHub {
     constructor(llmhub_share_url) {
