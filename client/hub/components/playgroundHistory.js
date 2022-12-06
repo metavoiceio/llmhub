@@ -19,12 +19,6 @@ export default function PlaygroundHistory({ history }) {
           <div>Created_at: {experiment.created_at}</div>
           <div>Prompt</div>
           <div>{experiment.prompt}</div>
-          <div>Prompt</div>
-          <div>{experiment.prompt}</div>
-          <div>Prompt</div>
-          <div>{experiment.prompt}</div>
-          <div>Prompt</div>
-          <div>{experiment.prompt}</div>
           <div>Output</div>
           <div>{experiment.output}</div>
           <div>
