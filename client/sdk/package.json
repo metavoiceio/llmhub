@@ -1,7 +1,7 @@
 {
   "name": "llmhub",
   "version": "0.0.4",
-  "description": "Github for LLMs",
+  "description": "LLMHub is where people build software on top of Large Language Models (LLMs). People use LLMHub to improve, discover, fork, and contribute to prompts.",
   "main": "main.js",
   "bin": {
     "llmhub": "cli.js"
