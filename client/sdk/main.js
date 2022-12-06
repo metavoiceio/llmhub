@@ -60,4 +60,7 @@ class LLMHub {
     }    
 }
 
-module.exports = { LLMHub };
+module.exports = { 
+    LLMHub,
+    default: LLMHub,
+ };
