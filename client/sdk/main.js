@@ -30,7 +30,7 @@ class LLMHub {
     async run({input}) {
         try {
             if (this.auth_token === null) {
-                auth_token = await get_token();
+                this.auth_token = await get_token();
             }
 
             // TODO: add credit checking, so the query doesn't run if the user doesn't have enough credits
@@ -56,7 +56,4 @@ class LLMHub {
     }    
 }
 
-module.exports = { 
-    LLMHub,
-    default: LLMHub,
- };
+module.exports = LLMHub;
