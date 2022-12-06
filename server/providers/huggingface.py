@@ -28,5 +28,7 @@ class HuggingFace(LLM):
             },
         )
         end_time = time.time()
+        completion = response.json()["generated_text"]
+        num_tokens = len(prompt + input + completion) // 4
 
-        return response.json()[0]["generated_text"], 0, end_time - start_time
+        return completion, num_tokens, end_time - start_time
