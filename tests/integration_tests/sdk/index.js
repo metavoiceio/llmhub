@@ -1,8 +1,8 @@
-const { LLMHub } = require("llmhub");
+const LLMHub = require("llmhub");
 
 const llmhub = new LLMHub("https://www.llmhub.com/2/functions/5/share")
-llmhub.run("This is a test prompt").then(
-    (output) => {
-        console.log(output);
+llmhub.run({input: "This is a test prompt"}).then(
+    (response) => {
+        console.log(response);
     }
 );
