@@ -51,8 +51,6 @@ class LLMHub {
             const { output, num_tokens, duration_s } = await response.json();
             return output;
         } catch (error) {
-            // TODO: credit checking should happen here.
-            //       API should check we have enough to run the query (aka generation + prompt size!)
             console.error(error);
         }
     }    
