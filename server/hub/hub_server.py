@@ -52,8 +52,10 @@ async def get_completion(request: CompletionRequest):
             request.prompt, request.input, request.config
         )
 
-    return {"output": output, "num_tokens": num_tokens, "duration_s": duration_s}
+    return_val = {"output": output, "num_tokens": num_tokens, "duration_s": duration_s}
+    print(return_val)
 
+    return return_val
 
 if __name__ == "__main__":
     # start server
