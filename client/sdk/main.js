@@ -54,8 +54,6 @@ class LLMHub {
             // TODO: credit checking should happen here.
             //       API should check we have enough to run the query (aka generation + prompt size!)
             console.error(error);
-        } finally {
-            console.log("query returned successfully");
         }
     }    
 }
