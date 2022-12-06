@@ -24,18 +24,23 @@ class LLMHub {
 
         this.workspace_id = path[3];
         this.function_id = path[5];
+        this.auth_token = null;
     }
 
     async run(input) {
         try {
-            auth_token = await get_token();
+            if (this.auth_token === null) {
+                auth_token = await get_token();
+            }
+
+            // TODO: add credit checking, so the query doesn't run if the user doesn't have enough credits
 
             let response = await fetch(
                 `${BASE_URL}/${this.workspace_id}/functions/${this.function_id}`,
                 {
                     method: 'POST',
                     headers: {
-                        'Authorization': `Bearer ${auth_token}`,
+                        'Authorization': `Bearer ${this.auth_token}`,
                         'Content-Type': 'application/json',
                     },
                     body: JSON.stringify({
