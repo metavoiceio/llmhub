@@ -48,8 +48,8 @@ export default withAuth({
 
         // route - /api/v0/user, ensure valid token
         if (req.nextUrl.href.includes('api/v0/users')) {
-          const decoded = getTokenFromReqHeaders(req.headers.get("Authorization"));
-          return decoded && parseUserIdFromToken(decoded)
+          token = getTokenFromReqHeaders(req.headers.get("Authorization"));
+          return token && parseUserIdFromToken(token)
         }
 
         // route - /api/v0/* & */share, ensure user has a valid workspace
@@ -57,17 +57,20 @@ export default withAuth({
           req.nextUrl.href.includes('api/v0') ||
           req.nextUrl.href.includes('share')
         ) {
-          const decoded = getTokenFromReqHeaders(req.headers.get("Authorization"));
+          if (req.nextUrl.href.includes('api/v0')) {
+            token = getTokenFromReqHeaders(req.headers.get("Authorization"));
+          }
+
           (
             { data: workspaces, error } = await supabase
               .from('workspaces')
               .select()
-              .eq('user_id', parseUserIdFromToken(decoded))
+              .eq('user_id', parseUserIdFromToken(token))
           )
 
           // TODO sidroopdaska: can't return a useful message from here. Move to API handler?
           if (workspaces.length === 0) {
-            console.log(`token: ${decoded} doesn't have a valid workspace`)
+            console.log(`token: ${token} doesn't have a valid workspace`)
           }
           return !error && workspaces.length > 0;
         }

@@ -98,7 +98,18 @@ export default function Function({ functions, deployments, currentDeploymentId }
           allowShare={!!currentDeploymentId}
         />
         {
-          deployments.length === 0 ? <p>No deployments have been made.</p> : render()
+          deployments.length > 0 ?
+            render() :
+            <div class="flex h-[80vh]">
+              <div className="m-auto flex flex-col items-center">
+                <div className="text-lg">
+                  No deployments have been made.
+                </div>
+                <div className="text-md">
+                  Please deploy a Prompt from the Playground page
+                </div>
+              </div>
+            </div>
         }
       </div>
     </div>
