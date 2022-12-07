@@ -13,7 +13,7 @@ class Cohere(LLM):
         model_name: str = "command-xlarge-20221108",
         temperature: float = 0.9,
         max_tokens: int = 256,
-        top_k: float = 0.0,
+        top_k: int = 0,
         top_p: float = 0.75,
         frequency_penalty: float = 0.0,
         presence_penalty: float = 0.0,
@@ -30,7 +30,7 @@ class Cohere(LLM):
             min value of 0.0, max value of 5.0 (!).
         :param top_k: Ensures only the top k most likely tokens are
             considered for generation at each step. Min is 0 (default),
-            max is 5.0
+            max is 500.
         :param top_p:  If set to a probability 0.0 < p < 1.0, it ensures that only the
             most likely tokens, with total probability mass of p, are considered for
             generation at each step. If both k and p are enabled, p acts after k.
@@ -47,7 +47,7 @@ class Cohere(LLM):
         """
         # TODO: be careful about these parameters.
         #       They behave differently than in OpenAI
-        self.client = cohere.client(api_key)
+        self.client = cohere.Client(api_key)
 
         if temperature < 0.0 or temperature > 5.0:
             raise ValueError("Temperature must be between 0.0 and 5.0.")
@@ -75,49 +75,65 @@ class Cohere(LLM):
             "stop_sequences": stop,
         }
 
-        def map_frontend_config(self, frontend_config: Dict) -> Dict:
-            # TODO: add checks again?
-            # TODO: check "model" and "engine" aren't both present
-            # TODO: check all parameters.
-            mapping = {
-                "engine": "model",
-                "presencePenalty": "presence_penalty",
-                "frequencyPenalty": "frequency_penalty",
-                "maximumLength": "max_tokens",
-                "stopSequences": "stop_sequences",
-            }
-            new_config = {}
-            for k, v in frontend_config.items():
-                if k in mapping:
-                    new_config[mapping[k]] = v
-                else:
-                    new_config[k] = v
-            return new_config
+    def map_frontend_config(self, frontend_config: Dict) -> Dict:
+        # TODO: add checks again?
+        # TODO: check "model" and "engine" aren't both present
+        # TODO: check all parameters.
+        mapping = {
+            "engine": "model",
+            "presencePenalty": "presence_penalty",
+            "frequencyPenalty": "frequency_penalty",
+            "maximumLength": "max_tokens",
+            "stopSequences": "stop_sequences",
+        }
+        new_config = {}
+        for k, v in frontend_config.items():
+            if k in mapping:
+                new_config[mapping[k]] = v
+            elif k == "user":
+                pass
+            else:
+                new_config[k] = v
 
-        def __call__(self, prompt: str, input: str, config: Dict) -> str:
-            """
-            Calls the Cohere API to generate a response to the prompt.
+        if "stop_sequences" in new_config:
+            if new_config["stop_sequences"] == "":
+                new_config["stop_sequences"] = None
+            else:
+                new_config["stop_sequences"] = new_config["stop_sequences"].split(",")
 
-            :param prompt: The prompt to generate a response to.
+        if "k" in new_config:
+            # TODO: add checks
+            # TODO: make sure this is dealt with in the frontend
+            new_config["k"] = int(new_config["k"])
 
-            Returns:
-                Completed string.
-            """
-            self.call_config = self.__llm_config.copy()
-            self.call_config.update(self.map_frontend_config(config))
+        return new_config
 
-            # TODO: add check on exceeding max_tokens?
-            # TODO: add variable replace?
-            # TODO: abstract this logic and make sure it works for huggingface?
-            print(self.call_config)
-            client_input = prompt + input
-            start_time = time.time()
-            # TODO: add check on exceeding max_tokens in API call?
-            response = self.client.generate(client_input, **self.call_config)
-            end_time = time.time()
+    def __call__(self, prompt: str, input: str, config: Dict) -> str:
+        """
+        Calls the Cohere API to generate a response to the prompt.
 
-            return (
-                response.generations[0].text,
-                (len(client_input) + len(response.generations[0].text)) // 4,
-                end_time - start_time,
-            )
+        :param prompt: The prompt to generate a response to.
+
+        Returns:
+            Completed string.
+        """
+        self.call_config = self.__llm_config.copy()
+        self.call_config.update(self.map_frontend_config(config))
+        # TODO: CONFIG IS NOT GETTING REGISTER!!
+
+        # TODO: add check on exceeding max_tokens?
+        # TODO: add variable replace?
+        # TODO: abstract this logic and make sure it works for huggingface?
+        print(self.call_config)
+        client_input = prompt + input
+        start_time = time.time()
+        # TODO: add check on exceeding max_tokens in API call?
+        response = self.client.generate(prompt=client_input, **self.call_config)
+        generated_text = response.generations[0].text
+        end_time = time.time()
+
+        return (
+            generated_text,
+            (len(client_input) + len(generated_text)) // 4,
+            end_time - start_time,
+        )
