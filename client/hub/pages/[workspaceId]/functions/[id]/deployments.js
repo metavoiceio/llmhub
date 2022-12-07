@@ -3,6 +3,8 @@ import { useRouter } from "next/router";
 import { ATTR_FRIENDLY_NAME_INDEX } from "../../../../common/constants";
 import { getFunctions, supabase } from "../../../../common/supabase";
 import AuthSideBar from "../../../../components/sidebar";
+import FunctionsNavbar from '../../../../components/functionsNavBar';
+
 const moment = require('moment');
 
 export default function Function({ functions, deployments, currentDeploymentId }) {
@@ -68,7 +70,7 @@ export default function Function({ functions, deployments, currentDeploymentId }
     const currentDeployments = deployments.filter(d => d.id === currentDeploymentId);
     const pastDeployments = deployments.filter(d => d.id !== currentDeploymentId);
     return (
-      <div className="p-4 mt-16 overflow-y-auto flex flex-col gap-5">
+      <div className="p-4 mt-4 overflow-y-auto flex flex-col gap-5">
         <div>
           <span className="bg-green-100 text-green-500 text-xs font-medium mr-2 px-2.5 py-1 rounded dark:bg-green-200 dark:text-green-900">
             ACTIVE
@@ -88,7 +90,13 @@ export default function Function({ functions, deployments, currentDeploymentId }
   return (
     <div className="flex flex-col sm:flex-row min-h-screen">
       <AuthSideBar workspaceId={workspaceId} functions={functions} />
-      <div className="h-full flex flex-col overflow-y-auto flex-1">
+      <div className="h-full flex flex-col overflow-y-auto flex-1 mx-4">
+        <FunctionsNavbar
+          workspaceId={workspaceId}
+          functionId={id}
+          mode="deployments"
+          allowShare={!!currentDeploymentId}
+        />
         {
           deployments.length === 0 ? <p>No deployments have been made.</p> : render()
         }
@@ -134,7 +142,7 @@ export async function getServerSideProps({ params }) {
     props: {
       functions: await getFunctions(workspaceId),
       deployments,
-      currentDeploymentId: functions[0].current_deployment_id
+      currentDeploymentId: functions.length ? functions[0].current_deployment_id : null
     }
   };
 }
