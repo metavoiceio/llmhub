@@ -37,6 +37,7 @@ export default function Home() {
         ])}
         {renderValuePropDiv("Developers", [
           "🍳 Easy deployment",
+          "😌 Standardised API across all providers, and prompts.",
           "💇 Abstract away auth and integration with LLM providers.",
           "💪 Showcase your work easily",
           "💻 Visibility into the behavior of prompt",
