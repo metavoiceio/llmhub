@@ -50,6 +50,14 @@
   text-align: center;
 }
 
+.headingTwo {
+  font-size: 2rem;
+  line-height: 1.15;
+  text-align: center;
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+}
+
 .description {
   margin: 4rem 0;
   line-height: 1.5;
@@ -106,6 +114,22 @@
 .logo {
   height: 1em;
   margin-left: 0.5rem;
+}
+
+.valuePropDiv {
+  display: inline-block;
+  vertical-align: top;
+  width: 33%;
+}
+
+.hubIntro {
+  font-size: 1.1rem;
+}
+
+.valuePropTitle {
+  font-size: 1.0rem;
+  margin-bottom: 0.25rem;
+  text-align: center;
 }
 
 @media (max-width: 600px) {
