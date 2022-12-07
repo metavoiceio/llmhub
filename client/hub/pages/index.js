@@ -9,8 +9,8 @@ export default function Home() {
       <div className={styles.valuePropDiv}>
         <h2 className={styles.valuePropTitle}>{title}</h2>
         <ul className={styles.valuePropList}>
-          {points.map((point) => (
-            <li className={styles.valuePropPoint}>{point}</li>
+          {points.map((point, index) => (
+            <li key={index} className={styles.valuePropPoint}>{point}</li>
           ))}
         </ul>
       </div>
