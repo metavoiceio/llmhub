@@ -4,7 +4,7 @@ import { useRouter } from 'next/router';
 import Image from 'next/image';
 import { HiChartBar } from 'react-icons/hi';
 import { BsGearWide, BsBraces, BsThreeDots } from 'react-icons/bs';
-import logo from "../public/logo.png";
+import logo from "../public/android-chrome-256x256.png";
 import NewFunctionModal from './newFunctionModal';
 import { toast } from 'react-toastify';
 
@@ -83,7 +83,7 @@ export default function AuthSideBar({ workspaceId, functions }) {
         <div className="flex flex-col bg-gray-50 dark:bg-gray-900 dark:text-gray-200 border-r-1 dark:border-gray-800 px-2 overflow-auto w-full">
           {/* sidebar header */}
           <Link className="pt-4 flex items-center px-1 text-sm" href={`/${workspaceId}`}>
-            <Image src={logo} alt="LLMHub logo" className="inline mr-1" />
+            <Image src={logo} alt="LLMHub logo" className="inline mr-1" width={48} />
             &nbsp;{workspaceId}
           </Link>
 
