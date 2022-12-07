@@ -92,6 +92,6 @@ export default function Home() {
 // - Deploy in 1-click.
 // - Allow users to use your app in 1-click.
 
-// - Monitor your prompt in production.
+// - Monitor and improve your prompts.
 // - Discover new prompts easily, and showcase your work.
 // - Contribute to popular prompts, and improve your skills.
