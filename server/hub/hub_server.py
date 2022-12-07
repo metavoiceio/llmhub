@@ -40,20 +40,16 @@ class CompletionRequest(BaseModel):
 async def get_completion(request: CompletionRequest):
     # HACK
     config = request.config
-    config['stopSequences'] = config['stopSequences'].replace('\\n', '\n')
+    config["stopSequences"] = config["stopSequences"].replace("\\n", "\n")
 
     if request.config["engine"] == "flan-t5-xl":
-        output, num_tokens, duration_s = huggingface_provider(
-            request.prompt, request.input, request.config
-        )
+        output, num_tokens, duration_s = huggingface_provider(request.prompt, request.input, config)
     elif request.config["engine"] == "codegen-16B-multi":
         output, num_tokens, duration_s = internalserver_provider(
-            request.prompt, request.input, request.config
+            request.prompt, request.input, config
         )
     else:
-        output, num_tokens, duration_s = openai_provider(
-            request.prompt, request.input, request.config
-        )
+        output, num_tokens, duration_s = openai_provider(request.prompt, request.input, config)
 
     return_val = {"output": output, "num_tokens": num_tokens, "duration_s": duration_s}
     print(return_val)
