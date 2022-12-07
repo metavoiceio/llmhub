@@ -66,12 +66,14 @@ export default function Welcome() {
   }, [status])
 
   return (
-    <div>
-      {
-        status === 'loading' ?
-          <p>Loading...</p> :
-          <p>Preparing your workspace...</p>
-      }
+    <div class="flex h-screen">
+      <div className="m-auto text-3xl">
+        {
+          status === 'loading' ?
+            <p>Loading...</p> :
+            <p>Preparing your workspace...</p>
+        }
+      </div>
     </div>
   );
 }
