@@ -214,7 +214,7 @@ export async function getServerSideProps({ params }) {
       .eq('id', selectedFunction.current_deployment_id)
   )
 
-  if (Object.keys(currentExperiment).length === 0 && allExperiments) {
+  if (Object.keys(currentExperiment).length === 0 && allExperiments.length > 0) {
     currentExperiment = allExperiments[0]
   }
 

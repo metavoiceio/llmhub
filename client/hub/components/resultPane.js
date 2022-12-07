@@ -1,6 +1,6 @@
 
 export default function ResultPane({ output, num_tokens, duration_s }) {
-  const numNewLines = output.split(/\r\n|\r|\n/).length;
+  const numNewLines = output && output.split(/\r\n|\r|\n/).length;
   return (
     <div className='mt-[2px] h-[calc(30vh)] bg-[#f0f0f0] border rounded p-2 px-6 overflow-y-auto'>
       <div className="flex flex-col">

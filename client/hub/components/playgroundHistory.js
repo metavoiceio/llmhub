@@ -14,8 +14,6 @@ export default function PlaygroundHistory({ history, currentDeployment }) {
   }
 
   const renderTimelineContent = () => {
-    if (history.length === 0) return <p>No history to show</p>;
-
     return history.map((experiment, idx) => {
       const promptNumNewLines = experiment.prompt.split(/\r\n|\r|\n/).length;
       const outputNumNewLines = experiment.output.split(/\r\n|\r|\n/).length;
@@ -107,9 +105,11 @@ export default function PlaygroundHistory({ history, currentDeployment }) {
         className='p-4 overflow-y-auto min-w-[75vw] break-words'
       >
         <div>
-          <Timeline lineColor='#d8dee4'>
-            {renderTimelineContent()}
-          </Timeline>
+          {
+            (history.length === 0) ? <p>No history to show</p> : <Timeline lineColor='#d8dee4'>
+              {renderTimelineContent()}
+            </Timeline>
+          }
         </div>
       </Drawer>
     </>
