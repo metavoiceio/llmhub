@@ -72,12 +72,50 @@ export const INITIAL_MODEL_CONFIGS = {
     maximumLength: 256,
     stopSequences: "",
   },
+  'cohere-command-xlarge-20221108': {
+    temperature: 0.9,
+    presencePenalty: 0.0,
+    frequencyPenalty: 0.0,
+    maximumLength: 256,
+    stopSequences: "",
+  },
+  'cohere-xlarge': {
+    temperature: 0.9,
+    presencePenalty: 0.0,
+    frequencyPenalty: 0.0,
+    maximumLength: 256,
+    stopSequences: "",
+  },
+  'cohere-large': {
+    temperature: 0.9,
+    presencePenalty: 0.0,
+    frequencyPenalty: 0.0,
+    maximumLength: 256,
+    stopSequences: "",
+  },
+  'cohere-medium': {
+    temperature: 0.9,
+    presencePenalty: 0.0,
+    frequencyPenalty: 0.0,
+    maximumLength: 256,
+    stopSequences: "",
+  },
+  'cohere-small': {
+    temperature: 0.9,
+    presencePenalty: 0.0,
+    frequencyPenalty: 0.0,
+    maximumLength: 256,
+    stopSequences: "",
+  },
 };
   // TODO: This model has no parameters!
   // TODO: parameters for models for different providers will have different moving
   // TODO: possibly call api to get these facts?
+  // TODO: add top_p
+  // TODO: incorporate TOKEN_MAX_LENGTH in frontend
+  // TODO: add description for each model in frontend
 
-const TOKEN_MAX_LENGTHS = [4000, 8000, 2048, 2048, 2048, 2048, 2048, 1000];
+const TOKEN_MAX_LENGTHS = [4000, 8000, 2048, 2048, 2048, 2048, 2048, 1000, 2048, 2048, 2048, 2048, 1024];
 
 export const SUPPORTED_MODELS = Object.keys(INITIAL_MODEL_CONFIGS);
 export const RENDER_CONFIG_INDEX = {};

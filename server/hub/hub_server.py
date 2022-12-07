@@ -5,6 +5,7 @@ import fastapi.middleware.cors
 import uvicorn
 from pydantic import BaseModel
 
+from server.providers.cohere import Cohere
 from server.providers.huggingface import HuggingFace
 from server.providers.internal_server import InternalServer
 from server.providers.openai import OpenAI
@@ -13,6 +14,8 @@ OPENAI_API_KEY = "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"
 openai_provider = OpenAI(OPENAI_API_KEY)
 huggingface_provider = HuggingFace()
 internalserver_provider = InternalServer()
+COHERE_API_KEY = "pkRSxNtXtNpBYI44dvgMWvMFsaVHdRxATc0RzDIv"
+cohere_provider = Cohere(COHERE_API_KEY)
 
 ## Setup FastAPI server.
 app = fastapi.FastAPI()
@@ -42,12 +45,15 @@ async def get_completion(request: CompletionRequest):
     config = request.config
     config["stopSequences"] = config["stopSequences"].replace("\\n", "\n")
 
-    if request.config["engine"] == "flan-t5-xl":
+    if config["engine"] == "flan-t5-xl":
         output, num_tokens, duration_s = huggingface_provider(request.prompt, request.input, config)
-    elif request.config["engine"] == "codegen-16B-multi":
+    elif config["engine"] == "codegen-16B-multi":
         output, num_tokens, duration_s = internalserver_provider(
             request.prompt, request.input, config
         )
+    elif "cohere-" in config["engine"]:
+        config["engine"] = config["engine"].replace("cohere-", "")
+        output, num_tokens, duration_s = cohere_provider(request.prompt, request.input, config)
     else:
         output, num_tokens, duration_s = openai_provider(request.prompt, request.input, config)
 
