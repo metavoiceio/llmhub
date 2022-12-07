@@ -1,5 +1,5 @@
 import time
-from typing import Dict, List, Optional
+from typing import Dict, List, Optional, Union
 
 import openai
 
@@ -16,7 +16,7 @@ class OpenAI(LLM):
         top_p: float = 1.0,
         frequency_penalty: float = 0.0,
         presence_penalty: float = 0.0,
-        stop: Optional[List[str]] = None,
+        stop: Optional[Union[str, List[str]]] = None,
     ) -> None:
         """
         Initaliser for the OpenAI completion API.
@@ -83,6 +83,11 @@ class OpenAI(LLM):
                 new_config[mapping[k]] = v
             else:
                 new_config[k] = v
+    
+        # massage stop sequences to the right data type
+        if 'stop' in new_config:
+            if new_config["stop"]:
+                new_config['stop'] = new_config['stop'].split(',')
         return new_config
 
     def __call__(self, prompt: str, input: str, config: Dict) -> str:
