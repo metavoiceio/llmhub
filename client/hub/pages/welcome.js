@@ -63,7 +63,7 @@ export default function Welcome() {
     if (session && status === 'authenticated') {
       handleUser().catch(console.error);
     }
-  }, [session, status])
+  }, [status])
 
   return (
     <div>
