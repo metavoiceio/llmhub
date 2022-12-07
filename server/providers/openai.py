@@ -66,6 +66,10 @@ class OpenAI(LLM):
         }
 
     def map_frontend_config(self, frontend_config: Dict) -> Dict:
+        # TODO: add "model"
+        # TODO: add checks again?
+        # TODO: check "model" and "engine" aren't both present
+        # TODO: check all parameters.
         mapping = {
             "model": "engine",
             "presencePenalty": "presence_penalty",
@@ -95,6 +99,7 @@ class OpenAI(LLM):
 
         # TODO: add check on exceeding max_tokens?
         # TODO: add variable replace?
+        # TODO: abstract this logic and make sure it works for huggingface?
         print(self.call_config)
         client_input = prompt + input
         start_time = time.time()
