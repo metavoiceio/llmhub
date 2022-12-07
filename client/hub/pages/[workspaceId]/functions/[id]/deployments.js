@@ -100,7 +100,7 @@ export default function Function({ functions, deployments, currentDeploymentId }
         {
           deployments.length > 0 ?
             render() :
-            <div class="flex h-[80vh]">
+            <div className="flex h-[80vh]">
               <div className="m-auto flex flex-col items-center">
                 <div className="text-lg">
                   No deployments have been made.
