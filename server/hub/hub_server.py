@@ -56,6 +56,13 @@ async def get_completion(request: CompletionRequest):
 
     return return_val
 
+
+@app.get("/shields/stars/{user}/{repo}")
+def shields_stars(user: str, repo: str):
+    print(user, repo)
+    return {"schemaVersion": 1, "label": "LLMHub ⭐️", "message": "0", "color": "brightgreen"}
+
+
 if __name__ == "__main__":
     # start server
     uvicorn.run(app, host="127.0.0.1", port=58001, log_level="info")
