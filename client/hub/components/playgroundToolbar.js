@@ -51,7 +51,7 @@ export default function PlaygroundToolbar(
               })
             }}
           />
-          <span>Max. four comma seaprated sequences</span>
+          <span>Max. four comma separated sequences</span>
           <span className="text-xs text-red-500 break-normal">{error}</span>
         </div>
       </li>
