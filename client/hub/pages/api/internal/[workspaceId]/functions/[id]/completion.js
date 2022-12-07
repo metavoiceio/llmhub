@@ -37,11 +37,16 @@ export default async function handler(req, res) {
 
   const { prompt, input, model, config } = req.body;
   // TODO: make sure this works across various different providers
-  config["engine"] = model; // TODO: remove this when the API is updated
-  config["user"] = "testing"; // TODO: @sidroopdaska, fix
-
   // call completion API
-  const { output, num_tokens, duration_s } = await completionApiCall(prompt, input, config);
+  const { output, num_tokens, duration_s } = await completionApiCall(
+    prompt,
+    input,
+    {
+      ...config,
+      engine: model,
+      user: 'testing' // TODO sidroopdaska: add user id
+    }
+  );
 
   let data, error;
   // update usage_tokens in the workspace
