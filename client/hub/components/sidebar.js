@@ -8,13 +8,20 @@ import logo from "../public/android-chrome-256x256.png";
 import NewFunctionModal from './newFunctionModal';
 import { toast } from 'react-toastify';
 
-export default function AuthSideBar({ workspaceId, functions }) {
+export default function AuthSideBar({ workspaceId, functions, forkUrl }) {
   const router = useRouter();
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [newFunctionName, setNewFunctionName] = useState('');
   const [functionToFork, setFunctionToFork] = useState('');
   const [isRunning, setIsRunning] = useState(false);
+
+  useEffect(() => {
+    if (forkUrl) {
+      setIsModalOpen(true)
+      setFunctionToFork(forkUrl)
+    }
+  }, [forkUrl])
 
   const refreshData = () => {
     router.replace(router.asPath);
