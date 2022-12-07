@@ -42,9 +42,9 @@ async def get_completion(request: CompletionRequest):
     config = request.config
     config["stopSequences"] = config["stopSequences"].replace("\\n", "\n")
 
-    if request.config["engine"] == "flan-t5-xl":
+    if config["engine"] == "flan-t5-xl":
         output, num_tokens, duration_s = huggingface_provider(request.prompt, request.input, config)
-    elif request.config["engine"] == "codegen-16B-multi":
+    elif config["engine"] == "codegen-16B-multi":
         output, num_tokens, duration_s = internalserver_provider(
             request.prompt, request.input, config
         )
