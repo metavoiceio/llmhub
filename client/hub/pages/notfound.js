@@ -8,7 +8,7 @@ export default function Home() {
       <main className={styles.main}>
         <div>Incorrect route, not found</div>
       </main>
-      <Footer />
+      {/* <Footer /> */}
     </div>
   );
 }
