@@ -37,7 +37,7 @@ export default function Home() {
               return (
                 <div className="relative" key={idx}>
                   <dt>
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" aria-hidden="true" className="absolute h-6 w-6 text-green-500"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5"></path></svg>
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" aria-hidden="true" className="absolute h-6 w-6 text-green-500"><path strokeLinecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5"></path></svg>
                     <p className="flex flex-row ml-9 text-lg font-medium leading-6 text-gray-900 items-center">
                       <span>{statement}</span>
                     </p>
