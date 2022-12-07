@@ -152,8 +152,8 @@ export default function Function({
         />
         <ResultPane
           output={initialExperimentData.output}
-          num_tokens={initialExperimentData.num_tokens}
-          duration_s={initialExperimentData.duration_s}
+          num_tokens={initialExperimentData.num_tokens || 0}
+          duration_s={initialExperimentData.duration_s || 0.0}
         />
       </div>
     </div>
