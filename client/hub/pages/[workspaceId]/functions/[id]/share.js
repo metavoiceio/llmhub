@@ -9,6 +9,7 @@ import logo from "../../../../public/logo.png";
 import { supabase } from '../../../../common/supabase';
 import { ATTR_FRIENDLY_NAME_INDEX } from "../../../../common/constants";
 import { useRouter } from "next/router";
+import { AiOutlineFork } from "react-icons/ai";
 
 export default function Share({ initialPrompt, model, config }) {
   const router = useRouter();
@@ -67,6 +68,9 @@ export default function Share({ initialPrompt, model, config }) {
           <Image src={logo} alt="LLMHub logo" className="inline mr-1" />
         </Link>
         <div className="flex md:order-2">
+          <button onClick={router.push(`/${workspaceId}?fork=${id}`)}>
+            <AiOutlineFork />
+          </button>
           <Badge
             color="pink"
             size="sm"
