@@ -17,7 +17,8 @@ export default function PlaygroundHistory({ history, currentDeployment }) {
     if (history.length === 0) return <p>No history to show</p>;
 
     return history.map((experiment, idx) => {
-      const numNewLines = experiment.prompt.split(/\r\n|\r|\n/).length;
+      const promptNumNewLines = experiment.prompt.split(/\r\n|\r|\n/).length;
+      const outputNumNewLines = experiment.output.split(/\r\n|\r|\n/).length;
       return (
         <TimelineEvent
           title=''
@@ -42,18 +43,23 @@ export default function PlaygroundHistory({ history, currentDeployment }) {
             <div className='border border-gray-300 rounded'>
               <textarea
                 readOnly
-                rows={numNewLines >= 10 ? 10 : numNewLines}
+                rows={promptNumNewLines >= 10 ? 10 : promptNumNewLines}
                 className="w-[100%] text-xs font-normal text-gray-900 dark:text-gray-400 border-none border-transparent focus:border-transparent focus:ring-0"
                 value={experiment.prompt}
               />
             </div>
-            <div className='p-2 text-xs mt-1 border border-gray-300 rounded flex'>
+            <div className='py-2 pl-1 pr-3 text-xs mt-1 border border-gray-300 rounded flex'>
               <div className='flex flex-col flex-1'>
                 <div>
-                  {experiment.output}
+                  <textarea
+                    readOnly
+                    rows={outputNumNewLines >= 10 ? 10 : outputNumNewLines}
+                    className="w-[100%] text-xs font-normal text-gray-900 dark:text-gray-400 border-none border-transparent focus:border-transparent focus:ring-0"
+                    value={experiment.output}
+                  />
                 </div>
               </div>
-              <div className='flex flex-col border-l border-gray-400 pl-2'>
+              <div className='flex flex-col border-l border-gray-400 pl-2 pt-2'>
                 <div className='flex'>
                   <div className='min-w-[10ch]'>Model</div>
                   <div>{experiment.model}</div>
