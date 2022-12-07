@@ -45,7 +45,7 @@ export default function FunctionsNavbar({ workspaceId, functionId, mode, allowSh
                   <>
                     <div className="px-2 mb-4 mt-2 truncate">
                       <span className="text-blue-400 underline">
-                        {window.location.href}/share
+                        {window.location.origin}/{workspaceId}/functions/{functionId}/share
                       </span>
                     </div>
                     <div className="px-2 flex items-center">🌐 Anyone can view & share</div>

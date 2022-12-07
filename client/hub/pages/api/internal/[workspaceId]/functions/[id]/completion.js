@@ -45,7 +45,7 @@ export default async function handler(req, res) {
     {
       ...config,
       engine: model,
-      user: session.user.id
+      user: String(session.user.id)
     }
   );
 
