@@ -6,7 +6,7 @@ import Link from "next/link";
 import { Badge, Navbar } from "flowbite-react"
 import PlaygroundEditor from "../../../../components/playgroundEditor";
 import ResultPane from "../../../../components/resultPane";
-import logo from "../../../../public/logo.png";
+import logo from "../../../../public/android-chrome-256x256.png";
 import { supabase } from '../../../../common/supabase';
 import { ATTR_FRIENDLY_NAME_INDEX } from "../../../../common/constants";
 import { useRouter } from "next/router";
@@ -67,7 +67,7 @@ export default function Share({ initialPrompt, model, config, userWorkspaceId })
         className='pt-4'
       >
         <Link href={`/`}>
-          <Image src={logo} alt="LLMHub logo" className="inline mr-1" />
+          <Image src={logo} alt="LLMHub logo" className="inline mr-1" width={48} />
         </Link>
         <div className="flex md:order-2">
           <button

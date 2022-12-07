@@ -14,9 +14,11 @@ export default function Function({ functions, deployments, currentDeploymentId }
   const renderDeploymentContent = (prompt, model, config) => {
     return (
       <div className="-ml-2 flex">
-        <textarea readOnly className="flex-1 text-sm font-normal text-gray-900 dark:text-gray-400 border-none border-transparent focus:border-transparent focus:ring-0">
-          {prompt}
-        </textarea>
+        <textarea
+          readOnly
+          className="flex-1 text-sm font-normal text-gray-900 dark:text-gray-400 border-none border-transparent focus:border-transparent focus:ring-0"
+          value={prompt}
+        />
         <div className="w-[20rem] max-md:w-[12rem] border-l flex flex-col pl-8 pr-8">
           <div className="flex items-center justify-between">
             <div className="text-xs text-gray-800">Model</div>
