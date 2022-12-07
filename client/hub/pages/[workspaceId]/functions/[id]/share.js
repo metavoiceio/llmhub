@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useSession } from "next-auth/react"
+import { unstable_getServerSession } from "next-auth/next"
 import Image from "next/image";
 import Link from "next/link";
 import { Badge, Navbar } from "flowbite-react"
@@ -10,8 +11,9 @@ import { supabase } from '../../../../common/supabase';
 import { ATTR_FRIENDLY_NAME_INDEX } from "../../../../common/constants";
 import { useRouter } from "next/router";
 import { AiOutlineFork } from "react-icons/ai";
+import { authOptions } from '../../../../pages/api/auth/[...nextauth]'
 
-export default function Share({ initialPrompt, model, config }) {
+export default function Share({ initialPrompt, model, config, userWorkspaceId }) {
   const router = useRouter();
   const { workspaceId, id } = router.query;
   const { data: session, status } = useSession();
@@ -68,7 +70,10 @@ export default function Share({ initialPrompt, model, config }) {
           <Image src={logo} alt="LLMHub logo" className="inline mr-1" />
         </Link>
         <div className="flex md:order-2">
-          <button onClick={router.push(`/${workspaceId}?fork=${id}`)}>
+          <button
+            className="mr-2 hover:bg-gray-200 px-2 rounded"
+            onClick={e => router.push(`/${userWorkspaceId}?fork=${encodeURIComponent(window.location.pathname)}`)}
+          >
             <AiOutlineFork />
           </button>
           <Badge
@@ -131,9 +136,21 @@ export default function Share({ initialPrompt, model, config }) {
   ) : <></>
 }
 
-export async function getServerSideProps({ params }) {
-  const { workspaceId, id } = params
-  let error, functions;
+export async function getServerSideProps(context) {
+  const { workspaceId, id } = context.params
+  const session = await unstable_getServerSession(context.req, context.res, authOptions)
+
+  let error, workspaces;
+
+  // get workspace owned by user
+  (
+    { data: workspaces, error } = await supabase
+      .from('workspaces')
+      .select('*')
+      .eq('user_id', session.user.id)
+  )
+
+  let functions;
   (
     { data: functions, error } = await supabase
       .from('functions')
@@ -155,7 +172,8 @@ export async function getServerSideProps({ params }) {
     props: {
       initialPrompt: experiment.prompt || '',
       model: experiment.model || '',
-      config: experiment.config || {}
+      config: experiment.config || {},
+      userWorkspaceId: workspaces[0].id
     }
   };
 }
