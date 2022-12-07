@@ -89,7 +89,7 @@ export default function Function({ functions, deployments, currentDeploymentId }
 
   return (
     <div className="flex flex-col sm:flex-row min-h-screen">
-      <AuthSideBar workspaceId={workspaceId} functions={functions} />
+      <AuthSideBar workspaceId={workspaceId} functions={functions} functionId={id} />
       <div className="h-full flex flex-col overflow-y-auto flex-1 mx-4">
         <FunctionsNavbar
           workspaceId={workspaceId}

@@ -21,6 +21,7 @@ export default function PlaygroundHistory({ history, currentDeployment }) {
       const numNewLines = experiment.prompt.split(/\r\n|\r|\n/).length;
       return (
         <TimelineEvent
+          title=''
           key={`experiment-${idx}`}
           createdAt={
             <span>
