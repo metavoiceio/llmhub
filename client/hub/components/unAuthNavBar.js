@@ -28,10 +28,10 @@ export default function UnAuthNavBar() {
           size="sm"
           onClick={e => {
             e.preventDefault();
-            signOut({ callbackUrl: process.env.NEXT_PUBLIC_POST_SIGNOUT_URL })
+            signIn('auth0', { callbackUrl: process.env.NEXT_PUBLIC_POST_SIGNIN_URL })
           }}
         >
-          Sign out
+          Sign up
         </Button>
       </div>
     </Navbar>
