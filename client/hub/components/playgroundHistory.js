@@ -1,7 +1,10 @@
 import { useState } from 'react';
+import { Timeline, TimelineEvent } from 'react-event-timeline'
+import { ATTR_FRIENDLY_NAME_INDEX } from '../common/constants';
 import Drawer from 'react-modern-drawer';
+const moment = require('moment');
 
-export default function PlaygroundHistory({ history }) {
+export default function PlaygroundHistory({ history, currentDeployment }) {
   const [isOpen, setIsOpen] = useState(false);
 
   const handleClick = (event) => {
@@ -10,23 +13,64 @@ export default function PlaygroundHistory({ history }) {
     setIsOpen(true);
   }
 
-  const showHistory = () => {
+  const renderTimelineContent = () => {
     if (history.length === 0) return <p>No history to show</p>;
 
     return history.map((experiment, idx) => {
+
+      const numNewLines = experiment.prompt.split(/\r\n|\r|\n/).length;
       return (
-        <div key={`experiment-${idx}`}>
-          <div>Created_at: {experiment.created_at}</div>
-          <div>Prompt</div>
-          <div>{experiment.prompt}</div>
-          <div>Output</div>
-          <div>{experiment.output}</div>
+        <TimelineEvent
+          key={`experiment-${idx}`}
+          createdAt={
+            <span>
+              {moment(experiment.created_at).format("MMMM Do YYYY, h:mm:ss")}&nbsp;
+              {
+                currentDeployment && currentDeployment.experiment_id === experiment.id ?
+                  <span class="bg-green-100 text-green-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded dark:bg-green-200 dark:text-green-900">Deployed</span>
+                  : null
+              }
+            </span>
+          }
+          showContent={idx === 0}
+          icon={currentDeployment && currentDeployment.experiment_id === experiment.id ? <span>🚀</span> : null}
+          iconColor={currentDeployment && currentDeployment.experiment_id === experiment.id ? '#0c9f6e' : '#ff9800'}
+          bubbleStyle={{ backgroundColor: '#fff' }}
+          collapsible
+        >
           <div>
-            {experiment.model} &nbsp;
-            {JSON.stringify(experiment.config)}
+            <div className='border border-gray-300 rounded'>
+              <textarea
+                readOnly
+                rows={numNewLines >= 10 ? 10 : numNewLines}
+                className="w-[100%] text-xs font-normal text-gray-900 dark:text-gray-400 border-none border-transparent focus:border-transparent focus:ring-0"
+              >
+                {experiment.prompt}
+              </textarea>
+            </div>
+            <div className='p-2 text-xs mt-1 border border-gray-300 rounded flex'>
+              <div className='flex flex-col flex-1'>
+                <div>
+                  {experiment.output}
+                </div>
+              </div>
+              <div className='flex flex-col border-l border-gray-400 pl-2'>
+                <div className='flex'>
+                  <div className='min-w-[10ch]'>Model</div>
+                  <div>{experiment.model}</div>
+                </div>
+                {Object.entries(experiment.config).map(([key, value], index) => {
+                  return (
+                    <div className='flex' key={index}>
+                      <div className='min-w-[10ch] flex-1'>{ATTR_FRIENDLY_NAME_INDEX[key]}</div>
+                      <div>{value}</div>
+                    </div>
+                  )
+                })}
+              </div>
+            </div>
           </div>
-          <div className="flex-grow border-b border-gray-400"></div>
-        </div>
+        </TimelineEvent>
       )
     });
   }
@@ -55,10 +99,12 @@ export default function PlaygroundHistory({ history }) {
         open={isOpen}
         onClose={() => setIsOpen(false)}
         direction='right'
-        className='p-4 overflow-y-auto min-w-[30rem] break-words'
+        className='p-4 overflow-y-auto min-w-[75vw] break-words'
       >
         <div>
-          {showHistory()}
+          <Timeline lineColor='#d8dee4'>
+            {renderTimelineContent()}
+          </Timeline>
         </div>
       </Drawer>
     </>
