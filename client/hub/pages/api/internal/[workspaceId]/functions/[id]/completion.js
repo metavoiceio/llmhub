@@ -1,4 +1,6 @@
 import { supabase } from '../../../../../../common/supabase';
+import { authOptions } from '../../../../auth/[...nextauth]'
+import { unstable_getServerSession } from "next-auth/next"
 
 export function mockCompletionApiCall() {
   return new Promise((resolve, reject) => {
@@ -31,20 +33,19 @@ export async function completionApiCall(prompt, input, config) {
 }
 
 export default async function handler(req, res) {
-  const { workspaceId, id } = req.query
+  const { workspaceId, id } = req.query 
+  const session = await unstable_getServerSession(req, res, authOptions)
 
   if (req.method !== 'POST') return res.status(500).json({ error: 'Invalid request' });
 
   const { prompt, input, model, config } = req.body;
-  // TODO: make sure this works across various different providers
-  // call completion API
   const { output, num_tokens, duration_s } = await completionApiCall(
     prompt,
     input,
     {
       ...config,
       engine: model,
-      user: 'testing' // TODO sidroopdaska: add user id
+      user: session.user.id
     }
   );
 

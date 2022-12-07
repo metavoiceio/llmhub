@@ -180,7 +180,6 @@ export async function getServerSideProps({ params }) {
       .eq('id', selectedFunction.current_experiment_id)
   );
   console.log('error', error)
-  console.log('experiments', experiments)
   let currentExperiment = error ? {} : experiments[0];
 
   //  get experiment history
