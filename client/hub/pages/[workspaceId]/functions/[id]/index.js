@@ -127,8 +127,7 @@ export default function Function({
 
   return (
     <div className="flex flex-col sm:flex-row min-h-screen">
-      <AuthSideBar workspaceId={workspaceId} functions={functions} />
-
+      <AuthSideBar workspaceId={workspaceId} functions={functions} functionId={id} />
       <div className="h-full flex flex-col overflow-y-auto flex-1 mx-4">
         <FunctionsNavbar
           workspaceId={workspaceId}
@@ -180,6 +179,8 @@ export async function getServerSideProps({ params }) {
       .select("*")
       .eq('id', selectedFunction.current_experiment_id)
   );
+  console.log('error', error)
+  console.log('experiments', experiments)
   let currentExperiment = error ? {} : experiments[0];
 
   //  get experiment history
@@ -213,6 +214,10 @@ export async function getServerSideProps({ params }) {
       .select("*")
       .eq('id', selectedFunction.current_deployment_id)
   )
+
+  if (Object.keys(currentExperiment).length === 0 && allExperiments) {
+    currentExperiment = allExperiments[0]
+  }
 
   return {
     props: {

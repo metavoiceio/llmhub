@@ -17,17 +17,17 @@ export default function PlaygroundHistory({ history, currentDeployment }) {
     if (history.length === 0) return <p>No history to show</p>;
 
     return history.map((experiment, idx) => {
-
       const numNewLines = experiment.prompt.split(/\r\n|\r|\n/).length;
       return (
         <TimelineEvent
+          title=''
           key={`experiment-${idx}`}
           createdAt={
             <span>
               {moment(experiment.created_at).format("MMMM Do YYYY, h:mm:ss")}&nbsp;
               {
                 currentDeployment && currentDeployment.experiment_id === experiment.id ?
-                  <span class="bg-green-100 text-green-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded dark:bg-green-200 dark:text-green-900">Deployed</span>
+                  <span className="bg-green-100 text-green-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded dark:bg-green-200 dark:text-green-900">Deployed</span>
                   : null
               }
             </span>
@@ -44,9 +44,8 @@ export default function PlaygroundHistory({ history, currentDeployment }) {
                 readOnly
                 rows={numNewLines >= 10 ? 10 : numNewLines}
                 className="w-[100%] text-xs font-normal text-gray-900 dark:text-gray-400 border-none border-transparent focus:border-transparent focus:ring-0"
-              >
-                {experiment.prompt}
-              </textarea>
+                value={experiment.prompt}
+              />
             </div>
             <div className='p-2 text-xs mt-1 border border-gray-300 rounded flex'>
               <div className='flex flex-col flex-1'>

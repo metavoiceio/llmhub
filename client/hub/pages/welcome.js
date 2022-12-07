@@ -66,7 +66,7 @@ export default function Welcome() {
   }, [status])
 
   return (
-    <div class="flex h-screen">
+    <div className="flex h-screen">
       <div className="m-auto text-3xl">
         {
           status === 'loading' ?

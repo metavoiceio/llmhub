@@ -3,6 +3,13 @@ import 'react-toastify/dist/ReactToastify.css';
 import 'react-modern-drawer/dist/index.css'
 import '../styles/globals.css'
 import { ToastContainer } from 'react-toastify';
+import Router from "next/router"
+import NProgress from "nprogress"
+import Header from "../components/header";
+
+Router.onRouteChangeStart = url => NProgress.start()
+Router.onRouteChangeComplete = () => NProgress.done()
+Router.onRouteChangeError = () => NProgress.done()
 
 export default function App({
   Component,
@@ -10,6 +17,7 @@ export default function App({
 }) {
   return (
     <SessionProvider session={session}>
+      <Header />
       <Component {...pageProps} />
       <ToastContainer
         position="top-right"

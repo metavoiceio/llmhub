@@ -8,7 +8,7 @@ import logo from "../public/android-chrome-256x256.png";
 import NewFunctionModal from './newFunctionModal';
 import { toast } from 'react-toastify';
 
-export default function AuthSideBar({ workspaceId, functions, forkUrl }) {
+export default function AuthSideBar({ workspaceId, functions, forkUrl, functionId='' }) {
   const router = useRouter();
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -63,13 +63,14 @@ export default function AuthSideBar({ workspaceId, functions, forkUrl }) {
 
   const renderFunctions = () => {
     return functions.map((funcData, _index) => {
+      const highlight = parseInt(functionId) === funcData.id ? 'bg-gray-300 hover:bg-gray-300' : 'dark:hover:bg-gray-800 hover:bg-gray-200'
       return (
         <Link
           key={funcData.id}
           id={funcData.id}
           role={"button"}
           tabIndex={0}
-          className="group p-1 rounded flex items-center text-start dark:hover:bg-gray-800 hover:bg-gray-100 gap-1"
+          className={`group p-1 rounded flex items-center text-start gap-1 ${highlight}`}
           href={`/${workspaceId}/functions/${funcData.id}`}
         >
           <div className="p-1 h-6 flex items-center justify-center rounded" >

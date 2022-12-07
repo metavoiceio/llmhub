@@ -14,9 +14,11 @@ export default function Function({ functions, deployments, currentDeploymentId }
   const renderDeploymentContent = (prompt, model, config) => {
     return (
       <div className="-ml-2 flex">
-        <textarea readOnly className="flex-1 text-sm font-normal text-gray-900 dark:text-gray-400 border-none border-transparent focus:border-transparent focus:ring-0">
-          {prompt}
-        </textarea>
+        <textarea
+          readOnly
+          className="flex-1 text-sm font-normal text-gray-900 dark:text-gray-400 border-none border-transparent focus:border-transparent focus:ring-0"
+          value={prompt}
+        />
         <div className="w-[20rem] max-md:w-[12rem] border-l flex flex-col pl-8 pr-8">
           <div className="flex items-center justify-between">
             <div className="text-xs text-gray-800">Model</div>
@@ -89,7 +91,7 @@ export default function Function({ functions, deployments, currentDeploymentId }
 
   return (
     <div className="flex flex-col sm:flex-row min-h-screen">
-      <AuthSideBar workspaceId={workspaceId} functions={functions} />
+      <AuthSideBar workspaceId={workspaceId} functions={functions} functionId={id} />
       <div className="h-full flex flex-col overflow-y-auto flex-1 mx-4">
         <FunctionsNavbar
           workspaceId={workspaceId}
@@ -100,7 +102,7 @@ export default function Function({ functions, deployments, currentDeploymentId }
         {
           deployments.length > 0 ?
             render() :
-            <div class="flex h-[80vh]">
+            <div className="flex h-[80vh]">
               <div className="m-auto flex flex-col items-center">
                 <div className="text-lg">
                   No deployments have been made.
