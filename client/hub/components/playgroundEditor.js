@@ -1,7 +1,7 @@
 import PlaygroundHistory from "./playgroundHistory"
 
 export default function PlaygroundEditor({
-  prompt, setPrompt, handleRun, experimentHistory, isRunning, handleDeploy
+  prompt, setPrompt, handleRun, experimentHistory, isRunning, handleDeploy, currentDeployment
 }) {
   return (
     <form onSubmit={handleRun}>
@@ -27,7 +27,7 @@ export default function PlaygroundEditor({
             >
               Run
             </button>
-            {experimentHistory && <PlaygroundHistory history={experimentHistory} />}
+            {experimentHistory && <PlaygroundHistory history={experimentHistory} currentDeployment={currentDeployment} />}
           </div>
           <div className="flex pl-0 space-x-1 sm:pl-2">
             {

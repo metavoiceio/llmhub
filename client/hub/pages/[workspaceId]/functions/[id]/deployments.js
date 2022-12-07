@@ -40,7 +40,7 @@ export default function Function({ functions, deployments, currentDeploymentId }
   const renderDeployments = (deployments) => {
     return (
       <>
-        <Accordion flush>
+        <Accordion flush alwaysOpen={true}>
           {
             deployments.map((deployment, idx) => {
               return (

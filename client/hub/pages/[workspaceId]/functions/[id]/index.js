@@ -149,6 +149,7 @@ export default function Function({
           experimentHistory={experimentHistory}
           isRunning={isRunning || isRefreshing}
           handleDeploy={handleDeploy}
+          currentDeployment={currentDeployment}
         />
         <ResultPane
           output={initialExperimentData.output}
