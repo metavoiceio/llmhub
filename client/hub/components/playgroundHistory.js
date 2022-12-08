@@ -26,7 +26,7 @@ export default function PlaygroundHistory({ history, currentDeployment }) {
               {moment(experiment.created_at).format("MMMM Do YYYY, h:mm:ss")}&nbsp;
               {
                 currentDeployment && currentDeployment.experiment_id === experiment.id ?
-                  <span className="bg-green-100 text-green-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded dark:bg-green-200 dark:text-green-900">Deployed</span>
+                  <span className="bg-green-100 text-green-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded">Deployed</span>
                   : null
               }
             </span>
@@ -34,7 +34,8 @@ export default function PlaygroundHistory({ history, currentDeployment }) {
           showContent={idx === 0}
           icon={currentDeployment && currentDeployment.experiment_id === experiment.id ? <span>🚀</span> : null}
           iconColor={currentDeployment && currentDeployment.experiment_id === experiment.id ? '#0c9f6e' : '#ff9800'}
-          bubbleStyle={{ backgroundColor: '#fff' }}
+          bubbleStyle={{ backgroundColor: '#fafafa' }}
+
           collapsible
         >
           <div>
@@ -42,7 +43,7 @@ export default function PlaygroundHistory({ history, currentDeployment }) {
               <textarea
                 readOnly
                 rows={promptNumNewLines >= 10 ? 10 : promptNumNewLines}
-                className="w-[100%] text-xs font-normal text-gray-900 dark:text-gray-400 border-none border-transparent focus:border-transparent focus:ring-0"
+                className="w-[100%] text-xs font-normal text-gray-900 border-none border-transparent focus:border-transparent focus:ring-0"
                 value={experiment.prompt}
               />
             </div>
@@ -52,21 +53,21 @@ export default function PlaygroundHistory({ history, currentDeployment }) {
                   <textarea
                     readOnly
                     rows={outputNumNewLines >= 10 ? 10 : outputNumNewLines}
-                    className="w-[100%] text-xs font-normal text-gray-900 dark:text-gray-400 border-none border-transparent focus:border-transparent focus:ring-0"
+                    className="w-[100%] text-xs font-normal text-gray-900  border-none border-transparent focus:border-transparent focus:ring-0"
                     value={experiment.output}
                   />
                 </div>
               </div>
               <div className='flex flex-col border-l border-gray-400 pl-2 pt-2'>
                 <div className='flex'>
-                  <div className='min-w-[10ch]'>Model</div>
-                  <div>{experiment.model}</div>
+                  <div className='min-w-[10ch] dark:text-gray-800'>Model</div>
+                  <div className='dark:text-black'>{experiment.model}</div>
                 </div>
                 {Object.entries(experiment.config).map(([key, value], index) => {
                   return (
                     <div className='flex' key={index}>
-                      <div className='min-w-[10ch] flex-1'>{ATTR_FRIENDLY_NAME_INDEX[key]}</div>
-                      <div>{value}</div>
+                      <div className='min-w-[10ch] flex-1 dark:text-gray-800'>{ATTR_FRIENDLY_NAME_INDEX[key]}</div>
+                      <div className='dark:text-black'>{value}</div>
                     </div>
                   )
                 })}
@@ -106,7 +107,7 @@ export default function PlaygroundHistory({ history, currentDeployment }) {
       >
         <div>
           {
-            (history.length === 0) ? <p>No history to show</p> : <Timeline lineColor='#d8dee4'>
+            (history.length === 0) ? <div className='flex h-screen'><div className='m-auto dark:text-black'>No history to show. Please run a few prompts.</div></div> : <Timeline lineColor='#d8dee4'>
               {renderTimelineContent()}
             </Timeline>
           }

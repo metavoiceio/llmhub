@@ -38,7 +38,7 @@ export default function FunctionsNavbar({ workspaceId, functionId, mode, allowSh
             arrowClassName='popover-arrow'
           >
             <div
-              className="z-50 shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none transform opacity-100 scale-100 p-2 rounded-lg text-xs flex flex-col w-fit"
+              className="z-50 shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none transform opacity-100 scale-100 p-2 rounded-lg text-xs flex flex-col w-fit dark:bg-gray-700"
             >
               {
                 allowShare ?

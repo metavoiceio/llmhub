@@ -63,7 +63,7 @@ export default function AuthSideBar({ workspaceId, functions, forkUrl, functionI
 
   const renderFunctions = () => {
     return functions.map((funcData, _index) => {
-      const highlight = parseInt(functionId) === funcData.id ? 'bg-gray-300 hover:bg-gray-300' : 'dark:hover:bg-gray-800 hover:bg-gray-200'
+      const highlight = parseInt(functionId) === funcData.id ? 'bg-gray-300 hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-700' : 'dark:hover:bg-gray-700 hover:bg-gray-200'
       return (
         <Link
           key={funcData.id}
@@ -88,7 +88,7 @@ export default function AuthSideBar({ workspaceId, functions, forkUrl, functionI
   return (
     <>
       <div className="hidden sm:flex select-auto w-[260px] max-w-[530px] min-w-[200px] box-border shrink-0 min-h-screen" >
-        <div className="flex flex-col bg-gray-50 dark:bg-gray-900 dark:text-gray-200 border-r-1 dark:border-gray-800 px-2 overflow-auto w-full">
+        <div className="flex flex-col bg-gray-50 dark:bg-gray-900 dark:text-gray-200 border-r-[1px] dark:border-r-gray-500 px-2 overflow-auto w-full">
           {/* sidebar header */}
           <Link className="pt-4 flex items-center px-1 text-sm" href={`/${workspaceId}`}>
             <Image src={logo} alt="LLMHub logo" className="inline mr-1" width={48} />
@@ -98,9 +98,9 @@ export default function AuthSideBar({ workspaceId, functions, forkUrl, functionI
           {/* functions */}
           <div className="pt-8 grow">
             <div className='px-2 pb-2 flex flex-row items-center justify-between'>
-              <div className="text-gray-500 text-xs p-1">Functions</div>
+              <div className="text-gray-500 text-xs p-1 dark:text-gray-400">Functions</div>
               <div
-                className='hover:border hover:bg-gray-200' role='button' tabIndex={0}
+                className='hover:border hover:bg-gray-200 dark:hover:bg-gray-600 rounded' role='button' tabIndex={0}
                 onClick={(_e) => setIsModalOpen(true)}
               >
                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" className="bi bi-plus" viewBox="0 0 16 16">
@@ -110,7 +110,7 @@ export default function AuthSideBar({ workspaceId, functions, forkUrl, functionI
             </div>
 
             {/* render functions */}
-            <div className='max-h-[70vh] overflow-y-auto'>
+            <div className='max-h-[70vh] overflow-y-auto flex flex-col gap-1'>
               {renderFunctions()}
             </div>
           </div>

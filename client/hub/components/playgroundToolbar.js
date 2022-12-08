@@ -33,7 +33,7 @@ export default function PlaygroundToolbar(
           <input
             id={"stopSequences"}
             name={"stopSequences"}
-            className="w-full px-2 py-2 rounded outline-none text-xs border focus:border-blue-500"
+            className="w-full px-2 py-2 rounded outline-none text-xs border focus:border-blue-500 dark:bg-gray-700"
             value={selectedModelConfig['stopSequences']}
             onInput={event => {
               if (event.target.value.split(',').length > 4) {
@@ -68,7 +68,7 @@ export default function PlaygroundToolbar(
         arrowIcon={false}
         inline
         label={
-          <div className="ml-2">
+          <div className="ml-1 dark:hover:bg-gray-700 rounded p-2">
             <BsSliders className="text-lg" />
           </div>
         }
@@ -90,7 +90,7 @@ export default function PlaygroundToolbar(
                       min={value.min}
                       max={value.max}
                       step={value.step}
-                      className="w-full px-2 py-2 rounded outline-none text-xs border-y focus:border-blue-500"
+                      className="w-full px-2 py-2 rounded outline-none text-xs border-y focus:border-blue-500 dark:bg-gray-700"
                       value={selectedModelConfig[key]}
                       onInput={event => setModelConfigs({
                         ...modelConfigs,

@@ -23,7 +23,7 @@ export default function Settings({ functions, workspace }) {
   }
 
   return (
-    <div className="flex flex-col sm:flex-row min-h-screen">
+    <div className="flex flex-col sm:flex-row min-h-screen dark:bg-gray-900">
       <AuthSideBar workspaceId={workspaceId} functions={functions} />
       <div className="h-screen flex-1 py-4 flex flex-col px-8">
         <h1 className="font-medium text-xl mb-20">Settings</h1>

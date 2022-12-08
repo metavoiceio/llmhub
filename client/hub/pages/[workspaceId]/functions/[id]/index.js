@@ -10,7 +10,6 @@ import ResultPane from "../../../../components/resultPane";
 import AuthSideBar from "../../../../components/sidebar";
 import { toast } from 'react-toastify';
 
-// TODO: loading spinner
 export default function Function({
   functions, initialFunctionData, initialExperimentData, experimentHistory, currentDeployment
 }) {
@@ -126,7 +125,7 @@ export default function Function({
   }
 
   return (
-    <div className="flex flex-col sm:flex-row min-h-screen">
+    <div className="flex flex-col sm:flex-row min-h-screen dark:bg-gray-900">
       <AuthSideBar workspaceId={workspaceId} functions={functions} functionId={id} />
       <div className="h-full flex flex-col overflow-y-auto flex-1 mx-4">
         <FunctionsNavbar

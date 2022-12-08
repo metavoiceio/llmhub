@@ -64,7 +64,7 @@ export default function Share({ initialPrompt, model, config, userWorkspaceId })
       <Navbar
         fluid={true}
         rounded={true}
-        className='pt-4'
+        className='pt-4 dark:bg-gray-900'
       >
         <Link href={`/`}>
           <Image src={logo} alt="LLMHub logo" className="inline mr-1" width={48} />
@@ -90,16 +90,16 @@ export default function Share({ initialPrompt, model, config, userWorkspaceId })
   const configPanel = () => {
     return (
       <div className="px-4 min-w-[18rem]">
-        <h2 className="text-xs text-gray-800 mb-4">CONFIG</h2>
+        <h2 className="text-xs text-gray-800 mb-4 dark:text-gray-300">CONFIG</h2>
         <div className="flex flex-col gap-1">
           <div className="flex items-center justify-between">
-            <div className="text-xs text-gray-800">Model</div>
+            <div className="text-xs text-gray-800 dark:text-gray-300">Model</div>
             <div>{model}</div>
           </div>
           {Object.entries(config).map(([key, value], index) => {
             return (
               <div className="flex items-center justify-between" key={`config-${index}`}>
-                <div className="text-xs text-gray-800">{ATTR_FRIENDLY_NAME_INDEX[key]}</div>
+                <div className="text-xs text-gray-800 dark:text-gray-300">{ATTR_FRIENDLY_NAME_INDEX[key]}</div>
                 <div>{value}</div>
               </div>
             )
@@ -110,7 +110,7 @@ export default function Share({ initialPrompt, model, config, userWorkspaceId })
   }
 
   return status === 'authenticated' ? (
-    <>
+    <div className="dark:bg-gray-900 h-screen">
       {navbar()}
       <div className="max-h-screen px-5 mt-10 flex overflow-y-hidden scrollbar-hide">
         <div className='flex-1'>
@@ -132,7 +132,7 @@ export default function Share({ initialPrompt, model, config, userWorkspaceId })
         </div>
         {configPanel()}
       </div>
-    </>
+    </div>
   ) : <></>
 }
 

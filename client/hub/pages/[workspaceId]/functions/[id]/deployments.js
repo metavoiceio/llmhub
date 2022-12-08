@@ -12,23 +12,26 @@ export default function Function({ functions, deployments, currentDeploymentId }
   const { workspaceId, id } = router.query;
 
   const renderDeploymentContent = (prompt, model, config) => {
+    // TODO: migrate textarea duplicate code into an independent function
+    const numNewLines = prompt && prompt.split(/\r\n|\r|\n/).length;
     return (
       <div className="-ml-2 flex">
         <textarea
           readOnly
-          className="flex-1 text-sm font-normal text-gray-900 dark:text-gray-400 border-none border-transparent focus:border-transparent focus:ring-0"
+          rows={numNewLines >= 10 ? 10 : numNewLines}
+          className="flex-1 text-sm font-normal text-gray-900 dark:text-gray-300 border-none border-transparent focus:border-transparent focus:ring-0 dark:bg-gray-700 rounded"
           value={prompt}
         />
         <div className="w-[20rem] max-md:w-[12rem] border-l flex flex-col pl-8 pr-8">
           <div className="flex items-center justify-between">
-            <div className="text-xs text-gray-800">Model</div>
+            <div className="text-xs text-gray-800 dark:text-gray-400">Model</div>
             <div className="text-sm">{model}</div>
           </div>
           {
             Object.entries(config).map(([key, value], idx) => {
               return (
                 <div className="flex items-center justify-between" key={idx}>
-                  <div className="text-xs text-gray-800">{ATTR_FRIENDLY_NAME_INDEX[key]}</div>
+                  <div className="text-xs text-gray-800 dark:text-gray-400">{ATTR_FRIENDLY_NAME_INDEX[key]}</div>
                   <div className="text-sm">{value}</div>
                 </div>
               )
@@ -40,6 +43,7 @@ export default function Function({ functions, deployments, currentDeploymentId }
   }
 
   const renderDeployments = (deployments) => {
+    if (deployments.length === 0) return <span className="text-xs ml-4 dark:text-gray-300">No prior deployments to show</span>
     return (
       <>
         <Accordion flush alwaysOpen={true}>
@@ -90,7 +94,7 @@ export default function Function({ functions, deployments, currentDeploymentId }
   }
 
   return (
-    <div className="flex flex-col sm:flex-row min-h-screen">
+    <div className="flex flex-col sm:flex-row min-h-screen dark:bg-gray-900">
       <AuthSideBar workspaceId={workspaceId} functions={functions} functionId={id} />
       <div className="h-full flex flex-col overflow-y-auto flex-1 mx-4">
         <FunctionsNavbar
