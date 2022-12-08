@@ -23,24 +23,24 @@ async function authToken() {
     }
 
     // fetches the .well-known endpoint for endpoints, issuer value etc.
-    const auth0 = await Issuer.discover(`https://${process.env.AUTH0_DOMAIN}`);
+    const auth0 = await Issuer.discover(`https://dev-n05dsuq3kini0zdl.us.auth0.com`);
 
     // instantiates a client
     const client = new auth0.Client({
-      client_id: process.env.AUTH0_CLIENT_ID,
+      client_id: 'HkkUN8OZv5ikAImggmRRRC0fNtGh68eG',
       token_endpoint_auth_method: 'none',
       id_token_signed_response_alg: 'RS256'
     });
 
     const handle = await client.deviceAuthorization({
-      scope: process.env.AUTH0_SCOPE, audience: process.env.AUTH0_AUDIENCE
+      scope: "openid profile", audience: "https://llmhub.com/api"
     });
 
     const { verification_uri_complete, user_code, expires_in } = handle
     await prompts({
       type: 'invisible',
       message: `Press any key to open up the browser to login or press ctrl-c to abort.\nYou will be navigated to: ${verification_uri_complete} and should see the following code: ${user_code}.\nIt expires in ${expires_in % 60 === 0 ? `${expires_in / 60} minutes` : `${expires_in} seconds`}.`,
-    });
+    }, { onCancel: () => { process.exit(0) }});
     open(verification_uri_complete);
 
     let tokens;
