@@ -13,7 +13,7 @@ export default function Workspace({ functions }) {
   })
 
   return (
-    <div className="flex flex-col sm:flex-row min-h-screen">
+    <div className="flex flex-col sm:flex-row min-h-screen dark:bg-gray-900">
       <AuthSideBar workspaceId={workspaceId} functions={functions} forkUrl={forkUrl} />
       <div className="h-full flex flex-col flex-1" />
     </div>

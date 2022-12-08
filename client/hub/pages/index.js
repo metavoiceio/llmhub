@@ -18,12 +18,11 @@ export default function Home() {
 
 
   return (
-    <div className={styles.container}>
+    <div className={`${styles.container} dark:bg-gray-900`}>
       <UnAuthNavBar />
       <main className={styles.main}>
-        {/* <h3 className={`${styles.hubIntro} mt-2 mb-2`}>Large Language Model-based applications are hard to build and hard to use.</h3> */}
         <h1 className={`text-5xl mt-[6rem] mb-5`}>The best way to</h1>
-        <h1 className={`text-5xl text-green-400`}>design, deploy & discover LLM Apps</h1>
+        <h1 className={`text-5xl text-green-400`}>design, deploy & use LLM Apps</h1>
         <div className="py-16 px-4 sm:px-6 xl:py-24 xl:px-8">
           <div className="sm:grid sm:grid-cols-2 sm:gap-x-6 sm:gap-y-12 sm:space-y-0 xl:grid-cols-3 xl:gap-x-8 flex items-center">
             {[
@@ -38,7 +37,7 @@ export default function Home() {
                 <div className="relative" key={idx}>
                   <dt>
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" aria-hidden="true" className="absolute h-6 w-6 text-green-500"><path strokeLinecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5"></path></svg>
-                    <p className="flex flex-row ml-9 text-lg font-medium leading-6 text-gray-900 items-center">
+                    <p className="flex flex-row ml-9 text-lg font-medium leading-6 text-gray-900 items-center dark:text-white">
                       <span>{statement}</span>
                     </p>
                   </dt>
@@ -52,12 +51,3 @@ export default function Home() {
     </div>
   );
 }
-
-
-// - Integrate ANY LLM in 3-lines with a standardised API
-// - Deploy in 1-click.
-// - Allow users to use your app in 1-click.
-
-// - Monitor and improve your prompts.
-// - Discover new prompts easily, and showcase your work.
-// - Contribute to popular prompts, and improve your skills.
