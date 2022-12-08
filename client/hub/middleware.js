@@ -100,5 +100,5 @@ export const config = {
     * - _next/static (static files)
     * - favicon.ico (favicon file)
     */
-  matcher: ['/((?!auth|_next/static).*\.(?:svg|jpg|png|ico))(.+)']
+  matcher: ['/((?!auth|_next/static|favicon.ico|android-chrome-233x233.png).*)(.+)']
 }
