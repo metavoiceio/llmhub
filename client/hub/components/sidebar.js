@@ -63,7 +63,7 @@ export default function AuthSideBar({ workspaceId, functions, forkUrl, functionI
 
   const renderFunctions = () => {
     return functions.map((funcData, _index) => {
-      const highlight = parseInt(functionId) === funcData.id ? 'bg-gray-300 hover:bg-gray-300' : 'dark:hover:bg-gray-800 hover:bg-gray-200'
+      const highlight = parseInt(functionId) === funcData.id ? 'bg-gray-300 hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-700' : 'dark:hover:bg-gray-700 hover:bg-gray-200'
       return (
         <Link
           key={funcData.id}
@@ -100,7 +100,7 @@ export default function AuthSideBar({ workspaceId, functions, forkUrl, functionI
             <div className='px-2 pb-2 flex flex-row items-center justify-between'>
               <div className="text-gray-500 text-xs p-1 dark:text-gray-400">Functions</div>
               <div
-                className='hover:border hover:bg-gray-200' role='button' tabIndex={0}
+                className='hover:border hover:bg-gray-200 dark:hover:bg-gray-600 rounded' role='button' tabIndex={0}
                 onClick={(_e) => setIsModalOpen(true)}
               >
                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" className="bi bi-plus" viewBox="0 0 16 16">
@@ -110,7 +110,7 @@ export default function AuthSideBar({ workspaceId, functions, forkUrl, functionI
             </div>
 
             {/* render functions */}
-            <div className='max-h-[70vh] overflow-y-auto'>
+            <div className='max-h-[70vh] overflow-y-auto flex flex-col gap-1'>
               {renderFunctions()}
             </div>
           </div>

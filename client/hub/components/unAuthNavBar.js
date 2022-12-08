@@ -8,7 +8,8 @@ export default function UnAuthNavBar() {
     <Navbar
       fluid={true}
       rounded={true}
-      className="px-2 sm:px-4 py-2.5 fixed w-full z-20 top-0 left-0 dark:bg-gray-900"
+      className="px-2 sm:px-4 py-2.5 fixed w-full z-20 top-0 left-0"
+      
     >
       <Navbar.Brand href="http://localhost:3000/">
         <Image src={logo} alt="LLMHub logo" className="inline mr-2" width={48} />
