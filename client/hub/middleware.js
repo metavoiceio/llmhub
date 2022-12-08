@@ -100,5 +100,5 @@ export const config = {
     * - _next/static (static files)
     * - favicon.ico (favicon file)
     */
-  matcher: ['/((?!auth|_next/static|favicon.ico).*)(.+)']
+  matcher: ['/((?!auth|_next/static|favicon.ico|mstile-150x150.png).*)(.+)']
 }
