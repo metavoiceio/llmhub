@@ -6,7 +6,7 @@ import Link from "next/link";
 import { Badge, Navbar } from "flowbite-react"
 import PlaygroundEditor from "../../../../components/playgroundEditor";
 import ResultPane from "../../../../components/resultPane";
-import logo from "../../../../public/android-chrome-256x256.png";
+import logo from "../../../../public/android-chrome-233x233.png";
 import { supabase } from '../../../../common/supabase';
 import { ATTR_FRIENDLY_NAME_INDEX } from "../../../../common/constants";
 import { useRouter } from "next/router";

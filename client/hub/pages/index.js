@@ -22,8 +22,8 @@ export default function Home() {
       <UnAuthNavBar />
       <main className={styles.main}>
         {/* <h3 className={`${styles.hubIntro} mt-2 mb-2`}>Large Language Model-based applications are hard to build and hard to use.</h3> */}
-        <h1 className={`text-5xl mt-[6rem] mb-5`}>The best way to <span className="text-green-400">discover,</span></h1>
-        <h1 className={`text-5xl text-green-400`}>design, deploy and use LLM Apps</h1>
+        <h1 className={`text-5xl mt-[6rem] mb-5`}>The best way to</h1>
+        <h1 className={`text-5xl text-green-400`}>design, deploy & discover LLM Apps</h1>
         <div className="py-16 px-4 sm:px-6 xl:py-24 xl:px-8">
           <div className="sm:grid sm:grid-cols-2 sm:gap-x-6 sm:gap-y-12 sm:space-y-0 xl:grid-cols-3 xl:gap-x-8 flex items-center">
             {[

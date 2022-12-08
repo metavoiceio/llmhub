@@ -4,7 +4,7 @@ import { useRouter } from 'next/router';
 import Image from 'next/image';
 import { HiChartBar } from 'react-icons/hi';
 import { BsGearWide, BsBraces, BsThreeDots } from 'react-icons/bs';
-import logo from "../public/android-chrome-256x256.png";
+import logo from "../public/android-chrome-233x233.png";
 import NewFunctionModal from './newFunctionModal';
 import { toast } from 'react-toastify';
 
