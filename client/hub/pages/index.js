@@ -22,7 +22,7 @@ export default function Home() {
       <UnAuthNavBar />
       <main className={styles.main}>
         <h1 className={`text-5xl mt-[6rem] mb-5 text-center leading-[3.5rem]`}>The best way to <br/><span className={`text-5xl text-green-400`}>design, deploy & use LLM Apps</span></h1>
-        <div className="flex flex-col max-w-2xl mx-auto w-full py-24">
+        <div className="flex flex-col max-w-xl mx-auto w-full py-24">
           <div className="px-4 gap-2 flex items-center pb-2 justify-center flex w-full text-sm sm:text-base">Watch the overview of LLMHub</div>
           <div>
             <div className="border rounded" style={{position:'relative', paddingBottom:'64.86486486486486%', height:0}}>
