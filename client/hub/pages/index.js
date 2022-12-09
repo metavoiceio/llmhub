@@ -23,6 +23,13 @@ export default function Home() {
       <main className={styles.main}>
         <h1 className={`text-5xl mt-[6rem] mb-5`}>The best way to</h1>
         <h1 className={`text-5xl text-green-400`}>design, deploy & use LLM Apps</h1>
+        <div style={{position: 'relative', paddingBottom: '64.63195691202873%', height: 0}}>
+          <iframe src="https://www.loom.com/embed/97f212d2115a406ab261d1d4f4ca25f3" 
+            // frameBorder="0"  allowFullScreen 
+            // style={{position: 'relative', top: 0, left: 0, width: '100%', height: '100%'}}
+            >
+          </iframe>
+        </div>
         <div className="py-16 px-4 sm:px-6 xl:py-24 xl:px-8">
           <div className="sm:grid sm:grid-cols-2 sm:gap-x-6 sm:gap-y-12 sm:space-y-0 xl:grid-cols-3 xl:gap-x-8 flex items-center">
             {[
