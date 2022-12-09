@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { signIn } from "next-auth/react";
 import { useSession } from "next-auth/react"
 import { unstable_getServerSession } from "next-auth/next"
 import Image from "next/image";
@@ -13,16 +14,18 @@ import { useRouter } from "next/router";
 import { AiOutlineFork } from "react-icons/ai";
 import { authOptions } from '../../../../pages/api/auth/[...nextauth]'
 
-export default function Share({ initialPrompt, model, config, userWorkspaceId }) {
+export default function Share({
+  initialPrompt, model, config, initialOutput, initial_num_tokens, initial_duration_s, userWorkspaceId
+}) {
   const router = useRouter();
   const { workspaceId, id } = router.query;
   const { data: session, status } = useSession();
   const [isRunning, setIsRunning] = useState(false);
   const [prompt, setPrompt] = useState(initialPrompt);
   const [result, setResult] = useState({
-    output: '',
-    num_tokens: '0',
-    duration_s: '0.0'
+    output: initialOutput,
+    num_tokens: initial_num_tokens,
+    duration_s: initial_duration_s
   });
 
   const handleRun = async (event) => {
@@ -60,15 +63,27 @@ export default function Share({ initialPrompt, model, config, userWorkspaceId })
   }
 
   const navbar = () => {
-    return (
-      <Navbar
-        fluid={true}
-        rounded={true}
-        className='pt-4 dark:bg-gray-900'
-      >
-        <Link href={`/`}>
-          <Image src={logo} alt="LLMHub logo" className="inline mr-1" width={48} />
-        </Link>
+    const unauthView = () => {
+      return (
+        <div className="flex items-center md:order-2">
+          <Badge
+            color="pink"
+            size="sm"
+          >
+            Mode: View
+          </Badge>
+          <button
+            className="ml-2 text-gray-900 hover:text-white border border-gray-800 hover:bg-gray-900 focus:ring-4 focus:outline-none focus:ring-gray-300 font-medium rounded-lg text-sm px-3 py-2 text-center dark:border-gray-600 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-800"
+            onClick={e => signIn('auth0', { callbackUrl: window.location.href })}
+          >
+            Login to Run/Fork
+          </button>
+        </div>
+      )
+    }
+
+    const authView = () => {
+      return (
         <div className="flex md:order-2">
           <button
             className="mr-2 hover:bg-gray-200 px-2 rounded"
@@ -83,6 +98,19 @@ export default function Share({ initialPrompt, model, config, userWorkspaceId })
             Mode: View & Run
           </Badge>
         </div>
+      )
+    }
+
+    return (
+      <Navbar
+        fluid={true}
+        rounded={true}
+        className='pt-4 dark:bg-gray-900'
+      >
+        <Link href={`/`}>
+          <Image src={logo} alt="LLMHub logo" className="inline mr-1" width={48} />
+        </Link>
+        {session ? authView() : unauthView()}
       </Navbar>
     )
   }
@@ -109,7 +137,7 @@ export default function Share({ initialPrompt, model, config, userWorkspaceId })
     )
   }
 
-  return status === 'authenticated' ? (
+  return (
     <div className="dark:bg-gray-900 h-screen">
       {navbar()}
       <div className="max-h-screen px-5 mt-10 flex overflow-y-hidden scrollbar-hide">
@@ -118,7 +146,7 @@ export default function Share({ initialPrompt, model, config, userWorkspaceId })
             <PlaygroundEditor
               prompt={prompt}
               setPrompt={setPrompt}
-              handleRun={handleRun}
+              handleRun={session ? handleRun : null}
               handleDeploy={null}
               experimentHistory={null}
               isRunning={isRunning}
@@ -133,22 +161,24 @@ export default function Share({ initialPrompt, model, config, userWorkspaceId })
         {configPanel()}
       </div>
     </div>
-  ) : <></>
+  )
 }
 
 export async function getServerSideProps(context) {
   const { workspaceId, id } = context.params
   const session = await unstable_getServerSession(context.req, context.res, authOptions)
 
-  let error, workspaces;
+  let error, workspaces = [];
 
   // get workspace owned by user
-  (
-    { data: workspaces, error } = await supabase
-      .from('workspaces')
-      .select('*')
-      .eq('user_id', session.user.id)
-  )
+  if (session) {
+    (
+      { data: workspaces, error } = await supabase
+        .from('workspaces')
+        .select('*')
+        .eq('user_id', session.user.id)
+    )
+  }
 
   let functions;
   (
@@ -160,7 +190,10 @@ export async function getServerSideProps(context) {
             id,
             prompt,
             model,
-            config
+            config,
+            output,
+            num_tokens,
+            duration_s
           )
         )
       `)
@@ -173,7 +206,10 @@ export async function getServerSideProps(context) {
       initialPrompt: experiment.prompt || '',
       model: experiment.model || '',
       config: experiment.config || {},
-      userWorkspaceId: workspaces[0].id
+      initialOutput: experiment.output || '',
+      initial_num_tokens: experiment.num_tokens || '0',
+      initial_duration_s: experiment.duration_s || '0.0',
+      userWorkspaceId: workspaces.length > 0 ? workspaces[0].id : null
     }
   };
 }

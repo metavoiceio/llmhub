@@ -16,6 +16,7 @@ export default function PlaygroundEditor({
             onChange={event => setPrompt(event.target.value)}
             value={prompt}
             required
+            disabled={!handleRun}
           />
         </div>
         <div className="flex items-center justify-between px-3 py-2 border-t dark:border-gray-600">
@@ -23,7 +24,7 @@ export default function PlaygroundEditor({
             <button
               type="submit"
               className="focus:outline-none text-white bg-green-500 hover:bg-green-700 focus:ring-4 focus:ring-green-300 font-medium rounded-lg py-2.5 px-4 text-xs mr-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800 disabled:opacity-50 disabled:cursor-not-allowed"
-              disabled={isRunning}
+              disabled={isRunning || !handleRun}
             >
               Run
             </button>
