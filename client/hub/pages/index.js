@@ -27,7 +27,7 @@ export default function Home() {
           <div>
             <div className="border rounded" style={{position:'relative', paddingBottom:'64.86486486486486%', height:0}}>
               <iframe
-                src="https://www.loom.com/embed/97f212d2115a406ab261d1d4f4ca25f3"
+                src="https://www.loom.com/embed/97f212d2115a406ab261d1d4f4ca25f3?hide_owner=true&hideEmbedTopBar=true"
                 allowfullscreen=""
                 style={{position:'absolute', top:0, left:0, width:'100%', height:'100%'}}
               >
