@@ -43,6 +43,22 @@ export default withAuth({
       let workspaces, error;
 
       try {
+        // route - /share
+        if (req.nextUrl.href.includes('share')) {
+          // check if workspaceId owns referenced functionId
+          const workspaceId = parseInt(req.nextUrl.href.split('/functions')[0].split('/')[3]);
+          const functionId = req.nextUrl.href.split('/functions/')[1].split('/')[0];
+          let functions;
+          (
+            { data: functions, error } = await supabase
+              .from('functions')
+              .select('*')
+              .eq('id', functionId)
+          )
+          console.log(functions)
+          return functions.length > 0 && functions[0].workspace_id === workspaceId;
+        };
+
         // route - /welcome
         if (req.nextUrl.href.includes('welcome')) return !!token;
 
@@ -53,14 +69,8 @@ export default withAuth({
         }
 
         // route - /api/v0/* & */share, ensure user has a valid workspace
-        if (
-          req.nextUrl.href.includes('api/v0') ||
-          req.nextUrl.href.includes('share')
-        ) {
-          if (req.nextUrl.href.includes('api/v0')) {
-            token = getTokenFromReqHeaders(req.headers.get("Authorization"));
-          }
-
+        if (req.nextUrl.href.includes('api/v0')) {
+          token = getTokenFromReqHeaders(req.headers.get("Authorization"));
           (
             { data: workspaces, error } = await supabase
               .from('workspaces')
