@@ -7,15 +7,7 @@ from setuptools import find_packages, setup
 ##### Dependencies of llm
 
 PROD_REQUIREMENTS = ["requests"]
-DEV_REQUIREMENTS = [
-    "black",
-    "flake8",
-    "isort",
-    "mypy",
-    "pytest",
-    "sphinx",
-    "twine"
-]
+DEV_REQUIREMENTS = ["black", "flake8", "isort", "mypy", "pytest", "sphinx", "twine"]
 
 
 def read_file(filename: str) -> str:
@@ -35,7 +27,7 @@ setup(
     long_description=readme_text,
     long_description_content_type="text/markdown",
     packages=find_packages("src", exclude=["tests"]),
-    package_dir={'': 'src'},
+    package_dir={"": "src"},
     package_data={"": ["*.lark"]},
     include_package_data=True,
     install_requires=PROD_REQUIREMENTS,
