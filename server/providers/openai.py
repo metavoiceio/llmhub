@@ -83,11 +83,11 @@ class OpenAI(LLM):
                 new_config[mapping[k]] = v
             else:
                 new_config[k] = v
-    
+
         # massage stop sequences to the right data type
-        if 'stop' in new_config:
+        if "stop" in new_config:
             if new_config["stop"]:
-                new_config['stop'] = new_config['stop'].split(',')
+                new_config["stop"] = new_config["stop"].split(",")
         return new_config
 
     def __call__(self, prompt: str, input: str, config: Dict) -> str:
