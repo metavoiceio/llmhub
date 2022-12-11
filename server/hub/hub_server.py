@@ -35,7 +35,7 @@ async def health_check():
 
 class CompletionRequest(BaseModel):
     prompt: str
-    input: str
+    input: Dict
     config: Dict
 
 
