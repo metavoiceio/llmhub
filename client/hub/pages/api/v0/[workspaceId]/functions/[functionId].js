@@ -8,6 +8,7 @@ export default async function handler(req, res) {
   const { functionId } = req.query;
 
   // check the req
+  // TODO: fix bug - req.body.input can't be an empty string!
   if (req.method !== 'POST' || !req.body.input || !req.body.mode) return res.status(500).json({ error: 'Invalid request' });
 
   // get workspace details of user
