@@ -121,7 +121,7 @@ class Cohere(LLM):
 
         self.call_config = self.__llm_config.copy()
         self.call_config.update(self.map_frontend_config(config))
-        # print(self.call_config)
+        print(self.call_config)
 
         # TODO: CONFIG IS NOT GETTING REGISTER!!
         # TODO: add check on exceeding max_tokens?
