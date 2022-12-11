@@ -28,6 +28,7 @@ export default function Function({
   const [selectedModel, setSelectedModel] = useState('text-davinci-003');
   const [modelConfigs, setModelConfigs] = useState(INITIAL_MODEL_CONFIGS);
   const [isPublic, setIsPublic] = useState(initialFunctionData.is_public);
+  const [promptVariables, setPromptVariables] = useState(initialFunctionData.input || {});
 
   useEffect(() => {
     setPrompt(initialExperimentData.prompt || '');
@@ -57,7 +58,7 @@ export default function Function({
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           prompt,
-          input: '',  // TODO sidroodpaska: add support for parameterisation
+          input: promptVariables,
           model: selectedModel,
           config: modelConfigs[selectedModel]
         })
@@ -148,6 +149,8 @@ export default function Function({
           isRunning={isRunning || isRefreshing}
           handleDeploy={handleDeploy}
           currentDeployment={currentDeployment}
+          promptVariables={promptVariables}
+          setPromptVariables={setPromptVariables}
         />
         <ResultPane
           output={initialExperimentData.output}
