@@ -10,6 +10,8 @@ class LLM(ABC):
         return prompt
 
     def __call__(self, prompt: str, input: Dict, config: Dict) -> str:
+        del config # unused
+        
         client_input = self._preprocess_input(prompt, input)
 
         return client_input
