@@ -1,8 +1,8 @@
 BLACK_CONFIG=-t py310 -l 100
-BLACK_TARGETS=server tests docs/*.py setup.py
+BLACK_TARGETS=server client/python-sdk/ tests docs/*.py setup.py
 ISORT_CONFIG=--atomic -l 100 --trailing-comma --remove-redundant-aliases --multi-line 3
-ISORT_TARGETS=server tests docs/*.py setup.py
-MYPY_TARGETS=server tests docs/*.py setup.py
+ISORT_TARGETS=server client/python-sdk/ tests docs/*.py setup.py
+MYPY_TARGETS=server client/python-sdk/ tests docs/*.py setup.py
 
 .PHONY: help clean dev-install install package format format-check type-check test check-all
 
