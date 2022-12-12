@@ -8,8 +8,8 @@ export default function PlaygroundEditor({
   promptVariables, setPromptVariables, isSharing
 }) {
   return (
-    <div className="flex">
-      <form onSubmit={handleRun} className='flex-1'>
+    <div className="grid grid-cols-12">
+      <form onSubmit={handleRun} className={isSharing ? 'col-span-12' : 'col-span-8'}>
         <div className="w-full border border-gray-200 rounded-lg bg-gray-50 dark:bg-gray-900 dark:border-gray-500">
           <div className="px-4 py-2 bg-white rounded-t-lg dark:bg-gray-900">
             <label htmlFor="prompt" className="sr-only">Your prompt</label>
@@ -59,10 +59,12 @@ export default function PlaygroundEditor({
         </div>
       </form>
       {!isSharing &&
-        <PromptVariables
-          promptVariables={promptVariables}
-          setPromptVariables={setPromptVariables}
-        />
+        <div className={`${isSharing ? null : 'col-span-4'}`}>
+          <PromptVariables
+            promptVariables={promptVariables}
+            setPromptVariables={setPromptVariables}
+          />
+        </div>
       }
     </div>
   )
