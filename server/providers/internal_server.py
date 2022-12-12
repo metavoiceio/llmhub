@@ -15,18 +15,22 @@ class InternalServer(LLM):
     def __init__(self) -> None:
         super().__init__()
 
-    def __call__(self, prompt: str, input: str, config: Dict) -> str:
+    def __call__(self, prompt: str, input: Dict, config: Dict) -> str:
+        client_input = super().__call__(prompt, input, config)
+
         start_time = time.time()
         response = requests.post(
             API_URL,
             headers=headers,
             json={
-                "prompt": prompt,
-                "input": input,
+                "prompt": client_input,
+                "input": "",
             },
         )
         end_time = time.time()
+
         completion = response.json()["completion"]
-        num_tokens = len(prompt + input + completion) // 4
+
+        num_tokens = len(client_input + completion) // 4
 
         return completion, num_tokens, end_time - start_time

@@ -108,7 +108,7 @@ class Cohere(LLM):
 
         return new_config
 
-    def __call__(self, prompt: str, input: str, config: Dict) -> str:
+    def __call__(self, prompt: str, input: Dict, config: Dict) -> str:
         """
         Calls the Cohere API to generate a response to the prompt.
 
@@ -117,17 +117,19 @@ class Cohere(LLM):
         Returns:
             Completed string.
         """
+        client_input = super().__call__(prompt, input, config)
+
         self.call_config = self.__llm_config.copy()
         self.call_config.update(self.map_frontend_config(config))
-        # TODO: CONFIG IS NOT GETTING REGISTER!!
+        print(self.call_config)
 
+        # TODO: CONFIG IS NOT GETTING REGISTER!!
         # TODO: add check on exceeding max_tokens?
         # TODO: add variable replace?
         # TODO: abstract this logic and make sure it works for huggingface?
-        print(self.call_config)
-        client_input = prompt + input
-        start_time = time.time()
         # TODO: add check on exceeding max_tokens in API call?
+
+        start_time = time.time()
         response = self.client.generate(prompt=client_input, **self.call_config)
         generated_text = response.generations[0].text
         end_time = time.time()
