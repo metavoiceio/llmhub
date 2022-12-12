@@ -15,7 +15,8 @@ import { AiOutlineFork } from "react-icons/ai";
 import { authOptions } from '../../../../pages/api/auth/[...nextauth]'
 
 export default function Share({
-  initialPrompt, model, config, initialOutput, initial_num_tokens, initial_duration_s, userWorkspaceId
+  initialPrompt, model, config, initialOutput,
+  initial_num_tokens, initial_duration_s, userWorkspaceId
 }) {
   const router = useRouter();
   const { workspaceId, id } = router.query;
@@ -150,6 +151,9 @@ export default function Share({
               handleDeploy={null}
               experimentHistory={null}
               isRunning={isRunning}
+              currentDeployment={null}
+              // promptVariables={}
+              // setPromptVariables={}
             />
             <ResultPane
               output={result.output}
