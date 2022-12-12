@@ -13,7 +13,7 @@ export function mockCompletionApiCall() {
 }
 
 export async function completionApiCall(prompt, input, config) {
-  let res = await fetch(process.env.LLMHUB_BACKEND_API, {
+  let res = await fetch(process.env.NEXT_PUBLIC_LLMHUB_BACKEND_API, {
     method: 'POST',
     headers: {
       "Content-type": "application/json"
