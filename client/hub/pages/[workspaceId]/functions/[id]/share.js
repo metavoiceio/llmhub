@@ -16,7 +16,9 @@ import PromptVariables from "../../../../components/promptVariables";
 
 export default function Share({
   initialPrompt, model, config, initialInput, initialOutput,
-  initial_num_tokens, initial_duration_s, userWorkspaceId
+  initial_num_tokens, initial_duration_s, userWorkspaceId,
+  initialLikes
+
 }) {
   const router = useRouter();
   const { workspaceId, id } = router.query;
@@ -29,6 +31,21 @@ export default function Share({
     num_tokens: initial_num_tokens,
     duration_s: initial_duration_s
   });
+  const [likes, setLikes] = useState(initialLikes)
+  const [userHasLiked, setUserHasLiked] = useState(false)
+
+  const handleLike = async (event) => {
+    if (!session) signIn('auth0', { callbackUrl: window.location.href })
+
+    const newUserHasLiked = !userHasLiked
+
+    // update user list
+    fetch(`/api/internal/${workspaceId}/functions/${id}/like?mode=${newUserHasLiked}`, { method: 'GET'})
+    // update functions counter
+    
+    setUserHasLiked(newUserHasLiked)
+    setLikes(likes + (newUserHasLiked ? 1 : -1))
+  }
 
   const handleRun = async (event) => {
     try {
@@ -64,18 +81,24 @@ export default function Share({
     setIsRunning(false);
   }
 
-  const heartButton = () => {
+  const likeButton = () => {
     return (
       <Button
         color="light"
         size={'xs'}
+        onClick={handleLike}
       >
-        <svg className="mr-2 -ml-1 bi bi-heart" xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" viewBox="0 0 16 16">
-          <path d="m8 2.748-.717-.737C5.6.281 2.514.878 1.4 3.053c-.523 1.023-.641 2.5.314 4.385.92 1.815 2.834 3.989 6.286 6.357 3.452-2.368 5.365-4.542 6.286-6.357.955-1.886.838-3.362.314-4.385C13.486.878 10.4.28 8.717 2.01L8 2.748zM8 15C-7.333 4.868 3.279-3.04 7.824 1.143c.06.055.119.112.176.171a3.12 3.12 0 0 1 .176-.17C12.72-3.042 23.333 4.867 8 15z" />
-        </svg>
+        {userHasLiked ?
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="#ef4444" className="mr-2 -ml-1 bi bi-heart-fill" viewBox="0 0 16 16">
+            <path fillRule="evenodd" d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314z" />
+          </svg> :
+          <svg className="mr-2 -ml-1 bi bi-heart" xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" viewBox="0 0 16 16">
+            <path d="m8 2.748-.717-.737C5.6.281 2.514.878 1.4 3.053c-.523 1.023-.641 2.5.314 4.385.92 1.815 2.834 3.989 6.286 6.357 3.452-2.368 5.365-4.542 6.286-6.357.955-1.886.838-3.362.314-4.385C13.486.878 10.4.28 8.717 2.01L8 2.748zM8 15C-7.333 4.868 3.279-3.04 7.824 1.143c.06.055.119.112.176.171a3.12 3.12 0 0 1 .176-.17C12.72-3.042 23.333 4.867 8 15z" />
+          </svg>
+        }
         Like
         <span className="inline-flex justify-center items-center ml-2 w-5 h-5 rounded-lg text-sm font-semibold text-blue-800 bg-blue-200">
-          2
+          {likes}
         </span>
       </Button>
     )
@@ -86,9 +109,13 @@ export default function Share({
       <Button
         color="light"
         size={'xs'}
+        onClick={event => {
+          if (!session) signIn('auth0', { callbackUrl: window.location.href })
+          console.log('liked')
+        }}
       >
         <svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" className="octicon octicon-repo-forked mr-2" fill="currentColor">
-          <path fill-rule="evenodd" d="M5 3.25a.75.75 0 11-1.5 0 .75.75 0 011.5 0zm0 2.122a2.25 2.25 0 10-1.5 0v.878A2.25 2.25 0 005.75 8.5h1.5v2.128a2.251 2.251 0 101.5 0V8.5h1.5a2.25 2.25 0 002.25-2.25v-.878a2.25 2.25 0 10-1.5 0v.878a.75.75 0 01-.75.75h-4.5A.75.75 0 015 6.25v-.878zm3.75 7.378a.75.75 0 11-1.5 0 .75.75 0 011.5 0zm3-8.75a.75.75 0 100-1.5.75.75 0 000 1.5z"></path>
+          <path fillRule="evenodd" d="M5 3.25a.75.75 0 11-1.5 0 .75.75 0 011.5 0zm0 2.122a2.25 2.25 0 10-1.5 0v.878A2.25 2.25 0 005.75 8.5h1.5v2.128a2.251 2.251 0 101.5 0V8.5h1.5a2.25 2.25 0 002.25-2.25v-.878a2.25 2.25 0 10-1.5 0v.878a.75.75 0 01-.75.75h-4.5A.75.75 0 015 6.25v-.878zm3.75 7.378a.75.75 0 11-1.5 0 .75.75 0 011.5 0zm3-8.75a.75.75 0 100-1.5.75.75 0 000 1.5z"></path>
         </svg>
         Fork
         <span className="inline-flex justify-center items-center ml-2 w-5 h-5 rounded-lg text-sm font-semibold text-blue-800 bg-blue-200">
@@ -103,7 +130,7 @@ export default function Share({
       return (
         <div className="flex flex-col items-end gap-2">
           <div className="flex items-center gap-1">
-            {heartButton()}
+            {likeButton()}
             {forkButton()}
             <button
               className="ml-2 text-gray-900 hover:text-white border border-gray-800 hover:bg-gray-900 focus:ring-4 focus:outline-none focus:ring-gray-300 font-medium rounded-lg text-sm px-3 py-2 text-center dark:border-gray-600 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-800"
@@ -134,7 +161,7 @@ export default function Share({
             <AiOutlineFork />
           </button> */}
           <div className="flex items-center gap-2">
-            {heartButton()}
+            {likeButton()}
             {forkButton()}
           </div>
           <div>
@@ -235,28 +262,36 @@ export async function getServerSideProps(context) {
     )
   }
 
-  let functions;
-  (
-    { data: functions, error } = await supabase
-      .from('functions')
-      .select(`
-        deployments!functions_current_deployment_id_fkey (
-          experiments (
-            id,
-            prompt,
-            input,
-            model,
-            config,
-            output,
-            num_tokens,
-            duration_s
-          )
+  const functionsPromise = supabase
+    .from('functions')
+    .select(`
+      deployments!functions_current_deployment_id_fkey (
+        experiments (
+          id,
+          prompt,
+          input,
+          model,
+          config,
+          output,
+          num_tokens,
+          duration_s
         )
-      `)
-      .eq('id', id)
-  )
+      )
+    `)
+    .eq('id', id)
 
-  const experiment = functions && functions[0].deployments.experiments;
+  const likesPromise = supabase
+    .from('functions')
+    .select('*')
+    .eq('id', id)
+
+  const results = await Promise.all([
+    functionsPromise,
+    likesPromise
+  ])
+
+  const experiment = results[0].data && results[0].data[0].deployments.experiments;
+  const likes = results[1].data && results[1].data[0].likes;
   return {
     props: {
       initialPrompt: experiment.prompt || '',
@@ -266,8 +301,8 @@ export async function getServerSideProps(context) {
       initialOutput: experiment.output || '',
       initial_num_tokens: experiment.num_tokens || '0',
       initial_duration_s: experiment.duration_s || '0.0',
-      userWorkspaceId: workspaces.length > 0 ? workspaces[0].id : null
+      userWorkspaceId: workspaces.length > 0 ? workspaces[0].id : null,
+      initialLikes: likes
     }
   };
 }
-2

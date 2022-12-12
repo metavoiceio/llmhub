@@ -55,7 +55,6 @@ export default withAuth({
               .select('*')
               .eq('id', functionId)
           )
-          console.log(functions)
           return functions.length > 0 && functions[0].workspace_id === workspaceId;
         };
 
