@@ -18,17 +18,21 @@ class HuggingFace(LLM):
     def __init__(self) -> None:
         super().__init__()
 
-    def __call__(self, prompt: str, input: str, config: Dict) -> str:
+    def __call__(self, prompt: str, input: Dict, config: Dict) -> str:
+        client_input = super().__call__(prompt, input, config)
+
         start_time = time.time()
         response = requests.post(
             API_URL,
             headers=headers,
             json={
-                "inputs": prompt + input,
+                "inputs": client_input,
             },
         )
         end_time = time.time()
+
         completion = response.json()[0]["generated_text"]
-        num_tokens = len(prompt + input + completion) // 4
+
+        num_tokens = len(client_input + completion) // 4
 
         return completion, num_tokens, end_time - start_time

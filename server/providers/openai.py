@@ -90,7 +90,7 @@ class OpenAI(LLM):
                 new_config["stop"] = new_config["stop"].split(",")
         return new_config
 
-    def __call__(self, prompt: str, input: str, config: Dict) -> str:
+    def __call__(self, prompt: str, input: Dict, config: Dict) -> str:
         """
         Calls the OpenAI API to generate a response to the prompt.
 
@@ -99,14 +99,15 @@ class OpenAI(LLM):
         Returns:
             Completed string.
         """
+        client_input = super().__call__(prompt, input, config)
+
         self.call_config = self.__llm_config.copy()
         self.call_config.update(self.map_frontend_config(config))
+        print(self.call_config)
 
         # TODO: add check on exceeding max_tokens?
         # TODO: add variable replace?
         # TODO: abstract this logic and make sure it works for huggingface?
-        print(self.call_config)
-        client_input = prompt + input
         start_time = time.time()
         response = self.client.create(prompt=client_input, **self.call_config)
         end_time = time.time()

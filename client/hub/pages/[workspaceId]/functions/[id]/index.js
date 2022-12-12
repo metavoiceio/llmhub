@@ -11,7 +11,7 @@ import AuthSideBar from "../../../../components/sidebar";
 import { toast } from 'react-toastify';
 
 export default function Function({
-  functions, initialFunctionData, initialExperimentData, experimentHistory, currentDeployment
+  functions, initialFunctionData, currentExperiment, experimentHistory, currentDeployment
 }) {
   const setInitialModelConfigs = (model, config) => {
     return model ? {
@@ -28,13 +28,15 @@ export default function Function({
   const [selectedModel, setSelectedModel] = useState('text-davinci-003');
   const [modelConfigs, setModelConfigs] = useState(INITIAL_MODEL_CONFIGS);
   const [isPublic, setIsPublic] = useState(initialFunctionData.is_public);
+  const [promptVariables, setPromptVariables] = useState(currentExperiment.input);
 
   useEffect(() => {
-    setPrompt(initialExperimentData.prompt || '');
-    setSelectedModel(initialExperimentData.model || 'text-davinci-003');
-    setModelConfigs(setInitialModelConfigs(initialExperimentData.model, initialExperimentData.config))
+    setPrompt(currentExperiment.prompt || '');
+    setPromptVariables(currentExperiment.input);
+    setSelectedModel(currentExperiment.model || 'text-davinci-003');
+    setModelConfigs(setInitialModelConfigs(currentExperiment.model, currentExperiment.config))
     setIsRefreshing(false);
-  }, [initialFunctionData, initialExperimentData]);
+  }, [initialFunctionData, currentExperiment]);
 
   const refreshData = () => {
     router.replace(router.asPath);
@@ -57,7 +59,7 @@ export default function Function({
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           prompt,
-          input: '',  // TODO sidroodpaska: add support for parameterisation
+          input: promptVariables,
           model: selectedModel,
           config: modelConfigs[selectedModel]
         })
@@ -148,11 +150,14 @@ export default function Function({
           isRunning={isRunning || isRefreshing}
           handleDeploy={handleDeploy}
           currentDeployment={currentDeployment}
+          promptVariables={promptVariables}
+          setPromptVariables={setPromptVariables}
+          isSharing={false}
         />
         <ResultPane
-          output={initialExperimentData.output}
-          num_tokens={initialExperimentData.num_tokens || 0}
-          duration_s={initialExperimentData.duration_s || 0.0}
+          output={currentExperiment.output}
+          num_tokens={currentExperiment.num_tokens || 0}
+          duration_s={currentExperiment.duration_s || 0.0}
         />
       </div>
     </div>
@@ -221,7 +226,7 @@ export async function getServerSideProps({ params }) {
     props: {
       functions: await getFunctions(workspaceId),
       initialFunctionData: selectedFunction,
-      initialExperimentData: currentExperiment,
+      currentExperiment: currentExperiment,
       experimentHistory: allExperiments,
       currentDeployment: error ? null : deployments[0]
     }
