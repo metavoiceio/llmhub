@@ -1,4 +1,3 @@
-{/* TODO sidroopdaska: use grid to fix width and avoid popping effect */ }
 export default function PromptVariables({ promptVariables, setPromptVariables }) {
   const renderVariables = () => {
     return Object.entries(promptVariables).map(([key, value], idx) => {
@@ -28,9 +27,10 @@ export default function PromptVariables({ promptVariables, setPromptVariables })
     });
   }
 
+  {/* TODO sidroopdaska: use grid to fix width and avoid popping effect */ }
   return (
     <div className="p-2 px-4 py-4 flex flex-col gap-1">
-      <div className="text-xs mb-4">PROMPT VARIABLES</div>
+      <h2 className="text-xs text-gray-800 mb-4 dark:text-gray-300">PROMPT VARIABLES</h2>
       {
         Object.keys(promptVariables).length > 0 ?
           renderVariables() :

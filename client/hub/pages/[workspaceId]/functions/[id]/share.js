@@ -13,9 +13,10 @@ import { ATTR_FRIENDLY_NAME_INDEX } from "../../../../common/constants";
 import { useRouter } from "next/router";
 import { AiOutlineFork } from "react-icons/ai";
 import { authOptions } from '../../../../pages/api/auth/[...nextauth]'
+import PromptVariables from "../../../../components/promptVariables";
 
 export default function Share({
-  initialPrompt, model, config, initialOutput,
+  initialPrompt, model, config, initialInput, initialOutput,
   initial_num_tokens, initial_duration_s, userWorkspaceId
 }) {
   const router = useRouter();
@@ -23,6 +24,7 @@ export default function Share({
   const { data: session, status } = useSession();
   const [isRunning, setIsRunning] = useState(false);
   const [prompt, setPrompt] = useState(initialPrompt);
+  const [promptVariables, setPromptVariables] = useState(initialInput);
   const [result, setResult] = useState({
     output: initialOutput,
     num_tokens: initial_num_tokens,
@@ -39,7 +41,7 @@ export default function Share({
       const res = await fetch(`/api/v0/${workspaceId}/functions/${id}`, {
         method: 'POST',
         body: JSON.stringify({
-          input: prompt,
+          input: promptVariables,
           mode: 'share-ui'
         }),
         headers: {
@@ -152,8 +154,9 @@ export default function Share({
               experimentHistory={null}
               isRunning={isRunning}
               currentDeployment={null}
-              // promptVariables={}
-              // setPromptVariables={}
+              promptVariables={null}
+              setPromptVariables={null}
+              isSharing={true}
             />
             <ResultPane
               output={result.output}
@@ -162,7 +165,10 @@ export default function Share({
             />
           </div>
         </div>
-        {configPanel()}
+        <div className="flex flex-col gap-4">
+          <PromptVariables promptVariables={promptVariables} setPromptVariables={setPromptVariables} />
+          {configPanel()}
+        </div>
       </div>
     </div>
   )
@@ -193,6 +199,7 @@ export async function getServerSideProps(context) {
           experiments (
             id,
             prompt,
+            input,
             model,
             config,
             output,
@@ -210,6 +217,7 @@ export async function getServerSideProps(context) {
       initialPrompt: experiment.prompt || '',
       model: experiment.model || '',
       config: experiment.config || {},
+      initialInput: experiment.input,
       initialOutput: experiment.output || '',
       initial_num_tokens: experiment.num_tokens || '0',
       initial_duration_s: experiment.duration_s || '0.0',

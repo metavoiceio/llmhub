@@ -1,9 +1,11 @@
 import PlaygroundHistory from "./playgroundHistory"
-import PromptVariables from './promptVariables';
+import PromptVariables from "./promptVariables";
 
+// TODO sidroopdaska: move <PromptVariables /> back into this function and better handle
+// share mode
 export default function PlaygroundEditor({
   prompt, setPrompt, handleRun, experimentHistory, isRunning, handleDeploy, currentDeployment,
-  promptVariables, setPromptVariables
+  promptVariables, setPromptVariables, isSharing
 }) {
   return (
     <div className="flex">
@@ -28,7 +30,7 @@ export default function PlaygroundEditor({
               }}
               value={prompt}
               required
-              disabled={!handleRun}
+              disabled={isSharing}
             />
           </div>
           <div className="flex items-center justify-between px-3 py-2 border-t dark:border-gray-600">
@@ -56,7 +58,12 @@ export default function PlaygroundEditor({
           </div>
         </div>
       </form>
-      <PromptVariables promptVariables={promptVariables} setPromptVariables={setPromptVariables} />
+      {!isSharing &&
+        <PromptVariables
+          promptVariables={promptVariables}
+          setPromptVariables={setPromptVariables}
+        />
+      }
     </div>
   )
 }
