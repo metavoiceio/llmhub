@@ -143,8 +143,8 @@ export default function Share({
   return (
     <div className="dark:bg-gray-900 h-screen">
       {navbar()}
-      <div className="max-h-screen px-5 mt-10 flex overflow-y-hidden scrollbar-hide">
-        <div className='flex-1'>
+      <div className="max-h-screen px-5 mt-10 flex overflow-y-hidden scrollbar-hide grid grid-cols-12">
+        <div className='col-span-8'>
           <div className="flex flex-col">
             <PlaygroundEditor
               prompt={prompt}
@@ -165,7 +165,7 @@ export default function Share({
             />
           </div>
         </div>
-        <div className="flex flex-col gap-4">
+        <div className="flex flex-col gap-4 col-span-4">
           <PromptVariables promptVariables={promptVariables} setPromptVariables={setPromptVariables} />
           {configPanel()}
         </div>

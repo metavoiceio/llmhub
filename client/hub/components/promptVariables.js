@@ -3,12 +3,11 @@ export default function PromptVariables({ promptVariables, setPromptVariables })
     return Object.entries(promptVariables).map(([key, value], idx) => {
       const id = `prompt-variable-floating-${idx}`
       return <div className="relative" key={id}>
-        <input
-          type="text"
+        <textarea
           id={id}
           name={key}
-          className="block px-2.5 pb-2.5 pt-4 w-full text-sm text-gray-900 bg-transparent rounded-lg border-1 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
-          placeholder=" "
+          className="block mb-2 px-2.5 pt-4 w-full text-sm text-gray-900 bg-transparent rounded-lg border-1 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600"
+          placeholder="Enter a value..."
           onChange={event => {
             setPromptVariables({
               ...promptVariables,
