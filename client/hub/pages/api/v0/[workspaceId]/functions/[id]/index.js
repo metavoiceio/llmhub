@@ -1,6 +1,6 @@
-import { supabase } from '../../../../../common/supabase';
-import { getTokenFromReqHeaders, parseUserIdFromToken } from '../../../../../common/token';
-import { mockCompletionApiCall, completionApiCall } from '../../../internal/[workspaceId]/functions/[id]/completion';
+import { supabase } from '../../../../../../common/supabase';
+import { getTokenFromReqHeaders, parseUserIdFromToken } from '../../../../../../common/token';
+import { mockCompletionApiCall, completionApiCall } from '../../../../internal/[workspaceId]/functions/[id]/completion';
 
 // TODO sidroopdaska: check for plan validity & token
 export default async function handler(req, res) {
