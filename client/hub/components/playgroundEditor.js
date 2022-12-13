@@ -1,3 +1,4 @@
+import { Tooltip } from "flowbite-react";
 import PlaygroundHistory from "./playgroundHistory"
 import PromptVariables from "./promptVariables";
 
@@ -46,13 +47,24 @@ export default function PlaygroundEditor({
             </div>
             <div className="flex pl-0 space-x-1 sm:pl-2">
               {
-                handleDeploy && <button
-                  className="text-white bg-gradient-to-br from-pink-500 to-orange-400 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-pink-200 dark:focus:ring-pink-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2 disabled:cursor-not-allowed disabled:opacity-50"
-                  disabled={isRunning || experimentHistory && experimentHistory.length === 0}
-                  onClick={handleDeploy}
+                handleDeploy &&
+                <Tooltip
+                  style="light"
+                  content={<p>
+                    Creates an API with the current version of the Function.<br/>
+                    It's this version of the prompt & settings that is publicy visible & executed by user apps.
+                  </p>}
+                  placement="bottom"
+                  className='font-normal max-w-[18rem]'
                 >
-                  Deploy
-                </button>
+                  <button
+                    className="text-white bg-gradient-to-br from-pink-500 to-orange-400 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-pink-200 dark:focus:ring-pink-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2 disabled:cursor-not-allowed disabled:opacity-50"
+                    disabled={isRunning || experimentHistory && experimentHistory.length === 0}
+                    onClick={handleDeploy}
+                  >
+                    Deploy
+                  </button>
+                </Tooltip>
               }
             </div>
           </div>
