@@ -16,7 +16,7 @@ export default function PlaygroundToolbar(
         {
           Object.keys(MODELS_INFO).map((model_name, index) => {
             let toReturn = [];
-            model = MODELS_INFO[model_name];
+            let model = MODELS_INFO[model_name];
             if (model_name === 'code-davinci-002') {
               toReturn.push(<Dropdown.Divider key={`${index}-divider`} />)
             }
