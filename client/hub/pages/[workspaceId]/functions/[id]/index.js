@@ -28,11 +28,11 @@ export default function Function({
   const [selectedModel, setSelectedModel] = useState('text-davinci-003');
   const [modelConfigs, setModelConfigs] = useState(INITIAL_MODEL_CONFIGS);
   const [isPublic, setIsPublic] = useState(initialFunctionData.is_public);
-  const [promptVariables, setPromptVariables] = useState(currentExperiment.input);
+  const [promptVariables, setPromptVariables] = useState(currentExperiment.input || {});
 
   useEffect(() => {
     setPrompt(currentExperiment.prompt || '');
-    setPromptVariables(currentExperiment.input);
+    setPromptVariables(currentExperiment.input || {});
     setSelectedModel(currentExperiment.model || 'text-davinci-003');
     setModelConfigs(setInitialModelConfigs(currentExperiment.model, currentExperiment.config))
     setIsRefreshing(false);
