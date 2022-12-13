@@ -50,10 +50,11 @@ export default function PlaygroundEditor({
                 handleDeploy &&
                 <Tooltip
                   style="light"
-                  content={<p>
-                    Creates an API with the current version of the Function.<br/>
-                    It's this version of the prompt & settings that is publicy visible & executed by user apps.
-                  </p>}
+                  content={
+                    <p>Creates an API with the current version of the Function.<br/>
+                    Its 0this version of the prompt & settings that is publicy visible & executed by user apps.
+                    </p>
+                  }
                   placement="bottom"
                   className='font-normal max-w-[18rem]'
                 >
