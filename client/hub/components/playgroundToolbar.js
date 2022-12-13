@@ -9,39 +9,38 @@ export default function PlaygroundToolbar(
   const [error, setError] = useState('');
 
   const modelSelect = () => {
-    console.log(selectedModel);
     return (
       <Dropdown
         label={selectedModel}
       >
         {
-          Object.keys(MODELS_INFO).map((model, index) => {
+          Object.keys(MODELS_INFO).map((model_name, index) => {
             let toReturn = [];
-            if (model === 'code-davinci-002') {
+            model = MODELS_INFO[model_name];
+            if (model_name === 'code-davinci-002') {
               toReturn.push(<Dropdown.Divider key={`${index}-divider`} />)
             }
-            toReturn.push(<Dropdown.Item key={index} onClick={() => setSelectedModel(model)}>
+            toReturn.push(<Dropdown.Item key={index} onClick={() => setSelectedModel(model_name)}>
               <div className="flex gap-1 items-center justify-between w-full">
                 <div className="text-sm font-medium truncate">
-                  {MODELS_INFO[model].description.logo}
+                  {model.description.logo}
                 </div>
                 <div className="px-0.1 text-gray-300">
                   •
                 </div>
                 <div className="text-sm grow">
-                  {model}
+                  {model_name}
                 </div>
                 <div className="flex gap-0.5 justify-end">
                   <div className="flex flex-col items-center">
                     <svg width="16" height="16">
-                      {/* TODO: change colour */}
-                      <circle cx="8" cy="8" r={MODELS_INFO[model].description.rep_size} fill="currentColor" className="bg-gray-800 dark:text-gray-100" />
+                      <circle cx="8" cy="8" r={model.description.rep_size} fill="currentColor" className="bg-gray-800 dark:text-gray-100" />
                     </svg>
                   </div>
 
                   <div>
                     <code className="text-xs bg-gray-100 rounded-lg p-1 text-green-400">
-                      {MODELS_INFO[model].description.token_max_length}
+                      {model.description.token_max_length}
                     </code>
                   </div>
                 </div>

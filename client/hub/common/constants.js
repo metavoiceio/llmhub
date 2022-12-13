@@ -276,6 +276,7 @@ Object.keys(INITIAL_MODEL_CONFIGS).forEach((key, index) => {
     maximumLength: {
       min: 1,
       // TODO: Note: this is the MAX length of the prompt+input, whereas this is only accounting for the input.
+      // TODO: fix using MODELS_INFO
       max: TOKEN_MAX_LENGTHS[index],
       helper: '',
       friendlyName: 'Maximum length',
