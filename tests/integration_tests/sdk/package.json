@@ -9,6 +9,6 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "llmhub": "^0.0.7"
+    "llmhub": "^0.0.8"
   }
 }

@@ -27,7 +27,7 @@ class LLMHub {
         this.auth_token = null;
     }
 
-    async run({input}) {
+    async run(input) {
         try {
             if (this.auth_token === null) {
                 this.auth_token = await get_token();
@@ -53,7 +53,7 @@ class LLMHub {
         } catch (error) {
             console.error(error);
         }
-    }    
+    }
 }
 
 module.exports = LLMHub;
