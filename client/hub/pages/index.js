@@ -82,14 +82,14 @@ export default function Home() {
         <h1 className={`text-5xl mt-[8rem] mb-5 text-center leading-[3.5rem]`}>The best way to <br /><span className={`text-5xl text-green-400`}>design, deploy & use LLM Apps</span></h1>
         <div className="w-[50vw] grid grid-cols-1 gap-3 mt-12">
           <div className="sm:flex-auto text-center">
-            <h1 className="text-base font-medium text-gray-900">🔥 Top Community Apps</h1>
-            <p className="text-sm text-gray-500">Discover apps created by the community. They serve as great examples to get started with LLMHub.</p>
+            <h1 className="text-base font-medium text-gray-900 dark:text-white">🔥 Top Community Apps</h1>
+            <p className="text-sm text-gray-500 dark:text-gray-400">Discover apps created by the community. They serve as great examples to get started with LLMHub.</p>
           </div>
           {renderTopFunctions()}
         </div>
         {/* video */}
         <div className="flex flex-col max-w-xl mx-auto w-full py-24">
-          <h1 className="text-center font-medium text-gray-900 mb-4">👀 Watch the overview of LLMHub</h1>
+          <h1 className="text-center font-medium text-gray-900 mb-4 dark:text-white">👀 Watch the overview of LLMHub</h1>
           <div>
             <div className="border rounded" style={{ position: 'relative', paddingBottom: '64.86486486486486%', height: 0 }}>
               <iframe

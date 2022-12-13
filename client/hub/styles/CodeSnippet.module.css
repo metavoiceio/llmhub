@@ -1,0 +1,18 @@
+.pre {
+	box-sizing: border-box;
+	height: 100%;
+	position: relative;
+	margin: 0;
+	padding: 16px;
+	max-height: 300px;
+	border-radius: 6px;
+	text-align: left;
+	margin: 1em 0;
+	overflow: scroll;
+
+	font-size: 12px;
+	margin: 5px;
+
+	-moz-tab-size: 2;
+	tab-size: 2;
+}
