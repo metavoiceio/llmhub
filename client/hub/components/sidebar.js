@@ -8,13 +8,14 @@ import logo from "../public/android-chrome-233x233.png";
 import NewFunctionModal from './newFunctionModal';
 import { toast } from 'react-toastify';
 
-export default function AuthSideBar({ workspaceId, functions, forkUrl, functionId='' }) {
+export default function AuthSideBar({ workspaceId, functions, forkUrl, functionId = '' }) {
   const router = useRouter();
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [newFunctionName, setNewFunctionName] = useState('');
   const [functionToFork, setFunctionToFork] = useState('');
   const [isRunning, setIsRunning] = useState(false);
+  const [showSidebar, setShowSidebar] = useState(false)
 
   useEffect(() => {
     if (forkUrl) {
@@ -86,9 +87,27 @@ export default function AuthSideBar({ workspaceId, functions, forkUrl, functionI
   }
 
   return (
-    <>
-      <div className="hidden sm:flex select-auto w-[260px] max-w-[530px] min-w-[200px] box-border shrink-0 min-h-screen" >
-        <div className="flex flex-col bg-gray-50 dark:bg-gray-900 dark:text-gray-200 border-r-[1px] dark:border-r-gray-500 px-2 overflow-auto w-full">
+    <div
+      onClick={e => setShowSidebar(false)}
+      className={showSidebar ? `fixed z-100 w-full bg-black` : null}
+    >
+      <button className={`sm:hidden ${showSidebar && 'hidden'} px-4 py-2`}
+        onClick={e => {
+          e.preventDefault()
+          e.stopPropagation()
+          setShowSidebar(!showSidebar)
+        }}
+      >
+        <svg width="1.2em" height="1.2em" viewBox="0 0 27 32" fill="currentColor" aria-hidden="true" focusable="false" className="rs-icon" aria-label="bars" data-category="legacy"><path d="M27.429 24v2.286c0 .625-.518 1.143-1.143 1.143H1.143A1.151 1.151 0 010 26.286V24c0-.625.518-1.143 1.143-1.143h25.143c.625 0 1.143.518 1.143 1.143zm0-9.143v2.286c0 .625-.518 1.143-1.143 1.143H1.143A1.151 1.151 0 010 17.143v-2.286c0-.625.518-1.143 1.143-1.143h25.143c.625 0 1.143.518 1.143 1.143zm0-9.143V8c0 .625-.518 1.143-1.143 1.143H1.143A1.151 1.151 0 010 8V5.714c0-.625.518-1.143 1.143-1.143h25.143c.625 0 1.143.518 1.143 1.143z"></path></svg>
+      </button>
+      <div
+        className={`${!showSidebar && 'hidden'} sm:flex select-auto w-[260px] max-w-[530px] min-w-[200px] box-border shrink-0`}
+        onClick={e => {
+          e.preventDefault()
+          e.stopPropagation()
+        }}
+      >
+        <div className="flex flex-col bg-gray-50 dark:bg-gray-900 dark:text-gray-200 border-r-[1px] dark:border-r-gray-500 px-2 overflow-auto w-full h-[100vh]">
           {/* sidebar header */}
           <Link className="pt-4 flex items-center px-1 text-sm" href={`/${workspaceId}`}>
             <Image src={logo} alt="LLMHub logo" className="inline mr-1" width={48} />
@@ -138,6 +157,6 @@ export default function AuthSideBar({ workspaceId, functions, forkUrl, functionI
         setFunctionToFork={setFunctionToFork}
         isRunning={isRunning}
       />
-    </>
+    </div>
   );
 }
