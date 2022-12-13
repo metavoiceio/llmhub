@@ -40,7 +40,7 @@ async function authToken() {
     await prompts({
       type: 'invisible',
       message: `Press any key to open up the browser to login or press ctrl-c to abort.\nYou will be navigated to: ${verification_uri_complete} and should see the following code: ${user_code}.\nIt expires in ${expires_in % 60 === 0 ? `${expires_in / 60} minutes` : `${expires_in} seconds`}.`,
-    }, { onCancel: () => { process.exit(0) }});
+    }, { onCancel: () => { process.exit(0) } });
     open(verification_uri_complete);
 
     let tokens;
@@ -68,8 +68,8 @@ async function authToken() {
 
     console.log('Authenticated successfully!');
   } catch (err) {
-      console.log(err);
-      process.exitCode = 1;
+    console.log(err);
+    process.exitCode = 1;
   }
 }
 
