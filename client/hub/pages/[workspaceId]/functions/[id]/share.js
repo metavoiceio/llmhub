@@ -41,7 +41,7 @@ export default function Share({
     const newUserHasLiked = !userHasLiked
     const oldLikes = likes
 
-    fetch(`/api/internal/${workspaceId}/functions/${id}/like?mode=${newUserHasLiked}`, { method: 'GET' })
+    fetch(`/api/v0/${workspaceId}/functions/${id}/like?mode=${newUserHasLiked}`, { method: 'GET' })
       .catch(error => {
         setUserHasLiked(false)
         setLikes(oldLikes)

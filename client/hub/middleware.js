@@ -67,9 +67,9 @@ export default withAuth({
           return token && parseUserIdFromToken(token)
         }
 
-        // route - /api/v0/* & */share, ensure user has a valid workspace
+        // route - /api/v0/* ensure user has a valid workspace
         if (req.nextUrl.href.includes('api/v0')) {
-          token = getTokenFromReqHeaders(req.headers.get("Authorization"));
+          if (!token) token = getTokenFromReqHeaders(req.headers.get("Authorization"));
           (
             { data: workspaces, error } = await supabase
               .from('workspaces')
