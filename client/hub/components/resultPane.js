@@ -22,7 +22,7 @@ export default function ResultPane({ output, num_tokens, duration_s }) {
               <div className='border border-gray-300 rounded'>
                 <textarea
                   readOnly
-                  rows={numNewLines >= 10 ? 10 : numNewLines}
+                  rows={numNewLines >= 10 ? 10 : numNewLines + 2}
                   className="w-[100%] text-xs font-normal text-gray-900 dark:text-gray-100 border-none border-transparent focus:border-transparent focus:ring-0 dark:bg-gray-700"
                   value={output}
                 />

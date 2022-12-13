@@ -1,4 +1,4 @@
-export default function PromptVariables({ promptVariables, setPromptVariables }) {
+export default function PromptVariables({ promptVariables, setPromptVariables, isSharing }) {
   const renderVariables = () => {
     return Object.entries(promptVariables).map(([key, value], idx) => {
       const id = `prompt-variable-floating-${idx}`
@@ -35,7 +35,10 @@ export default function PromptVariables({ promptVariables, setPromptVariables })
           renderVariables() :
           <>
             <div className="text-sm">No variables found</div>
-            <div className="text-sm">Create via<code className="font-mono m-2 p-1 bg-gray-100 border rounded-sm dark:text-gray-700">&#123;&#123;variable&#125;&#125;</code></div>
+            {
+              !isSharing &&
+              <div className="text-sm">Create via<code className="font-mono m-2 p-1 bg-gray-100 border rounded-sm dark:text-gray-700">&#123;&#123;variable&#125;&#125;</code></div>
+            }
           </>
       }
     </div>
