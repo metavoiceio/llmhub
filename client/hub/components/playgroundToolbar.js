@@ -31,7 +31,7 @@ export default function PlaygroundToolbar(
                 <div className="text-sm grow">
                   {model_name}
                 </div>
-                <div className="flex gap-0.5 justify-end">
+                <div className="flex gap-0.5 items-center justify-end">
                   <div className="flex flex-col items-center">
                     <svg width="16" height="16">
                       <circle cx="8" cy="8" r={model.description.rep_size} fill="currentColor" className="bg-gray-800 dark:text-gray-100" />
