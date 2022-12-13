@@ -15,7 +15,7 @@ def read_file(filename: str) -> str:
         return f.read().strip()
 
 
-version = read_file("VERSION")
+version = "0.0.3"
 readme_text = read_file("README.md")
 
 setup(

@@ -1,6 +1,7 @@
 import json
 import os
 from pathlib import Path
+from typing import Dict
 
 import requests
 
@@ -37,7 +38,7 @@ class Client:
         self.function_id = llmhub_share_url.parts[4]
         self.token = None
 
-    def run(self, input: str) -> str:
+    def run(self, input: Dict) -> Dict:
         if self.token is None:
             self.token = get_token()
 
