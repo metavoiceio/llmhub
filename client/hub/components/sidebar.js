@@ -7,6 +7,7 @@ import { BsGearWide, BsBraces, BsThreeDots } from 'react-icons/bs';
 import logo from "../public/android-chrome-233x233.png";
 import NewFunctionModal from './newFunctionModal';
 import { toast } from 'react-toastify';
+import { Tooltip } from 'flowbite-react';
 
 export default function AuthSideBar({ workspaceId, functions, forkUrl, functionId = '' }) {
   const router = useRouter();
@@ -118,14 +119,21 @@ export default function AuthSideBar({ workspaceId, functions, forkUrl, functionI
           <div className="pt-8 grow">
             <div className='px-2 pb-2 flex flex-row items-center justify-between'>
               <div className="text-gray-500 text-xs p-1 dark:text-gray-400">Functions</div>
-              <div
-                className='hover:border hover:bg-gray-200 dark:hover:bg-gray-600 rounded' role='button' tabIndex={0}
-                onClick={(_e) => setIsModalOpen(true)}
+              <Tooltip
+                style="light"
+                content="Self-contained task. Equivalent to one prompt of a LLM."
+                placement="bottom"
+                className='font-normal max-w-[15rem]'
               >
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" className="bi bi-plus" viewBox="0 0 16 16">
-                  <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z" />
-                </svg>
-              </div>
+                <button
+                  className='hover:border hover:bg-gray-200 dark:hover:bg-gray-600 rounded' role='button' tabIndex={0}
+                  onClick={(_e) => setIsModalOpen(true)}
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" className="bi bi-plus" viewBox="0 0 16 16">
+                    <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z" />
+                  </svg>
+                </button>
+              </Tooltip>
             </div>
 
             {/* render functions */}
