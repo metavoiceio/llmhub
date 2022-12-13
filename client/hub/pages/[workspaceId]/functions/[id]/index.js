@@ -95,7 +95,7 @@ export default function Function({
         .from('deployments')
         .insert([
           {
-            experiment_id: initialFunctionData.current_experiment_id,
+            experiment_id: currentExperiment.id,
             function_id: id
           }
         ])

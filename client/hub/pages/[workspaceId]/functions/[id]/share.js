@@ -238,7 +238,7 @@ export default function Share({
           </div>
         </div>
         <div className="flex flex-col gap-4 col-span-4">
-          <PromptVariables promptVariables={promptVariables} setPromptVariables={setPromptVariables} />
+          <PromptVariables promptVariables={promptVariables} setPromptVariables={setPromptVariables} isSharing={true}/>
           {configPanel()}
         </div>
       </div>

@@ -76,6 +76,7 @@ export default function PlaygroundEditor({
           <PromptVariables
             promptVariables={promptVariables}
             setPromptVariables={setPromptVariables}
+            isSharing={false}
           />
         </div>
       }
