@@ -13,11 +13,12 @@ import { ATTR_FRIENDLY_NAME_INDEX } from "../../../../common/constants";
 import { useRouter } from "next/router";
 import { authOptions } from '../../../../pages/api/auth/[...nextauth]'
 import PromptVariables from "../../../../components/promptVariables";
+import { toast } from 'react-toastify';
 
 export default function Share({
   initialPrompt, model, config, initialInput, initialOutput,
   initial_num_tokens, initial_duration_s, userWorkspaceId,
-  initialLikes
+  initialLikes, initialUserHasLiked
 
 }) {
   const router = useRouter();
@@ -32,17 +33,22 @@ export default function Share({
     duration_s: initial_duration_s
   });
   const [likes, setLikes] = useState(initialLikes)
-  const [userHasLiked, setUserHasLiked] = useState(false)
+  const [userHasLiked, setUserHasLiked] = useState(initialUserHasLiked)
 
   const handleLike = async (event) => {
     if (!session) signIn('auth0', { callbackUrl: window.location.href })
 
     const newUserHasLiked = !userHasLiked
+    const oldLikes = likes
 
-    // update user list
-    fetch(`/api/internal/${workspaceId}/functions/${id}/like?mode=${newUserHasLiked}`, { method: 'GET'})
-    // update functions counter
-    
+    fetch(`/api/internal/${workspaceId}/functions/${id}/like?mode=${newUserHasLiked}`, { method: 'GET' })
+      .catch(error => {
+        setUserHasLiked(false)
+        setLikes(oldLikes)
+        console.log(error)
+        toast("Unable to like function", { type: 'error' });
+      })
+
     setUserHasLiked(newUserHasLiked)
     setLikes(likes + (newUserHasLiked ? 1 : -1))
   }
@@ -111,7 +117,7 @@ export default function Share({
         size={'xs'}
         onClick={event => {
           if (!session) signIn('auth0', { callbackUrl: window.location.href })
-          console.log('liked')
+          router.push(`/${userWorkspaceId}?fork=${encodeURIComponent(window.location.pathname)}`)
         }}
       >
         <svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" className="octicon octicon-repo-forked mr-2" fill="currentColor">
@@ -154,12 +160,6 @@ export default function Share({
     const authView = () => {
       return (
         <div className="flex flex-col items-end gap-2">
-          {/* <button
-            className="mr-2 hover:bg-gray-200 px-2 rounded"
-            onClick={e => router.push(`/${userWorkspaceId}?fork=${encodeURIComponent(window.location.pathname)}`)}
-          >
-            <AiOutlineFork />
-          </button> */}
           <div className="flex items-center gap-2">
             {likeButton()}
             {forkButton()}
@@ -250,59 +250,82 @@ export async function getServerSideProps(context) {
   const { workspaceId, id } = context.params
   const session = await unstable_getServerSession(context.req, context.res, authOptions)
 
-  let error, workspaces = [];
-
+  let promises = []
   // get workspace owned by user
   if (session) {
-    (
-      { data: workspaces, error } = await supabase
+    promises.push(
+      supabase
         .from('workspaces')
         .select('*')
         .eq('user_id', session.user.id)
     )
+
+    promises.push(
+      supabase
+        .from('users')
+        .select('*')
+        .eq('id', session.user.id)
+    )
   }
 
-  const functionsPromise = supabase
-    .from('functions')
-    .select(`
-      deployments!functions_current_deployment_id_fkey (
-        experiments (
-          id,
-          prompt,
-          input,
-          model,
-          config,
-          output,
-          num_tokens,
-          duration_s
+  promises.push(
+    supabase
+      .from('functions')
+      .select(`
+        deployments!functions_current_deployment_id_fkey (
+          experiments (
+            id,
+            prompt,
+            input,
+            model,
+            config,
+            output,
+            num_tokens,
+            duration_s
+          )
         )
-      )
-    `)
-    .eq('id', id)
+      `)
+      .eq('id', id)
+  )
 
-  const likesPromise = supabase
-    .from('functions')
-    .select('*')
-    .eq('id', id)
+  promises.push(
+    supabase
+      .from('functions')
+      .select('*')
+      .eq('id', id)
+  )
 
-  const results = await Promise.all([
-    functionsPromise,
-    likesPromise
-  ])
+  const results = await Promise.all(promises)
 
-  const experiment = results[0].data && results[0].data[0].deployments.experiments;
-  const likes = results[1].data && results[1].data[0].likes;
+  const data = (result) => {
+    if (result.error) throw Error(result.error)
+    return result.data[0]
+  }
+
+  let experiment, likes, userWorkspaceId = null, userLikes = null
+  if (session) {
+    userWorkspaceId = data(results[0]).id;
+    userLikes = data(results[1]).likes;
+
+    experiment = data(results[2]).deployments.experiments;
+    likes = data(results[3]).likes;
+  } else {
+    experiment = data(results[0]).deployments.experiments;
+    likes = data(results[1]).likes;
+  }
+
   return {
     props: {
-      initialPrompt: experiment.prompt || '',
-      model: experiment.model || '',
-      config: experiment.config || {},
+      initialPrompt: experiment.prompt,
+      model: experiment.model,
+      config: experiment.config,
       initialInput: experiment.input,
-      initialOutput: experiment.output || '',
-      initial_num_tokens: experiment.num_tokens || '0',
-      initial_duration_s: experiment.duration_s || '0.0',
-      userWorkspaceId: workspaces.length > 0 ? workspaces[0].id : null,
-      initialLikes: likes
+      initialOutput: experiment.output,
+      initial_num_tokens: String(experiment.num_tokens),
+      initial_duration_s: String(experiment.duration_s),
+      userWorkspaceId: userWorkspaceId,
+      initialLikes: likes,
+      initialUserHasLiked: userLikes && userLikes.filter(fid => fid === parseInt(id)).length > 0
     }
   };
 }

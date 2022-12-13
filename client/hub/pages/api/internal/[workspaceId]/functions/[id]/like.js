@@ -34,6 +34,7 @@ export default async function handler(req, res) {
   if (error) return res.status(500).json({ error });
 
   // update function likes
+  let data
   (
     { data, error } = await supabase
       .rpc('increment_likes', { value: mode === 'true' ? 1 : -1, row_id: id })
