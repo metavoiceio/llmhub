@@ -1,7 +1,7 @@
 import { Dropdown } from "flowbite-react";
 import { useState } from "react";
 import { BsSliders } from "react-icons/bs";
-import { SUPPORTED_MODELS, RENDER_CONFIG_INDEX } from "../common/constants";
+import { MODELS_INFO, RENDER_CONFIG_INDEX } from "../common/constants";
 
 export default function PlaygroundToolbar(
   { selectedModel, setSelectedModel, modelConfigs, setModelConfigs }
@@ -9,17 +9,49 @@ export default function PlaygroundToolbar(
   const [error, setError] = useState('');
 
   const modelSelect = () => {
+    console.log(selectedModel);
     return (
-      <select
-        id="models"
-        className="block p-2 w-[10rem] text-xs text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-        value={selectedModel}
-        onChange={event => setSelectedModel(event.target.value)}
+      <Dropdown
+        label={selectedModel}
       >
         {
-          SUPPORTED_MODELS.map((m, index) => <option value={m} key={`${m}-${index}`}>{m}</option>)
+          Object.keys(MODELS_INFO).map((model, index) => {
+            let toReturn = [];
+            if (model === 'code-davinci-002') {
+              toReturn.push(<Dropdown.Divider key={`${index}-divider`} />)
+            }
+            toReturn.push(<Dropdown.Item key={index} onClick={() => setSelectedModel(model)}>
+              <div className="flex gap-1 items-center justify-between w-full">
+                <div className="text-sm font-medium truncate">
+                  {MODELS_INFO[model].description.logo}
+                </div>
+                <div className="px-0.1 text-gray-300">
+                  •
+                </div>
+                <div className="text-sm grow">
+                  {model}
+                </div>
+                <div className="flex gap-0.5 justify-end">
+                  <div className="flex flex-col items-center">
+                    <svg width="16" height="16">
+                      {/* TODO: change colour */}
+                      <circle cx="8" cy="8" r={MODELS_INFO[model].description.rep_size} fill="currentColor" className="bg-gray-800 dark:text-gray-100" />
+                    </svg>
+                  </div>
+
+                  <div>
+                    <code className="text-xs bg-gray-100 rounded-lg p-1 text-green-400">
+                      {MODELS_INFO[model].description.token_max_length}
+                    </code>
+                  </div>
+                </div>
+              </div>
+            </Dropdown.Item>)
+
+            return toReturn;
+          })
         }
-      </select>
+      </Dropdown>
     )
   }
 
