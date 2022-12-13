@@ -52,7 +52,7 @@ export default function PlaygroundEditor({
                   style="light"
                   content={
                     <p>Creates an API with the current version of the Function.<br/>
-                    Its 0this version of the prompt & settings that is publicy visible & executed by user apps.
+                    Its this version of the prompt & settings that is publicy visible & executed by user apps.
                     </p>
                   }
                   placement="bottom"
