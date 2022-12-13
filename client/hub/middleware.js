@@ -41,10 +41,10 @@ export default withAuth({
   callbacks: {
     async authorized({ req, token }) {
       let workspaces, error;
-
+      console.log(req.nextUrl.href)
       try {
         // route - /share
-        if (req.nextUrl.href.includes('share')) {
+        if (req.nextUrl.href.includes('share') && !req.nextUrl.href.includes('fork')) {
           // check if workspaceId owns referenced functionId
           const workspaceId = parseInt(req.nextUrl.href.split('/functions')[0].split('/')[3]);
           const functionId = req.nextUrl.href.split('/functions/')[1].split('/')[0];
@@ -55,7 +55,6 @@ export default withAuth({
               .select('*')
               .eq('id', functionId)
           )
-          console.log(functions)
           return functions.length > 0 && functions[0].workspace_id === workspaceId;
         };
 
