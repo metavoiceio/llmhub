@@ -87,6 +87,9 @@ export default function AuthSideBar({ workspaceId, functions, forkUrl, functionI
 
   return (
     <>
+      <div className='sm:hidden'>
+        Button
+      </div>
       <div className="hidden sm:flex select-auto w-[260px] max-w-[530px] min-w-[200px] box-border shrink-0 min-h-screen" >
         <div className="flex flex-col bg-gray-50 dark:bg-gray-900 dark:text-gray-200 border-r-[1px] dark:border-r-gray-500 px-2 overflow-auto w-full">
           {/* sidebar header */}
