@@ -6,11 +6,12 @@ export default async function handler(req, res) {
 
   const { workspaceId } = req.query
   let data, error, dataToInsert;
+  let targetFunctionId = null;
 
   if (req.body.functionToFork) {
     let experiments;
     // takes url of the form http://localhost:3000/[workspaceId]/functions/[functionId]/share and extracts [functionId]
-    const targetFunctionId = req.body.functionToFork.split('functions/')[1].split('/')[0];
+    targetFunctionId = req.body.functionToFork.split('functions/')[1].split('/')[0];
 
     // fetch all the experiments of the target function
     (
@@ -44,8 +45,15 @@ export default async function handler(req, res) {
       .insert([dataToInsert])
       .select()
   )
-
   if (error) return res.status(500).json(error);
+
+  // increment functions.forks counter
+  if (req.body.functionToFork) {
+    (
+      { data, error } = await supabase
+        .rpc('increment_forks', { row_id: targetFunctionId })
+    )
+  }
 
   return res.status(201).json(data);
 }

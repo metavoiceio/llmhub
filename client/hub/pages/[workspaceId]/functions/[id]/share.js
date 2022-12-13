@@ -18,7 +18,7 @@ import { toast } from 'react-toastify';
 export default function Share({
   initialPrompt, model, config, initialInput, initialOutput,
   initial_num_tokens, initial_duration_s, userWorkspaceId,
-  initialLikes, initialUserHasLiked
+  initialLikes, initialUserHasLiked, initialForks
 
 }) {
   const router = useRouter();
@@ -125,7 +125,7 @@ export default function Share({
         </svg>
         Fork
         <span className="inline-flex justify-center items-center ml-2 w-5 h-5 rounded-lg text-sm font-semibold text-blue-800 bg-blue-200">
-          2
+          {initialForks}
         </span>
       </Button>
     )
@@ -302,16 +302,18 @@ export async function getServerSideProps(context) {
     return result.data[0]
   }
 
-  let experiment, likes, userWorkspaceId = null, userLikes = null
+  let experiment, likes, forks, userWorkspaceId = null, userLikes = null
   if (session) {
     userWorkspaceId = data(results[0]).id;
     userLikes = data(results[1]).likes;
 
     experiment = data(results[2]).deployments.experiments;
     likes = data(results[3]).likes;
+    forks = data(results[3]).forks;
   } else {
     experiment = data(results[0]).deployments.experiments;
     likes = data(results[1]).likes;
+    forks = data(results[1]).forks;
   }
 
   return {
@@ -325,6 +327,7 @@ export async function getServerSideProps(context) {
       initial_duration_s: String(experiment.duration_s),
       userWorkspaceId: userWorkspaceId,
       initialLikes: likes,
+      initialForks: forks,
       initialUserHasLiked: userLikes && userLikes.filter(fid => fid === parseInt(id)).length > 0
     }
   };
