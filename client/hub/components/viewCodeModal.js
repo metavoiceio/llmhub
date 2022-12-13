@@ -13,7 +13,7 @@ const integrateInCode = (url, inputKeys) => {
   input += '}'
   const ret = `const LLMHub = require("llmhub")
 const llmhub = new LLMHub('${url}')
-llmhub.run(${input}).then({ output } => { console.log(output) });`
+llmhub.run(${input}).then(({ output }) => { console.log(output) });`
 
   return ret;
 }
@@ -30,7 +30,7 @@ export default function ViewCodeModal({ shareUrl, inputKeys }) {
         View Code
       </button>
       <Modal
-        show={true}
+        show={isOpen}
         size="3xl"
         onClose={e => setIsOpen(false)}
       >

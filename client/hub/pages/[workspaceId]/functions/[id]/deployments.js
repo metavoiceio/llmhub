@@ -5,12 +5,18 @@ import { getFunctions, supabase } from "../../../../common/supabase";
 import AuthSideBar from "../../../../components/sidebar";
 import FunctionsNavbar from '../../../../components/functionsNavBar';
 import ViewCodeModal from "../../../../components/viewCodeModal";
+import { useEffect, useState } from "react";
 
 const moment = require('moment');
 
 export default function Function({ functions, deployments, currentDeploymentId }) {
   const router = useRouter();
   const { workspaceId, id } = router.query;
+  const [shareUrl, setShareUrl] = useState('');
+
+  useEffect(() => {
+    if (window && deployments.length > 0) setShareUrl(`${window.location.origin}/${workspaceId}/functions/${id}/share`)
+  })
 
   const renderDeploymentContent = (prompt, model, config) => {
     // TODO: migrate textarea duplicate code into an independent function
@@ -76,6 +82,7 @@ export default function Function({ functions, deployments, currentDeploymentId }
   const render = () => {
     const currentDeployments = deployments.filter(d => d.id === currentDeploymentId);
     const pastDeployments = deployments.filter(d => d.id !== currentDeploymentId);
+
     return (
       <div className="p-4 mt-4 overflow-y-auto flex flex-col gap-5">
         <div className="flex justify-between items-center">
@@ -87,7 +94,7 @@ export default function Function({ functions, deployments, currentDeploymentId }
           {
             currentDeployments.length > 0 &&
             <ViewCodeModal
-              shareUrl={`${window.location.origin}/${workspaceId}/functions/${id}/share`}
+              shareUrl={shareUrl}
               inputKeys={Object.keys(currentDeployments[0].experiments.input)}
             />
           }
@@ -166,7 +173,6 @@ export async function getServerSideProps({ params }) {
   )
 
   console.log(error);
-  console.log('input', deployments[0].experiments.input);
   return {
     props: {
       functions: await getFunctions(workspaceId),
