@@ -16,23 +16,21 @@ import PromptVariables from "../../../../components/promptVariables";
 import { toast } from 'react-toastify';
 
 export default function Share({
-  initialPrompt, model, config, initialInput, initialOutput,
-  initial_num_tokens, initial_duration_s, userWorkspaceId,
-  initialLikes, initialUserHasLiked, initialForks
+  experiment, userWorkspaceId, functionData, initialUserHasLiked
 
 }) {
   const router = useRouter();
   const { workspaceId, id } = router.query;
   const { data: session, status } = useSession();
   const [isRunning, setIsRunning] = useState(false);
-  const [prompt, setPrompt] = useState(initialPrompt);
-  const [promptVariables, setPromptVariables] = useState(initialInput);
+  const [prompt, setPrompt] = useState(experiment.prompt);
+  const [promptVariables, setPromptVariables] = useState(experiment.input);
   const [result, setResult] = useState({
-    output: initialOutput,
-    num_tokens: initial_num_tokens,
-    duration_s: initial_duration_s
+    output: experiment.output,
+    num_tokens: String(experiment.num_tokens),
+    duration_s: String(experiment.duration_s)
   });
-  const [likes, setLikes] = useState(initialLikes)
+  const [likes, setLikes] = useState(functionData.likes)
   const [userHasLiked, setUserHasLiked] = useState(initialUserHasLiked)
 
   const handleLike = async (event) => {
@@ -125,7 +123,7 @@ export default function Share({
         </svg>
         Fork
         <span className="inline-flex justify-center items-center ml-2 w-5 h-5 rounded-lg text-sm font-semibold text-blue-800 bg-blue-200">
-          {initialForks}
+          {functionData.forks}
         </span>
       </Button>
     )
@@ -182,9 +180,12 @@ export default function Share({
         rounded={true}
         className='pt-4 dark:bg-gray-900'
       >
-        <Link href={`/`}>
-          <Image src={logo} alt="LLMHub logo" className="inline mr-1" width={48} />
-        </Link>
+        <div className="flex items-center">
+          <Link href={`/`}>
+            <Image src={logo} alt="LLMHub logo" className="inline mr-1" width={48} />
+          </Link>
+          <p>LLMHub</p>
+        </div>
         {session ? authView() : unauthView()}
       </Navbar>
     )
@@ -197,9 +198,9 @@ export default function Share({
         <div className="flex flex-col gap-1">
           <div className="flex items-center justify-between">
             <div className="text-xs text-gray-800 dark:text-gray-300">Model</div>
-            <div>{model}</div>
+            <div>{experiment.model}</div>
           </div>
-          {Object.entries(config).map(([key, value], index) => {
+          {Object.entries(experiment.config).map(([key, value], index) => {
             return (
               <div className="flex items-center justify-between" key={`config-${index}`}>
                 <div className="text-xs text-gray-800 dark:text-gray-300">{ATTR_FRIENDLY_NAME_INDEX[key]}</div>
@@ -215,9 +216,10 @@ export default function Share({
   return (
     <div className="dark:bg-gray-900 h-screen">
       {navbar()}
-      <div className="max-h-screen px-5 mt-8 flex overflow-y-hidden scrollbar-hide grid grid-cols-12">
+      <div className="max-h-screen px-5 flex overflow-y-hidden scrollbar-hide grid grid-cols-12">
         <div className='col-span-8'>
           <div className="flex flex-col">
+            <h2 className="p-1 mb-2 font-medium">{functionData.workspaces.users.nickname}/{functionData.name}</h2>
             <PlaygroundEditor
               prompt={prompt}
               setPrompt={setPrompt}
@@ -238,7 +240,7 @@ export default function Share({
           </div>
         </div>
         <div className="flex flex-col gap-4 col-span-4">
-          <PromptVariables promptVariables={promptVariables} setPromptVariables={setPromptVariables} isSharing={true}/>
+          <PromptVariables promptVariables={promptVariables} setPromptVariables={setPromptVariables} isSharing={true} />
           {configPanel()}
         </div>
       </div>
@@ -291,7 +293,17 @@ export async function getServerSideProps(context) {
   promises.push(
     supabase
       .from('functions')
-      .select('*')
+      .select(`
+        id,
+        name,
+        likes,
+        forks,
+        workspaces!functions_workspace_id_fkey (
+          users!workspaces_user_id_fkey (
+            nickname
+          )
+        )
+      `)
       .eq('id', id)
   )
 
@@ -302,32 +314,23 @@ export async function getServerSideProps(context) {
     return result.data[0]
   }
 
-  let experiment, likes, forks, userWorkspaceId = null, userLikes = null
+  let experiment, functionData, userWorkspaceId = null, userLikes = null
   if (session) {
     userWorkspaceId = data(results[0]).id;
     userLikes = data(results[1]).likes;
 
     experiment = data(results[2]).deployments.experiments;
-    likes = data(results[3]).likes;
-    forks = data(results[3]).forks;
+    functionData = data(results[3])
   } else {
     experiment = data(results[0]).deployments.experiments;
-    likes = data(results[1]).likes;
-    forks = data(results[1]).forks;
+    functionData = data(results[1]);
   }
 
   return {
     props: {
-      initialPrompt: experiment.prompt,
-      model: experiment.model,
-      config: experiment.config,
-      initialInput: experiment.input,
-      initialOutput: experiment.output,
-      initial_num_tokens: String(experiment.num_tokens),
-      initial_duration_s: String(experiment.duration_s),
+      experiment,
       userWorkspaceId: userWorkspaceId,
-      initialLikes: likes,
-      initialForks: forks,
+      functionData,
       initialUserHasLiked: userLikes && userLikes.filter(fid => fid === parseInt(id)).length > 0
     }
   };
