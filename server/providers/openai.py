@@ -108,6 +108,8 @@ class OpenAI(LLM):
         # TODO: add check on exceeding max_tokens?
         # TODO: add variable replace?
         # TODO: abstract this logic and make sure it works for huggingface?
+        # TODO: add checks to make sure the `call_config` doesn't contain
+        #       any keys that aren't accepted by OpenAI?
         start_time = time.time()
         response = self.client.create(prompt=client_input, **self.call_config)
         end_time = time.time()
