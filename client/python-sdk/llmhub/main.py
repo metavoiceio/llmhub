@@ -85,7 +85,3 @@ def auth():
 @app.command()
 def version():
     print('LLMHub Python CLI v0.0.1')
-
-
-if __name__ == "__main__":
-    app()
