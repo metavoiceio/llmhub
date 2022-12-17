@@ -1,1 +1,1 @@
-# LLMHub Python Client
+# LLMHub Python SDK
