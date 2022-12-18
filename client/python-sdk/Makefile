@@ -1,3 +1,3 @@
 pypi-push:
-	python3 -m build
+	python setup.py sdist bdist_wheel
 	twine upload dist/*
