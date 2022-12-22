@@ -9,7 +9,7 @@ import { useEffect, useState } from "react";
 
 const moment = require('moment');
 
-export default function Function({ functions, deployments, currentDeploymentId }) {
+export default function Function({ functions, deployments, currentDeploymentId, functionCalls }) {
   const router = useRouter();
   const { workspaceId, id } = router.query;
   const [shareUrl, setShareUrl] = useState('');
@@ -143,7 +143,7 @@ export default function Function({ functions, deployments, currentDeploymentId }
 export async function getServerSideProps({ params }) {
   const { workspaceId, id } = params;
 
-  let data, error, functions;
+  let error, functions;
   // fetch current deployment id
   (
     { data: functions, error } = await supabase
@@ -152,8 +152,8 @@ export async function getServerSideProps({ params }) {
       .eq('id', id)
   )
 
-  let deployments;
   // fetch deployments for function
+  let deployments;
   (
     { data: deployments, error } = await supabase
       .from('deployments')
@@ -171,13 +171,31 @@ export async function getServerSideProps({ params }) {
       .eq('function_id', id)
       .order('created_at', { ascending: false })
   )
-
   console.log(error);
+
+  // get function_calls / deployment
+  let function_calls;
+  (
+    { data: function_calls, error } = await supabase
+      .from('function_calls')
+      .select(`
+        id,
+        created_at,
+        deployment_id,
+        input,
+        output
+      `)
+      .in('deployment_id', deployments.map((d, idx) => d.id))
+      .order('created_at', { ascending: false })
+  )
+
+  console.log('error', error);
   return {
     props: {
       functions: await getFunctions(workspaceId),
       deployments,
-      currentDeploymentId: functions.length ? functions[0].current_deployment_id : null
+      currentDeploymentId: functions.length ? functions[0].current_deployment_id : null,
+      functionCalls: function_calls
     }
   };
 }
