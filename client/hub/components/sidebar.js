@@ -72,10 +72,10 @@ export default function AuthSideBar({ workspaceId, functions, forkUrl, functionI
           id={funcData.id}
           role={"button"}
           tabIndex={0}
-          className={`group p-1 rounded flex items-center text-start gap-1 ${highlight}`}
+          className={`group p-1 rounded flex items-center text-start gap-1 ${highlight} text-black hover:text-black`}
           href={`/${workspaceId}/functions/${funcData.id}`}
         >
-          <div className="p-1 h-6 flex items-center justify-center rounded" >
+          <div className="p-1 h-6 flex items-center justify-center rounded">
             <BsBraces />
           </div>
           <div className="flex flex-1 leading-none text-sm">
@@ -110,7 +110,7 @@ export default function AuthSideBar({ workspaceId, functions, forkUrl, functionI
       >
         <div className="flex flex-col bg-gray-50 dark:bg-gray-900 dark:text-gray-200 border-r-[1px] dark:border-r-gray-500 px-2 overflow-auto w-full h-[100vh]">
           {/* sidebar header */}
-          <Link className="pt-4 flex items-center px-1 text-sm" href={`/${workspaceId}`}>
+          <Link className="pt-4 flex items-center px-1 text-sm text-black" href={`/${workspaceId}`}>
             <Image src={logo} alt="LLMHub logo" className="inline mr-1" width={48} />
             &nbsp;{workspaceId}
           </Link>
@@ -149,8 +149,8 @@ export default function AuthSideBar({ workspaceId, functions, forkUrl, functionI
               <span className="text-sm ml-2 mr-1 text-gray-700 dark:text-gray-300">Usage</span>
             </Link> */}
             <Link className="flex items-center px-2 interact-bounce hover:bg-gray-100 dark:hover:bg-gray-800 py-1 rounded" href={`/${workspaceId}/settings`}>
-              <BsGearWide />
-              <span className="text-sm ml-2 mr-1 text-gray-700 dark:text-gray-300">Settings</span>
+              <BsGearWide className='text-black' />
+              <span className="text-sm ml-2 mr-1 dark:text-gray-300 text-black">Settings</span>
             </Link>
           </div>
         </div>

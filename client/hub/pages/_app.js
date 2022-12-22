@@ -1,6 +1,7 @@
 import { SessionProvider } from "next-auth/react"
 import 'react-toastify/dist/ReactToastify.css';
 import 'react-modern-drawer/dist/index.css'
+import 'rsuite/dist/rsuite.min.css'
 import '../styles/globals.css'
 import { ToastContainer } from 'react-toastify';
 import Router from "next/router"

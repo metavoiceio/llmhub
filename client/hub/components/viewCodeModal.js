@@ -38,9 +38,9 @@ export default function ViewCodeModal({ shareUrl, inputKeys }) {
           View Code
         </Modal.Header>
         <Modal.Body>
-          <p className="text-sm font-light">You can use the following code to start integrating your current function and associated settings into your application.</p>
+          <p className="text-sm font-light mb-4">You can use the following code to start integrating your current function and associated settings into your application.</p>
 
-          <Accordion flush={true} alwaysOpen={true} className="mb-4">
+          <Accordion alwaysOpen={true} className="mb-4">
             <Accordion.Panel>
               <Accordion.Title>
                 One-time setup

@@ -8,15 +8,15 @@ export default function FunctionsNavbar({ workspaceId, functionId, mode, allowSh
   const selectPlayground = mode === 'playground' ? 'border-b-2 border-green-500' : '';
   const selectDeployments = mode === 'deployments' ? 'border-b-2 border-green-500' : '';
   return (
-    <div className="w-full flex item-center gap-2 mt-4">
+    <div className="w-full flex items-center gap-2 mt-4 text-black">
       <Link
-        className={`${selectPlayground} text-sm`}
+        className={`${selectPlayground} text-sm py-2 hover:text-black`}
         href={`/${workspaceId}/functions/${functionId}`}
       >
         Playground
       </Link>
       <Link
-        className={`${selectDeployments} text-sm`}
+        className={`${selectDeployments} text-sm py-2 hover:text-black`}
         href={`/${workspaceId}/functions/${functionId}/deployments`}
       >
         Deployments
@@ -44,7 +44,7 @@ export default function FunctionsNavbar({ workspaceId, functionId, mode, allowSh
                 allowShare ?
                   <>
                     <div className="px-2 mb-4 mt-2 truncate">
-                      <span className="text-blue-400 underline">
+                      <span className="text-blue-500 underline">
                         {window.location.origin}/{workspaceId}/functions/{functionId}/share
                       </span>
                     </div>

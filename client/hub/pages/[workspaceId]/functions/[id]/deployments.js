@@ -63,9 +63,8 @@ export default function Function({ functions, deployments, currentDeploymentId, 
                 <Accordion.Panel key={idx}>
                   <Accordion.Title>
                     {moment(deployment.created_at).format("MMMM Do YYYY, h:mm:ss")}
-                    <br/>
                     <a 
-                      className={`text-xs ${numApiCallsClass}`}
+                      className={`block text-xs ${numApiCallsClass}`}
                       onClick={event => {
                         event.stopPropagation()
                       }}
