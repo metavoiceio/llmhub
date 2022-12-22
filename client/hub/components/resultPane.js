@@ -7,11 +7,11 @@ export default function ResultPane({ output, num_tokens, duration_s }) {
         {/* top bar */}
         <div className="flex gap-10 mb-4">
           <div className="flex flex-col">
-            <div className="text-sm">{num_tokens}</div>
+            <div className="text-sm text-black">{num_tokens}</div>
             <div className="text-xs text-gray-800 dark:text-gray-300">num_tokens</div>
           </div>
           <div className="flex flex-col">
-            <div className="text-sm">{duration_s}s</div>
+            <div className="text-sm text-black">{duration_s}s</div>
             <div className="text-xs text-gray-800 dark:text-gray-300">duration</div>
           </div>
         </div>

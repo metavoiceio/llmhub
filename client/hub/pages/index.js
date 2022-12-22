@@ -88,8 +88,8 @@ export default function Home() {
           {renderTopFunctions()}
         </div>
         {/* video */}
-        <div className="flex flex-col max-w-xl mx-auto w-full py-24">
-          <h1 className="text-center font-medium text-gray-900 mb-4 dark:text-white">👀 Watch the overview of LLMHub</h1>
+        <div className="flex flex-col max-w-xl mx-auto w-full py-24 text-center">
+          <h1 className="text-base font-medium text-gray-900 dark:text-white mb-4">👀 Watch the overview of LLMHub</h1>
           <div>
             <div className="border rounded" style={{ position: 'relative', paddingBottom: '64.86486486486486%', height: 0 }}>
               <iframe

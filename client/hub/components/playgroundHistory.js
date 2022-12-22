@@ -22,7 +22,7 @@ export default function PlaygroundHistory({ history, currentDeployment }) {
           title=''
           key={`experiment-${idx}`}
           createdAt={
-            <span>
+            <span className='text-sm'>
               {moment(experiment.created_at).format("MMMM Do YYYY, h:mm:ss")}&nbsp;
               {
                 currentDeployment && currentDeployment.experiment_id === experiment.id ?
