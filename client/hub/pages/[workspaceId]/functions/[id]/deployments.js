@@ -9,7 +9,7 @@ import { useEffect, useState } from "react";
 
 const moment = require('moment');
 
-export default function Function({ functions, deployments, currentDeploymentId }) {
+export default function Function({ functions, deployments, currentDeploymentId, functionCalls }) {
   const router = useRouter();
   const { workspaceId, id } = router.query;
   const [shareUrl, setShareUrl] = useState('');
@@ -49,17 +49,29 @@ export default function Function({ functions, deployments, currentDeploymentId }
     )
   }
 
+
   const renderDeployments = (deployments) => {
     if (deployments.length === 0) return <span className="text-xs ml-4 dark:text-gray-300">No deployments to show</span>
     return (
       <>
-        <Accordion flush alwaysOpen={true}>
+        <Accordion alwaysOpen={true}>
           {
             deployments.map((deployment, idx) => {
+              const numApiCalls = functionCalls.filter(fc => fc.deployment_id === deployment.id).length;
+              const numApiCallsClass = numApiCalls > 0 ? "text-blue-500 hover:underline" : 'text-gray-500'
               return (
                 <Accordion.Panel key={idx}>
                   <Accordion.Title>
                     {moment(deployment.created_at).format("MMMM Do YYYY, h:mm:ss")}
+                    <br/>
+                    <a 
+                      className={`text-xs ${numApiCallsClass}`}
+                      onClick={event => {
+                        event.stopPropagation()
+                      }}
+                    >
+                      {numApiCalls} API calls
+                    </a>
                   </Accordion.Title>
                   <Accordion.Content>
                     {
@@ -143,7 +155,7 @@ export default function Function({ functions, deployments, currentDeploymentId }
 export async function getServerSideProps({ params }) {
   const { workspaceId, id } = params;
 
-  let data, error, functions;
+  let error, functions;
   // fetch current deployment id
   (
     { data: functions, error } = await supabase
@@ -152,8 +164,8 @@ export async function getServerSideProps({ params }) {
       .eq('id', id)
   )
 
-  let deployments;
   // fetch deployments for function
+  let deployments;
   (
     { data: deployments, error } = await supabase
       .from('deployments')
@@ -171,13 +183,31 @@ export async function getServerSideProps({ params }) {
       .eq('function_id', id)
       .order('created_at', { ascending: false })
   )
-
   console.log(error);
+
+  // get function_calls / deployment
+  let function_calls;
+  (
+    { data: function_calls, error } = await supabase
+      .from('function_calls')
+      .select(`
+        id,
+        created_at,
+        deployment_id,
+        input,
+        output
+      `)
+      .in('deployment_id', deployments.map((d, idx) => d.id))
+      .order('created_at', { ascending: false })
+  )
+
+  console.log('error', error);
   return {
     props: {
       functions: await getFunctions(workspaceId),
       deployments,
-      currentDeploymentId: functions.length ? functions[0].current_deployment_id : null
+      currentDeploymentId: functions.length ? functions[0].current_deployment_id : null,
+      functionCalls: function_calls
     }
   };
 }
