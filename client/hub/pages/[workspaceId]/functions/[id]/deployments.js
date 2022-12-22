@@ -49,17 +49,29 @@ export default function Function({ functions, deployments, currentDeploymentId, 
     )
   }
 
+
   const renderDeployments = (deployments) => {
     if (deployments.length === 0) return <span className="text-xs ml-4 dark:text-gray-300">No deployments to show</span>
     return (
       <>
-        <Accordion flush alwaysOpen={true}>
+        <Accordion alwaysOpen={true}>
           {
             deployments.map((deployment, idx) => {
+              const numApiCalls = functionCalls.filter(fc => fc.deployment_id === deployment.id).length;
+              const numApiCallsClass = numApiCalls > 0 ? "text-blue-500 hover:underline" : 'text-gray-500'
               return (
                 <Accordion.Panel key={idx}>
                   <Accordion.Title>
                     {moment(deployment.created_at).format("MMMM Do YYYY, h:mm:ss")}
+                    <br/>
+                    <a 
+                      className={`text-xs ${numApiCallsClass}`}
+                      onClick={event => {
+                        event.stopPropagation()
+                      }}
+                    >
+                      {numApiCalls} API calls
+                    </a>
                   </Accordion.Title>
                   <Accordion.Content>
                     {
