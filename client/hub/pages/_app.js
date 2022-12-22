@@ -30,6 +30,7 @@ export default function App({
         theme="light"
       />
       <script src="https://unpkg.com/flowbite@1.5.4/dist/flowbite.js" async />
+      <script src="lodash.js" async />
     </SessionProvider>
   )
 }

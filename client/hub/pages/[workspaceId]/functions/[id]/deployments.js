@@ -1,18 +1,23 @@
-import { Accordion } from "flowbite-react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
+import { Accordion } from "flowbite-react";
 import { ATTR_FRIENDLY_NAME_INDEX } from "../../../../common/constants";
 import { getFunctions, supabase } from "../../../../common/supabase";
 import AuthSideBar from "../../../../components/sidebar";
 import FunctionsNavbar from '../../../../components/functionsNavBar';
 import ViewCodeModal from "../../../../components/viewCodeModal";
-import { useEffect, useState } from "react";
-
+import Drawer from 'rsuite/Drawer';
+import Table from 'rsuite/Table';
+var _ = require('lodash');
 const moment = require('moment');
 
 export default function Function({ functions, deployments, currentDeploymentId, functionCalls }) {
   const router = useRouter();
   const { workspaceId, id } = router.query;
   const [shareUrl, setShareUrl] = useState('');
+  const [open, setOpen] = useState(false);
+  const [cols, setCols] = useState([]);
+  const [data, setData] = useState([]);
 
   useEffect(() => {
     if (window && deployments.length > 0) setShareUrl(`${window.location.origin}/${workspaceId}/functions/${id}/share`)
@@ -49,6 +54,25 @@ export default function Function({ functions, deployments, currentDeploymentId, 
     )
   }
 
+  const handleApiHistoryClick = (event, selectedDeploymentId) => {
+    event.stopPropagation();
+
+    setOpen(true)
+
+    const filtered = functionCalls.filter(fc => fc.deployment_id === selectedDeploymentId);
+
+    let newCols = []
+    newCols.push({ key: 'output', label: 'Output' });
+    // TODO sidroopdaska: change `input` type from text -> JSON string in supabase. At present, there are two types
+    // coexisting in this column: text + JSON. Let's fix this asap!
+    Object.keys(JSON.parse(filtered[0].input)).forEach((key, idx) => {
+      newCols.push({ key: `input.${key}`, label: `Input.{{${key}}}` })
+    })
+    newCols.push({ key: 'created_at', label: 'Date Time' });
+
+    setCols(newCols)
+    setData(filtered)
+  }
 
   const renderDeployments = (deployments) => {
     if (deployments.length === 0) return <span className="text-xs ml-4 dark:text-gray-300">No deployments to show</span>
@@ -63,11 +87,10 @@ export default function Function({ functions, deployments, currentDeploymentId, 
                 <Accordion.Panel key={idx}>
                   <Accordion.Title>
                     {moment(deployment.created_at).format("MMMM Do YYYY, h:mm:ss")}
-                    <a 
+                    <a
                       className={`block text-xs ${numApiCallsClass}`}
-                      onClick={event => {
-                        event.stopPropagation()
-                      }}
+                      onClick={(event) => handleApiHistoryClick(event, deployment.id)}
+                      disabled={!numApiCalls}
                     >
                       {numApiCalls} API calls
                     </a>
@@ -121,6 +144,20 @@ export default function Function({ functions, deployments, currentDeploymentId, 
     )
   }
 
+  const CustomCell = ({ rowData, dataKey, ...props }) => {
+    return (
+      <Table.Cell {...props}>
+        {
+          _.get({
+            ...rowData,
+            input: JSON.parse(rowData.input),
+            created_at: moment(rowData.created_at).format("MM-DD-YY, HH:mm:ss")
+          }, dataKey)
+        }
+      </Table.Cell>
+    )
+  }
+
   return (
     <div className="flex flex-col sm:flex-row min-h-screen dark:bg-gray-900">
       <AuthSideBar workspaceId={workspaceId} functions={functions} functionId={id} />
@@ -146,6 +183,32 @@ export default function Function({ functions, deployments, currentDeploymentId, 
             </div>
         }
       </div>
+      <Drawer size={'lg'} placement={'right'} open={open} onClose={() => {
+        setOpen(false)
+        setCols([])
+        setData([])
+      }}>
+        <Drawer.Header>
+          <Drawer.Title>API call history</Drawer.Title>
+        </Drawer.Header>
+        <Drawer.Body>
+          <div>
+            <Table virtualized height={400} data={data}>
+              {
+                cols.map((column, idx) => {
+                  const { key, label } = column;
+                  return (
+                    <Table.Column key={key} flexGrow={1}>
+                      <Table.HeaderCell>{label}</Table.HeaderCell>
+                      <CustomCell dataKey={key} />
+                    </Table.Column>
+                  )
+                })
+              }
+            </Table>
+          </div>
+        </Drawer.Body>
+      </Drawer>
     </div>
   );
 }
