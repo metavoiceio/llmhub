@@ -1,6 +1,5 @@
 # LLM Hub: Iterate on prompts for production-use cases in the simplest way.
-
-## NB: We don't have time to support this actively, but are happy to help with other OS efforts.
+## NB: We don't have time to support this actively, but are happy to lightly help with other OS efforts.
 
 LLMHub is a platform that provides an OpenAI-playground-like experience for iterating on prompts/LLM providers, deploying the prompts, and capturing usage to further iteration. It provides a single UX experience on top of multiple LLM providers, with some initial features to make collaboration easier.
 
