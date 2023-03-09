@@ -5,7 +5,7 @@ import requests
 
 from server.providers.base import LLM
 
-API_URL = "https://8a9a-35-203-168-64.ngrok.io/api"
+API_URL = "<ENTER VALUE>"
 headers = {
     "Content-Type": "application/json",
 }

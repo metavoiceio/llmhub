@@ -5,9 +5,8 @@ import requests
 
 from server.providers.base import LLM
 
-API_TOKEN = "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"
-
-API_URL = "https://dcks6mrqe7w3t87f.us-east-1.aws.endpoints.huggingface.cloud"
+API_TOKEN = "<ENTER VALUE>"
+API_URL = "<ENTER VALUE>"
 headers = {
     "Authorization": f"Bearer {API_TOKEN}",
     "Content-Type": "application/json",

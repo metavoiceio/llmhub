@@ -7,8 +7,8 @@ import requests
 import typer
 from auth0.v3.authentication.token_verifier import AsymmetricSignatureVerifier, TokenVerifier
 
-AUTH0_DOMAIN = "dev-n05dsuq3kini0zdl.us.auth0.com"
-AUTH0_CLIENT_ID = "HkkUN8OZv5ikAImggmRRRC0fNtGh68eG"
+AUTH0_DOMAIN = "<ENTER VALUE>"
+AUTH0_CLIENT_ID = "<ENTER VALUE>"
 ALGORITHMS = ["RS256"]
 ROOT_DIR = os.path.join(os.environ.get("HOME"), ".llmhub")
 

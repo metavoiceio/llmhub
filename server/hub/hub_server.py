@@ -10,11 +10,11 @@ from server.providers.huggingface import HuggingFace
 from server.providers.internal_server import InternalServer
 from server.providers.openai import OpenAI
 
-OPENAI_API_KEY = "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"
+OPENAI_API_KEY = "<ENTER VALUE>"
 openai_provider = OpenAI(OPENAI_API_KEY)
 huggingface_provider = HuggingFace()
 internalserver_provider = InternalServer()
-COHERE_API_KEY = "pkRSxNtXtNpBYI44dvgMWvMFsaVHdRxATc0RzDIv"
+COHERE_API_KEY = "<ENTER VALUE>"
 cohere_provider = Cohere(COHERE_API_KEY)
 
 ## Setup FastAPI server.
