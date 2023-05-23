@@ -6,7 +6,7 @@ from setuptools import find_packages, setup
 
 ##### Dependencies of llm
 
-PROD_REQUIREMENTS = ["requests==2.28.1", "auth0-python==3.24.0", "typer==0.7.0"]
+PROD_REQUIREMENTS = ["requests==2.31.0", "auth0-python==3.24.0", "typer==0.7.0"]
 DEV_REQUIREMENTS = ["black", "flake8", "isort", "mypy", "pytest", "sphinx", "twine"]
 
 
